@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Faculty Register | IIT </title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://ofa.iiti.ac.in/facrec_che_2023_july_02/css/bootstrap.css">
+    <!-- Include reCAPTCHA script -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<style type="text/css">
+    /* Your custom CSS styles here */
+</style>
+<body>
+<div class="container-fluid" style="background-color: #f7ffff; margin-bottom: 10px;">
+    <div class="container">
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-md-8 col-md-offset-2">
+                <!-- Your custom header content -->
+            </div>
+        </div>
+    </div>
+</div>
+<h3 style="color: #e10425; margin-bottom: 20px; font-weight: bold; text-align: center; font-family: 'Noto Serif', serif;"
+    class="blink_me">Application for Faculty Position</h3>
+<div class="container" style="border-radius: 10px; margin-top: 20px;">
+    <div class="row" style="border-width: 2px; border-style: solid; border-radius: 10px; box-shadow: 0px 1px 30px 1px #284d7a; height: 500px; background-color: #F7FFFF;">
+        <div class="col-md-6 col-sm-6 col-xs-6">
+            <img src="https://ofa.iiti.ac.in/facrec_che_2023_july_02/images/IITIndorelogo.png" style="margin-left: 22%; margin-top: 5%;">
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6">
+            <h3>CREATE YOUR PROFILE</h3><br>
+            <form action="process_registration.php" method="post" class="form" role="form">
+                <input type="hidden" name="ci_csrf_token" value="">
+                <div class="row">
+                    <div class="col-xs-6 col-md-6">
+                        <input class="form-control" value="" name="firstname" placeholder="First name" type="text" required autofocus>
+                    </div>
+                    <div class="col-xs-6 col-md-6">
+                        <input class="form-control" name="lastname" value="" required placeholder="Last name" type="text">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 col-md-6">
+                        <input class="form-control" name="email" placeholder="Your email" value="" required type="email">
+                    </div>
+                    <div class="col-xs-6 col-md-6">
+                        <select id="cast" name="cast" class="form-control input-md" required>
+                            <option value="">Select Category</option>
+                            <option value="UR">UR</option>
+                            <option value="OBC">OBC</option>
+                            <option value="SC">SC</option>
+                            <option value="ST">ST</option>
+                            <option value="PWD">PWD</option>
+                            <option value="EWS">EWS</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <input class="form-control" name="password" placeholder="New password" required type="password">
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <input class="form-control" name="re_password" placeholder="Retype - new password" required type="password">
+                    </div>
+                </div>
+                <!-- Add reCAPTCHA widget here -->
+                <div class="g-recaptcha" data-sitekey="YOUR_SITE_KEY_HERE"></div>
+                <div class="col-xs-12 col-md-12">
+                    <h5><strong><font color="red">Note:</font>
+                        <br>
+                        <br>
+                        <br>
+                        <font color="#124f93">
+                            1. Applicant should kindly check their email for an activation link to access the portal.
+                            <br>
+                            2. Please check the SPAM folder also, in case the activation link is not received in the INBOX.<br>
+                            3. Applicant applying for more than one position/department should use <strong><font color="red">different email id</font></strong> for each application.</font> </strong>
+                        <br>
+                        <br>
+                        <br>
+                    </h5>
+                    <button class="btn btn-sm btn-primary" type="submit" name="submit" value="Submit">Register</button>
+                    <strong class="pull-right" style="color: green;">
+                        If registered <a href='https://ofa.iiti.ac.in/facrec_che_2023_july_02/faculty/login'
+                            class="btn btn-sm btn-success">Login Here</a>
+                    </strong>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<br>
+<div class="container">
+    <div class="col-md-8 col-md-offset-2" style="text-align: center!important; font-weight: bold; color: black!important">
+        <!-- Your custom content -->
+    </div>
+</div>
+<div id="footer"></div>
+</body>
+</html>
