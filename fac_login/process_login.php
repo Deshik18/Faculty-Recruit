@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (mysqli_num_rows($result) > 0) {
         // Authentication successful, set a session variable and redirect to a secure page
         $_SESSION['email'] = $email; // Store the user's email in a session variable
-        header('Location: secure_page.php');
+        header('Location: setname.php');
         exit();
     } else {
         // Authentication failed, redirect to the login page with an error message

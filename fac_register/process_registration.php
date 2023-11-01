@@ -23,11 +23,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         'cast' => $cast
     ));
 
+    // Get the current date in the desired format (e.g., DD/MM/YYYY)
+    $currentDate = date('d/m/Y');
+
     // Generate a unique activation token (you can use any method to create this token)
     $activationToken = bin2hex(random_bytes(16)); // This is just an example; you can choose your own method.
 
     // Prepare and execute the SQL query to insert data into the database
-    $sql = "INSERT INTO faculty_details (fn_ln_cast, email, password, activate) VALUES ('" . mysqli_real_escape_string($conn, $fn_ln_cast) . "', '" . mysqli_real_escape_string($conn, $email) . "', '" . mysqli_real_escape_string($conn, $password) . "', '{\"activation_token\":\"$activationToken\", \"activated\":false}')";
+    $sql = "INSERT INTO faculty_details (fn_ln_cast, email, password, activate, doa) VALUES ('" . mysqli_real_escape_string($conn, $fn_ln_cast) . "', '" . mysqli_real_escape_string($conn, $email) . "', '" . mysqli_real_escape_string($conn, $password) . "', '{\"activation_token\":\"$activationToken\", \"activated\":false}', '" . $currentDate . "')";
 
     if (mysqli_query($conn, $sql)) {
         $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" . "activate.php?id=" . $sql;
@@ -36,9 +39,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $content = "Click this link to activate your account | <a href='" . $actual_link . "'>" . $actual_link . "</a>";
         $mailHeaders = "From: Admin\r\n";
         if (mail($toEmail, $subject, $content, $mailHeaders)) {
-            $message = "You have registered and the activation mail is sent to your email. Click the activation link to activate you account.";
+            $message = "You have registered and the activation mail is sent to your email. Click the activation link to activate your account.";
             $type = "success";
-        }else {
+        } else {
             // Email sending failed
             echo "Registration succeeded, but we couldn't send the activation email. Please contact support.";
         }
