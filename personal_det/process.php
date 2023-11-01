@@ -99,9 +99,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             mkdir($photo_upload_dir, 0777, true); // Create the directory if it doesn't exist
         }
 
-        $photo_file = $photo_upload_dir . basename($_FILES['userfile']['name']);
         $photo_file_type = strtolower(pathinfo($photo_file, PATHINFO_EXTENSION));
-
+        $photo_file = $photo_upload_dir . $_SESSION['email'] . '_photo' . $photo_file_type;
         // Check if the file is a valid image
         if (getimagesize($_FILES['userfile']['tmp_name']) === false) {
             die('Invalid file. Please upload a valid image.');
