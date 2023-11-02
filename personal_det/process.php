@@ -76,15 +76,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'email_2' => $email_2,
         'landline' => $landline
     ]);
-    $var = 1;
     // Perform any additional processing or validation as needed
 
     // Perform database insertion
-    $query = "UPDATE faculty_details SET pd_bool = ?, application_details = ?, per_det = ?, cadd_det = ?, padd_det = ?, contact_det = ? WHERE email = ?";
+    $query = "UPDATE faculty_details SET application_details = ?, per_det = ?, cadd_det = ?, padd_det = ?, contact_det = ? WHERE email = ?";
 
     $stmt = $conn->prepare($query);
 
-    $stmt->bind_param("issssss", $var, $application_details, $per_det, $cadd_det, $padd_det, $contact_det, $_SESSION['email']);
+    $stmt->bind_param("ssssss", $application_details, $per_det, $cadd_det, $padd_det, $contact_det, $_SESSION['email']);
 
     if ($stmt->execute()) {
         // Data has been successfully inserted into the database

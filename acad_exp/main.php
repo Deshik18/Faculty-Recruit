@@ -3,21 +3,21 @@
 <!-- saved from url=(0060)https://ofa.iiti.ac.in/facrec_che_2023_july_02/thesis_course -->
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>Academic Experience </title>
-	<link rel="stylesheet" type="text/css" href="./Academic Experience(6)_files/favicon.ico">
-	<link rel="icon" href="./Academic Experience(6)_files/favicon.ico" type="image/x-icon">
-	<link rel="stylesheet" type="text/css" href="./Academic Experience(6)_files/bootstrap.css">
-	<link rel="stylesheet" type="text/css" href="./Academic Experience(6)_files/bootstrap-datepicker.css">
-	<script type="text/javascript" src="./Academic Experience(6)_files/jquery.js.download"></script>
-	<script type="text/javascript" src="./Academic Experience(6)_files/bootstrap.js.download"></script>
-	<script type="text/javascript" src="./Academic Experience(6)_files/bootstrap-datepicker.js.download"></script>
+	<link rel="stylesheet" type="text/css" href="../favicon.ico" type="image/x-icon">
+	<link rel="icon" href="../favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="../bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="../bootstrap-datepicker.css">
+	<script type="text/javascript" src="../jquery.js"></script>
+	<script type="text/javascript" src="../bootstrap.js"></script>
+	<script type="text/javascript" src="../bootstrap-datepicker.js"></script>
 
-	<link href="./Academic Experience(6)_files/css" rel="stylesheet"> 
-	<link href="./Academic Experience(6)_files/css(1)" rel="stylesheet"> 
-	<link href="./Academic Experience(6)_files/css(2)" rel="stylesheet"> 
-	<link href="./Academic Experience(6)_files/css(3)" rel="stylesheet"> 
-	<link href="./Academic Experience(6)_files/css(4)" rel="stylesheet"> 
+	<link href="../files/css" rel="stylesheet"> 
+	<link href="../files/css(1)" rel="stylesheet"> 
+	<link href="../files/css(2)" rel="stylesheet"> 
+	<link href="../files/css(3)" rel="stylesheet"> 
+	<link href="../files/css(4)" rel="stylesheet"> 
 	<link rel="preconnect" href="https://fonts.gstatic.com/">
-	<link href="./Academic Experience(6)_files/css2" rel="stylesheet">
+	<link href="../files/css2" rel="stylesheet">
 
 
 	
@@ -32,9 +32,9 @@
         <div class="row" style="margin-bottom:10px; ">
         	<div class="col-md-8 col-md-offset-2">
 
-        		<!--  <img src="https://ofa.iiti.ac.in/facrec_che_2023_july_02/images/IITIndorelogo.png" alt="logo1" class="img-responsive" style="padding-top: 5px; height: 120px; float: left;"> -->
+        		<!--  <img src="https://ofa.iiti.ac.in/facrec_che_2023_july_02/images/IITIndorelogo.png" alt="logo1" class="img-responsive" style="padding-top: 5px; height: 120px; float: left;"> 
 
-        		<h3 style="text-align:center;color:#414002!important;font-weight: bold;font-size: 2.3em; margin-top: 3px; font-family: &#39;Noto Sans&#39;, sans-serif;">भारतीय प्रौद्योगिकी संस्थान इंदौर</h3>
+        		<h3 style="text-align:center;color:#414002!important;font-weight: bold;font-size: 2.3em; margin-top: 3px; font-family: &#39;Noto Sans&#39;, sans-serif;">भारतीय प्रौद्योगिकी संस्थान इंदौर</h3> -->
     			<h3 style="text-align:center;color: #414002!important;font-weight: bold;font-family: &#39;Oswald&#39;, sans-serif!important;font-size: 2.2em; margin-top: 0px;">Indian Institute of Technology Indore</h3>
     			
 

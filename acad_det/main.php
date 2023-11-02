@@ -3,28 +3,23 @@
 session_start(); // Start the session (make sure this is at the top of your PHP file)
 include '../config.php';
 
-$acad_bool = 0;
 $phd_details = $pg_det = $ug_det = $sch_details = array(); // Initialize as empty arrays
 $additional_qualifications = array();
 
 // Check if acad_bool is 1 in the database
-$sql = "SELECT acad_bool, phd_det, pg_det, ug_det, sch_det, additional_qualifications FROM faculty_details WHERE email = ?";
+$sql = "SELECT phd_det, pg_det, ug_det, sch_det, additional_qualifications FROM faculty_details WHERE email = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $_SESSION['email']);
 $stmt->execute();
-$stmt->bind_result($acad_bool, $phd_json, $pg_json, $ug_json, $sch_json, $additional_qualifications_json);
+$stmt->bind_result($phd_json, $pg_json, $ug_json, $sch_json, $additional_qualifications_json);
 $stmt->fetch();
 $stmt->close();
 
-// If acad_bool is 1, decode the JSON and populate the form values
-if ($acad_bool == 1) {
+
   $phd_details = json_decode($phd_json, true);
   $pg_det = json_decode($pg_json, true);
   $ug_det = json_decode($ug_json, true);
   $sch_details = json_decode($sch_json, true);
-}
-
-// Decode and populate additional_qualifications
 $additional_qualifications = json_decode($additional_qualifications_json, true);
 
 ?>
@@ -86,12 +81,12 @@ var counter_acde=4;
         create_tr();
         create_input('add_degree[]', 'Degree','add_degree'+counter_acde, 'acde', counter_acde, 'acde');
         create_input('add_college[]', 'College', 'add_college'+counter_acde,'acde', counter_acde, 'acde');
-        create_input('add_subjects[]', 'Subjects', 'add_subjects'+counter_acde,'acde', counter_acde, 'acde');
+        create_input('add_stream[]', 'Subjects', 'add_stream'+counter_acde,'acde', counter_acde, 'acde');
         create_input('add_yoj[]', 'Year Of Joining', 'add_yoj'+counter_acde,'acde', counter_acde, 'acde');
         create_input('add_yog[]', 'Year Of Graduation','add_yog'+counter_acde, 'acde', counter_acde, 'acde');
         create_input('add_duration[]', 'Duration','add_duration'+counter_acde, 'acde', counter_acde, 'acde');
-        create_input('add_perce[]', 'Percentage','add_perce'+counter_acde, 'acde', counter_acde, 'acde');
-        create_input('add_rank[]', 'Rank', 'add_rank'+counter_acde,'acde', counter_acde,'acde',true);
+        create_input('add_percentage[]', 'Percentage','add_percentage'+counter_acde, 'acde', counter_acde, 'acde');
+        create_input('add_division[]', 'Rank', 'add_division'+counter_acde,'acde', counter_acde,'acde',true);
         counter_acde++;
         return false;
     });
@@ -535,7 +530,7 @@ hr{
                               <input id="add_yoj<?= $index + 1 ?>" name="add_yoj[]" type="text" placeholder="Year of Joining" class="form-control input-md" autofocus="" value="<?= $qualification['yoj'] ?? '' ?>">
                             </td>
                             <td class="col-md-1">
-                              <input id="add_yoc<?= $index + 1 ?>" name="add_yoc[]" type="text" placeholder="Year of Completion" class="form-control input-md" autofocus="" value="<?= $qualification['yoc'] ?? '' ?>">
+                              <input id="add_yog<?= $index + 1 ?>" name="add_yog[]" type="text" placeholder="Year of Completion" class="form-control input-md" autofocus="" value="<?= $qualification['yog'] ?? '' ?>">
                             </td>
                             <td class="col-md-1">
                               <input id="add_duration<?= $index + 1 ?>" name="add_duration[]" type="text" placeholder="Duration (in years)" class="form-control input-md" autofocus="" value="<?= $qualification['duration'] ?? '' ?>">

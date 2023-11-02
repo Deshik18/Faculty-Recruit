@@ -80,30 +80,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ));
 
     $additional_qualifications = array();
+    if(isset($_POST['add_degree'])) {
     for ($i = 0; $i < count($_POST['add_degree']); $i++) {
         $qualification = array(
             'degree' => $_POST['add_degree'][$i],
             'college' => $_POST['add_college'][$i],
-            'stream' => $_POST['add_subjects'][$i],
+            'stream' => $_POST['add_stream'][$i],
             'yoj' => $_POST['add_yoj'][$i],
-            'yoc' => $_POST['add_yoc'][$i],
+            'yog' => $_POST['add_yog'][$i],
             'duration' => $_POST['add_duration'][$i],
-            'percentage' => $_POST['add_perce'][$i],
-            'division' => $_POST['add_rank'][$i], // Update the key to 'division'
+            'percentage' => $_POST['add_percentage'][$i],
+            'division' => $_POST['add_division'][$i], // Update the key to 'division'
         );
         $additional_qualifications[] = $qualification;
+    }
     }
 
     // Encode the array as JSON
     $additional_qualifications_json = json_encode($additional_qualifications);
 
-    $var = 1;
-
     // Now you can update your database with these JSON values
-    $updateQuery = "UPDATE faculty_details SET acad_bool = ?, phd_det = ?, pg_det = ?, ug_det = ?, sch_det = ?, additional_qualifications = ? WHERE email = ?";
+    $updateQuery = "UPDATE faculty_details SET  phd_det = ?, pg_det = ?, ug_det = ?, sch_det = ?, additional_qualifications = ? WHERE email = ?";
 
     $stmt = $conn->prepare($updateQuery);
-    $stmt->bind_param("issssss", $var, $phd_details, $pg_details, $ug_details, $sch_details, $additional_qualifications_json, $_SESSION['email']);
+    $stmt->bind_param("ssssss", $phd_details, $pg_details, $ug_details, $sch_details, $additional_qualifications_json, $_SESSION['email']);
 
 
     if ($stmt->execute()) {
