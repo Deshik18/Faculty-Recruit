@@ -3,21 +3,21 @@
 <!-- saved from url=(0054)https://ofa.iiti.ac.in/facrec_che_2023_july_02/publish -->
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>Publication Details</title>
-	<link rel="stylesheet" type="text/css" href="./Publication Details(4)_files/favicon.ico">
-	<link rel="icon" href="./Publication Details(4)_files/favicon.ico" type="image/x-icon">
-	<link rel="stylesheet" type="text/css" href="./Publication Details(4)_files/bootstrap.css">
-	<link rel="stylesheet" type="text/css" href="./Publication Details(4)_files/bootstrap-datepicker.css">
-	<script type="text/javascript" src="./Publication Details(4)_files/jquery.js.download"></script>
-	<script type="text/javascript" src="./Publication Details(4)_files/bootstrap.js.download"></script>
-	<script type="text/javascript" src="./Publication Details(4)_files/bootstrap-datepicker.js.download"></script>
+	<link rel="stylesheet" type="text/css" href="../favicon.ico" type="image/x-icon">
+	<link rel="icon" href="../favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="../bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="../bootstrap-datepicker.css">
+	<script type="text/javascript" src="../jquery.js"></script>
+	<script type="text/javascript" src="../bootstrap.js"></script>
+	<script type="text/javascript" src="../bootstrap-datepicker.js"></script>
 
-	<link href="./Publication Details(4)_files/css" rel="stylesheet"> 
-	<link href="./Publication Details(4)_files/css(1)" rel="stylesheet"> 
-	<link href="./Publication Details(4)_files/css(2)" rel="stylesheet"> 
-	<link href="./Publication Details(4)_files/css(3)" rel="stylesheet"> 
-	<link href="./Publication Details(4)_files/css(4)" rel="stylesheet"> 
+	<link href="../files/css" rel="stylesheet"> 
+	<link href="../files/css(1)" rel="stylesheet"> 
+	<link href="../files/css(2)" rel="stylesheet"> 
+	<link href="../files/css(3)" rel="stylesheet"> 
+	<link href="../files/css(4)" rel="stylesheet"> 
 	<link rel="preconnect" href="https://fonts.gstatic.com/">
-	<link href="./Publication Details(4)_files/css2" rel="stylesheet">
+	<link href="../files/css2" rel="stylesheet">
 
 
 	
@@ -558,7 +558,7 @@ var counter_patent=1;
 <div class="form-group">
 
   <div class="col-md-1">
-    <a href="https://ofa.iiti.ac.in/facrec_che_2023_july_02/employment_details" class="btn btn-primary pull-left"><i class="glyphicon glyphicon-fast-backward"></i></a>
+    <a href="../acad_det/main.php" class="btn btn-primary pull-left"><i class="glyphicon glyphicon-fast-backward"></i></a>
   </div>
 
 <div class="col-md-11">

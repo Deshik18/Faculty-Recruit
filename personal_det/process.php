@@ -84,24 +84,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $stmt = $conn->prepare($query);
 
-    if (!$stmt) {
-        die('Database error: ' . $conn->error);
-    }
-
     $stmt->bind_param("issssss", $var, $application_details, $per_det, $cadd_det, $padd_det, $contact_det, $_SESSION['email']);
 
     if ($stmt->execute()) {
         // Data has been successfully inserted into the database
         $selected_department = $_POST['dept'];
-        $photo_upload_dir = '../Documents/' . $selected_department . '/'; // Specify the directory where you want to store uploaded images
-
+        $photo_upload_dir = '../Document/' . $selected_department . '/';
+    
         if (!file_exists($photo_upload_dir)) {
-            mkdir($photo_upload_dir, 0777, true); // Create the directory if it doesn't exist
+            mkdir($photo_upload_dir, 0777, true);
         }
-
-        $photo_file_type = strtolower(pathinfo($photo_file, PATHINFO_EXTENSION));
-        $photo_file = $photo_upload_dir . $_SESSION['email'] . '_photo' . $photo_file_type;
-        // Check if the file is a valid image
+    
+        $photo_file_type = strtolower(pathinfo($_FILES['userfile']['name'], PATHINFO_EXTENSION)); // Get the file type from the uploaded file
+        $photo_file = $photo_upload_dir . $_SESSION['email'] . '_photo.' . $photo_file_type; // Define $photo_file here
+    
         if (getimagesize($_FILES['userfile']['tmp_name']) === false) {
             die('Invalid file. Please upload a valid image.');
         } elseif ($_FILES['userfile']['size'] > 1000000) {
@@ -109,19 +105,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($photo_file_type !== 'jpg' && $photo_file_type !== 'jpeg') {
             die('Only JPG and JPEG images are allowed.');
         }
-
+    
         if (move_uploaded_file($_FILES['userfile']['tmp_name'], $photo_file)) {
-
-            $id_proof_upload_dir = '../Documents/' . $selected_department . '/';
+            // The photo file has been successfully uploaded
+    
+            $id_proof_upload_dir = '../Document/' . $selected_department . '/';
+    
             if (!file_exists($id_proof_upload_dir)) {
-                mkdir($id_proof_upload_dir, 0777, true); // Create the department's subfolder if it doesn't exist
+                mkdir($id_proof_upload_dir, 0777, true);
             }
-
+    
             $id_proof_file = $id_proof_upload_dir . $_SESSION['email'] . '_idproof.' . $photo_file_type;
-
+    
             if (move_uploaded_file($_FILES['userfile2']['tmp_name'], $id_proof_file)) {
                 // Data and files uploaded successfully
-                header('Location: success.html');
+                header('Location: ../acad_det/main.php');
                 exit();
             } else {
                 die('Error uploading the ID proof file.');
@@ -131,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } else {
         die('Error inserting data into the database.');
-    }
+    }    
 } else {
     die('Invalid request.');
 }

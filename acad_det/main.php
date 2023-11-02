@@ -1,8 +1,34 @@
 
-<!-- Add this PHP code at the top of your HTML page -->
 <?php
 session_start(); // Start the session (make sure this is at the top of your PHP file)
+include '../config.php';
+
+$acad_bool = 0;
+$phd_details = $pg_det = $ug_det = $sch_details = array(); // Initialize as empty arrays
+$additional_qualifications = array();
+
+// Check if acad_bool is 1 in the database
+$sql = "SELECT acad_bool, phd_det, pg_det, ug_det, sch_det, additional_qualifications FROM faculty_details WHERE email = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $_SESSION['email']);
+$stmt->execute();
+$stmt->bind_result($acad_bool, $phd_json, $pg_json, $ug_json, $sch_json, $additional_qualifications_json);
+$stmt->fetch();
+$stmt->close();
+
+// If acad_bool is 1, decode the JSON and populate the form values
+if ($acad_bool == 1) {
+  $phd_details = json_decode($phd_json, true);
+  $pg_det = json_decode($pg_json, true);
+  $ug_det = json_decode($ug_json, true);
+  $sch_details = json_decode($sch_json, true);
+}
+
+// Decode and populate additional_qualifications
+$additional_qualifications = json_decode($additional_qualifications_json, true);
+
 ?>
+
 <html>
 <head>
 	<title>Academic Details</title>
@@ -179,7 +205,7 @@ hr{
 <div class="container">
 <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 well">
-        <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+        <form class="form-horizontal" action="process.php" method="post" enctype="multipart/form-data">
           <input type="hidden" name="ci_csrf_token" value="" />
         <fieldset>
          
@@ -203,45 +229,44 @@ hr{
       <div class="panel-heading">(A) Details of PhD *</div>
         <div class="panel-body">
           
-          <span class="col-md-2 control-label" for="college_phd">University/Institute</span>  
+        <span class="col-md-2 control-label" for="college_phd">University/Institute</span>
           <div class="col-md-4">
-          <input id="college_phd" value="" name="college_phd" type="text" placeholder="University/Institute" class="form-control input-md" autofocus="" required="">
+              <input id="college_phd" value="<?php echo (is_array($phd_details) && array_key_exists('college', $phd_details)) ? $phd_details['college'] : ''; ?>" name="college_phd" type="text" placeholder="University/Institute" class="form-control input-md" autofocus="" required="">
           </div>
 
-          <span class="col-md-2 control-label" for="stream">Department</span>  
+          <span class="col-md-2 control-label" for="stream">Department</span>
           <div class="col-md-4">
-          <input id="stream" value="" name="stream" type="text" placeholder="Department" class="form-control input-md" autofocus="">
-          </div> 
-          
-          <span class="col-md-2 control-label" for="duration_phd">Name of PhD Supervisor</span>  
-          <div class="col-md-4">
-          <input id="supervisor" name="supervisor" type="text" placeholder="Name of Ph. D. Supervisor" value="" class="form-control input-md" required="">
+              <input id="stream" value="<?php echo (is_array($phd_details) && array_key_exists('stream', $phd_details)) ? $phd_details['stream'] : ''; ?>" name="stream" type="text" placeholder="Department" class="form-control input-md" autofocus="">
           </div>
 
-          <span class="col-md-2 control-label" for="yoj_phd">Year of Joining</span>  
+          <span class="col-md-2 control-label" for="supervisor">Name of PhD Supervisor</span>
           <div class="col-md-4">
-          <input id="yoj_phd" value="" name="yoj_phd" type="text" placeholder="Year of Joining" class="form-control input-md" required="">
+              <input id="supervisor" value="<?php echo (is_array($phd_details) && array_key_exists('supervisor', $phd_details)) ? $phd_details['supervisor'] : ''; ?>" name="supervisor" type="text" placeholder="Name of Ph. D. Supervisor" class="form-control input-md" required="">
           </div>
-          
+
+          <span class="col-md-2 control-label" for="yoj_phd">Year of Joining</span>
+          <div class="col-md-4">
+              <input id="yoj_phd" value="<?php echo (is_array($phd_details) && array_key_exists('yoj', $phd_details)) ? $phd_details['yoj'] : ''; ?>" name="yoj_phd" type="text" placeholder="Year of Joining" class="form-control input-md" required="">
+          </div>
+
           <div class="row">
-          <div class="col-md-12">
-          <span class="col-md-2 control-label" for="dod_phd">Date of Successful Thesis Defence</span>  
-          <div class="col-md-4">
-          <input id="dod_phd" name="dod_phd" type="text" data-provide="datepicker" placeholder="Date of Defence" value="" class="form-control input-md datepicker" required="">
+              <div class="col-md-12">
+                  <span class="col-md-2 control-label" for="dod_phd">Date of Successful Thesis Defence</span>
+                  <div class="col-md-4">
+                      <input id="dod_phd" value="<?php echo (is_array($phd_details) && array_key_exists('dod', $phd_details)) ? $phd_details['dod'] : ''; ?>" name="dod_phd" type="text" data-provide="datepicker" placeholder="Date of Defence" class="form-control input-md datepicker" required="">
+                  </div>
+
+                  <span class="col-md-2 control-label" for="doa_phd">Date of Award</span>
+                  <div class="col-md-4">
+                      <input id="doa_phd" value="<?php echo (is_array($phd_details) && array_key_exists('doa', $phd_details)) ? $phd_details['doa'] : ''; ?>" name="doa_phd" type="text" data-provide="datepicker" placeholder="Date of Award" class="form-control input-md datepicker" required="">
+                  </div>
+              </div>
           </div>
 
-          <span class="col-md-2 control-label" for="doa_phd">Date of Award</span>  
-          <div class="col-md-4">
-          <input id="doa_phd" name="doa_phd" type="text" data-provide="datepicker" placeholder="Date of Award" value="" class="form-control input-md datepicker" required="">
-          </div>
-          </div>
-          </div>
-          <br />
-          <span class="col-md-2 control-label" for="phd_title">Title of PhD Thesis</span>  
+          <span class="col-md-2 control-label" for="phd_title">Title of PhD Thesis</span>
           <div class="col-md-10">
-          <input id="phd_title" value="" name="phd_title" type="text" placeholder="Title of PhD Thesis" class="form-control input-md" required="">
+              <input id="phd_title" value="<?php echo (is_array($phd_details) && array_key_exists('title', $phd_details)) ? $phd_details['title'] : ''; ?>" name="phd_title" type="text" placeholder="Title of PhD Thesis" class="form-control input-md" required="">
           </div>
-
       </div>
     </div>
   </div>
@@ -250,234 +275,288 @@ hr{
 
 <div class="row">
     <div class="col-md-12">
-      <div class="panel panel-success">
-      <div class="panel-heading">(B) Academic Details - M. Tech./ M.E./ PG Details</div>
-        <div class="panel-body">
-          
-          <span class="col-md-2 control-label" for="pg_degree">Degree/Certificate</span>  
-          <div class="col-md-4">
-          <input id="pg_degree" value="" name="pg_degree" type="text" placeholder="Degree/Certificate" class="form-control input-md" autofocus="">
-          </div>
+        <div class="panel panel-success">
+            <div class="panel-heading">(B) Academic Details - M. Tech./ M.E./ PG Details</div>
+            <div class="panel-body">
+                <span class="col-md-2 control-label" for="pg_degree">Degree/Certificate</span>
+                <div class="col-md-4">
+                    <input id="pg_degree" value="<?php echo (is_array($pg_det) && array_key_exists('degree', $pg_det)) ? $pg_det['degree'] : ''; ?>" name="pg_degree" type="text" placeholder="Degree/Certificate" class="form-control input-md" autofocus="">
+                </div>
 
-          <span class="col-md-2 control-label" for="pg_college">University/Institute</span>  
-          <div class="col-md-4">
-          <input id="pg_college" value="" name="pg_college" type="text" placeholder="University/Institute" class="form-control input-md" autofocus="">
-          </div> 
-          
-          <span class="col-md-2 control-label" for="pg_subjects">Branch/Stream</span>  
-          <div class="col-md-4">
-          <input id="pg_subjects" name="pg_subjects" type="text" placeholder="Branch/Stream" value="" class="form-control input-md" >
-          </div>
+                <span class="col-md-2 control-label" for="pg_college">University/Institute</span>
+                <div class="col-md-4">
+                    <input id="pg_college" value="<?php echo (is_array($pg_det) && array_key_exists('college', $pg_det)) ? $pg_det['college'] : ''; ?>" name="pg_college" type="text" placeholder="University/Institute" class="form-control input-md" autofocus="">
+                </div>
 
-          <span class="col-md-2 control-label" for="pg_yoj">Year of Joining</span>  
-          <div class="col-md-4">
-          <input id="pg_yoj" value="" name="pg_yoj" type="text" placeholder="Year of Joining" class="form-control input-md" >
-          </div>
-          
-          <div class="row">
-          <div class="col-md-12">
-          <span class="col-md-2 control-label" for="pg_yog">Year of Completion</span>  
-          <div class="col-md-4">
-          <input id="pg_yog" name="pg_yog" type="text" placeholder="Year of Completion" value="" class="form-control input-md" >
-          </div>
+                <span class="col-md-2 control-label" for="pg_subjects">Branch/Stream</span>
+                <div class="col-md-4">
+                    <input id="pg_subjects" value="<?php echo (is_array($pg_det) && array_key_exists('subjects', $pg_det)) ? $pg_det['subjects'] : ''; ?>" name="pg_subjects" type="text" placeholder="Branch/Stream" class="form-control input-md">
+                </div>
 
-          <span class="col-md-2 control-label" for="pg_duration">Duration (in years)</span>  
-          <div class="col-md-4">
-          <input id="pg_duration" name="pg_duration" type="text" placeholder="Duration" value="" class="form-control input-md" >
-          </div>
+                <span class="col-md-2 control-label" for="pg_yoj">Year of Joining</span>
+                <div class="col-md-4">
+                    <input id="pg_yoj" value="<?php echo (is_array($pg_det) && array_key_exists('yoj', $pg_det)) ? $pg_det['yoj'] : ''; ?>" name="pg_yoj" type="text" placeholder="Year of Joining" class="form-control input-md">
+                </div>
 
-          <span class="col-md-2 control-label" for="pg_perce">Percentage/ CGPA</span>  
-          <div class="col-md-4">
-          <input id="pg_perce" name="pg_perce" type="text" placeholder="Percentage/ CGPA" value="" class="form-control input-md" >
-          </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <span class="col-md-2 control-label" for="pg_yog">Year of Completion</span>
+                        <div class="col-md-4">
+                            <input id="pg_yog" value="<?php echo (is_array($pg_det) && array_key_exists('yog', $pg_det)) ? $pg_det['yog'] : ''; ?>" name="pg_yog" type="text" placeholder="Year of Completion" class="form-control input-md">
+                        </div>
 
-          <span class="col-md-2 control-label" for="pg_rank">Division/Class</span>  
-          <div class="col-md-4">
-          <input id="pg_rank" name="pg_rank" type="text" placeholder="Division/Class" value="" class="form-control input-md" >
-          </div>
+                        <span class="col-md-2 control-label" for="pg_duration">Duration (in years)</span>
+                        <div class="col-md-4">
+                            <input id="pg_duration" value="<?php echo (is_array($pg_det) && array_key_exists('duration', $pg_det)) ? $pg_det['duration'] : ''; ?>" name="pg_duration" type="text" placeholder="Duration" class="form-control input-md">
+                        </div>
 
-          </div>
-          </div>
-          <br />
-          
+                        <span class="col-md-2 control-label" for="pg_perce">Percentage/ CGPA</span>
+                        <div class="col-md-4">
+                            <input id="pg_perce" value="<?php echo (is_array($pg_det) && array_key_exists('percentage', $pg_det)) ? $pg_det['percentage'] : ''; ?>" name="pg_perce" type="text" placeholder="Percentage/ CGPA" class="form-control input-md">
+                        </div>
 
-      </div>
+                        <span class="col-md-2 control-label" for="pg_rank">Division/Class</span>
+                        <div class="col-md-4">
+                            <input id="pg_rank" value="<?php echo (is_array($pg_det) && array_key_exists('rank', $pg_det)) ? $pg_det['rank'] : ''; ?>" name="pg_rank" type="text" placeholder="Division/Class" class="form-control input-md">
+                        </div>
+                    </div>
+                </div>
+                <br />
+            </div>
+        </div>
     </div>
-  </div>
 </div>
-
-
 
 <div class="row">
     <div class="col-md-12">
-      <div class="panel panel-success">
-      <div class="panel-heading">(C) Academic Details - B. Tech /B.E. / UG Details *</div>
-        <div class="panel-body">
-          
-          <span class="col-md-2 control-label" for="ug_degree">Degree/Certificate</span>  
-          <div class="col-md-4">
-          <input id="ug_degree" value="" name="ug_degree" type="text" placeholder="Degree/Certificate" class="form-control input-md" autofocus="" required="">
-          </div>
+        <div class="panel panel-success">
+            <div class="panel-heading">(C) Academic Details - B. Tech /B.E. / UG Details *</div>
+            <div class="panel-body">
+                <span class="col-md-2 control-label" for="ug_degree">Degree/Certificate</span>
+                <div class="col-md-4">
+                    <input id="ug_degree" value="<?php echo (is_array($ug_det) && array_key_exists('degree', $ug_det)) ? $ug_det['degree'] : ''; ?>" name="ug_degree" type="text" placeholder="Degree/Certificate" class="form-control input-md" autofocus="" required="">
+                </div>
 
-          <span class="col-md-2 control-label" for="ug_college">University/Institute</span>  
-          <div class="col-md-4">
-          <input id="ug_college" value="" name="ug_college" type="text" placeholder="University/Institute" class="form-control input-md" autofocus="">
-          </div> 
-          
-          <span class="col-md-2 control-label" for="ug_subjects">Branch/Stream</span>  
-          <div class="col-md-4">
-          <input id="ug_subjects" name="ug_subjects" type="text" placeholder="Branch/Stream" value="" class="form-control input-md" required="">
-          </div>
+                <span class="col-md-2 control-label" for="ug_college">University/Institute</span>
+                <div class="col-md-4">
+                    <input id="ug_college" value="<?php echo (is_array($ug_det) && array_key_exists('college', $ug_det)) ? $ug_det['college'] : ''; ?>" name="ug_college" type="text" placeholder="University/Institute" class="form-control input-md" autofocus="">
+                </div>
 
-          <span class="col-md-2 control-label" for="ug_yoj">Year of Joining</span>  
-          <div class="col-md-4">
-          <input id="ug_yoj" value="" name="ug_yoj" type="text" placeholder="Year of Joining" class="form-control input-md" required="">
-          </div>
-          
-          <div class="row">
-          <div class="col-md-12">
-          <span class="col-md-2 control-label" for="ug_yog">Year of Completion</span>  
-          <div class="col-md-4">
-          <input id="ug_yog" name="ug_yog" type="text" placeholder="Year of Completion" value="" class="form-control input-md" required="">
-          </div>
+                <span class="col-md-2 control-label" for="ug_subjects">Branch/Stream</span>
+                <div class="col-md-4">
+                    <input id="ug_subjects" value="<?php echo (is_array($ug_det) && array_key_exists('subjects', $ug_det)) ? $ug_det['subjects'] : ''; ?>" name="ug_subjects" type="text" placeholder="Branch/Stream" class="form-control input-md" required="">
+                </div>
 
-          <span class="col-md-2 control-label" for="ug_duration">Duration (in years)</span>  
-          <div class="col-md-4">
-          <input id="ug_duration" name="ug_duration" type="text" placeholder="Duration" value="" class="form-control input-md" required="">
-          </div>
+                <span class="col-md-2 control-label" for="ug_yoj">Year of Joining</span>
+                <div class="col-md-4">
+                    <input id="ug_yoj" value="<?php echo (is_array($ug_det) && array_key_exists('yoj', $ug_det)) ? $ug_det['yoj'] : ''; ?>" name="ug_yoj" type="text" placeholder="Year of Joining" class="form-control input-md" required="">
+                </div>
 
-          <span class="col-md-2 control-label" for="ug_perce">Percentage/ CGPA</span>  
-          <div class="col-md-4">
-          <input id="ug_perce" name="ug_perce" type="text" placeholder="Percentage/ CGPA" value="" class="form-control input-md" required="">
-          </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <span class="col-md-2 control-label" for="ug_yog">Year of Completion</span>
+                        <div class="col-md-4">
+                            <input id="ug_yog" value="<?php echo (is_array($ug_det) && array_key_exists('yog', $ug_det)) ? $ug_det['yog'] : ''; ?>" name="ug_yog" type="text" placeholder="Year of Completion" class="form-control input-md" required="">
+                        </div>
 
-          <span class="col-md-2 control-label" for="ug_rank">Division/Class</span>  
-          <div class="col-md-4">
-          <input id="ug_rank" name="ug_rank" type="text" placeholder="Division/Class" value="" class="form-control input-md" required="">
-          </div>
+                        <span class="col-md-2 control-label" for="ug_duration">Duration (in years)</span>
+                        <div class="col-md-4">
+                            <input id="ug_duration" value="<?php echo (is_array($ug_det) && array_key_exists('duration', $ug_det)) ? $ug_det['duration'] : ''; ?>" name="ug_duration" type="text" placeholder="Duration" class="form-control input-md" required="">
+                        </div>
 
-          
+                        <span class="col-md-2 control-label" for="ug_perce">Percentage/ CGPA</span>
+                        <div class="col-md-4">
+                            <input id="ug_perce" value="<?php echo (is_array($ug_det) && array_key_exists('percentage', $ug_det)) ? $ug_det['percentage'] : ''; ?>" name="ug_perce" type="text" placeholder="Percentage/ CGPA" class="form-control input-md" required="">
+                        </div>
 
-          </div>
-          </div>
-          <br />
-          
-
-      </div>
+                        <span class="col-md-2 control-label" for="ug_rank">Division/Class</span>
+                        <div class="col-md-4">
+                            <input id="ug_rank" value="<?php echo (is_array($ug_det) && array_key_exists('rank', $ug_det)) ? $ug_det['rank'] : ''; ?>" name="ug_rank" type="text" placeholder="Division/Class" class="form-control input-md" required="">
+                        </div>
+                    </div>
+                </div>
+                <br />
+            </div>
+        </div>
     </div>
-  </div>
 </div>
-
 
 <div class="row">
     <div class="col-md-12">
-      <div class="panel panel-success">
-      <div class="panel-heading">(D) Academic Details - School *
-        
-      </div>
-        <div class="panel-body">
-          <table class="table table-bordered">
-              
-              <tr height="30px">
-                <th class="col-md-3"> 10th/12th/HSC/Diploma </th>
-                <th class="col-md-3"> School </th>
-                <th class="col-md-1"> Year of Passing</th>
-                <th class="col-md-2"> Percentage/ Grade </th>
-                <th class="col-md-2"> Division/Class </th>
-              </tr>
-              
-              
-              <tr height="60px">
-                <td class="col-md-2">  
-                    <input id="hsc_ssc1" name="hsc_ssc[]" type="text" value="12th/HSC/Diploma" placeholder="" class="form-control input-md" readonly="" required=""> 
-                </td>
+        <div class="panel panel-success">
+            <div class="panel-heading">(D) Academic Details - School *</div>
+            <div class="panel-body">
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr height="30px">
+                            <th class="col-md-3"> 10th/12th/HSC/Diploma </th>
+                            <th class="col-md-3"> School </th>
+                            <th class="col-md-1"> Year of Passing</th>
+                            <th class="col-md-2"> Percentage/ Grade </th>
+                            <th class="col-md-2"> Division/Class </th>
+                        </tr>
 
-                <td class="col-md-2"> 
-                    <input id="school1" name="school[]" type="text" value=""  placeholder="School" class="form-control input-md" maxlength="80" required=""> 
-                  </td>
-                <td class="col-md-2"> 
-                  <input id="passing_year1" name="passing_year[]" type="text" value=""  placeholder="Passing Year" class="form-control input-md" maxlength="5" required=""> 
-                </td>
+                        <?php
+                        if (isset($sch_details['hsc_ssc'])) {
+                            for ($i = 0; $i < 2; $i++) {
+                              if($i == 0){
+                                $hsc_ssc_value = "12th/HSC/Diploma";
+                              }else{
+                                $hsc_ssc_value = "10th";
+                              }
+                                $school_value = $sch_details['school'][$i];
+                                $passing_year_value = $sch_details['passing_year'][$i];
+                                $s_perce_value = $sch_details['percentage'][$i];
+                                $s_rank_value = $sch_details['rank'][$i];
+                        ?>
+                            <tr height="60px">
+                                <td class="col-md-2">
+                                    <input id="hsc_ssc<?php echo $i + 1; ?>" name="hsc_ssc[]" type="text" value="<?php echo $hsc_ssc_value; ?>" placeholder="" class="form-control input-md" readonly="" required="">
+                                </td>
 
-              
+                                <td class="col-md-2">
+                                    <input id="school<?php echo $i + 1; ?>" name="school[]" type="text" value="<?php echo $school_value; ?>" placeholder="School" class="form-control input-md" maxlength="80" required="">
+                                </td>
 
-                <td class="col-md-2"> 
-                  <input id="s_perce1" name="s_perce[]" type="text" value=""  placeholder="Percentage/Grade" class="form-control input-md" maxlength="5" required="">
-                </td>
+                                <td class="col-md-2">
+                                    <input id="passing_year<?php echo $i + 1; ?>" name="passing_year[]" type="text" value="<?php echo $passing_year_value; ?>" placeholder="Passing Year" class="form-control input-md" maxlength="5" required="">
+                                </td>
 
-                 
-                <td class="col-md-2"> 
-                  <input id="s_rank1" name="s_rank[]" type="text" value=""  placeholder="Percentage/Grade" class="form-control input-md" maxlength="5" required="">
-                </td>
+                                <td class="col-md-2">
+                                    <input id="s_perce<?php echo $i + 1; ?>" name="s_perce[]" type="text" value="<?php echo $s_perce_value; ?>" placeholder="Percentage/Grade" class="form-control input-md" maxlength="5" required="">
+                                </td>
+
+                                <td class="col-md-2">
+                                    <input id="s_rank<?php echo $i + 1; ?>" name="s_rank[]" type="text" value="<?php echo $s_rank_value; ?>" placeholder="Percentage/Grade" class="form-control input-md" maxlength="5" required="">
+                                </td>
+                            </tr>
+                        <?php
+                            }
+                        }else{
+                          ?>
+                          <tr height="60px">
+                          <td class="col-md-2">  
+                              <input id="hsc_ssc1" name="hsc_ssc[]" type="text" value="12th/HSC/Diploma" placeholder="" class="form-control input-md" readonly="" required=""> 
+                          </td>
+
+                          <td class="col-md-2"> 
+                              <input id="school1" name="school[]" type="text" value="" placeholder="School" class="form-control input-md" maxlength="80" required=""> 
+                            </td>
+                          <td class="col-md-2"> 
+                            <input id="passing_year1" name="passing_year[]" type="text" value="" placeholder="Passing Year" class="form-control input-md" maxlength="5" required=""> 
+                          </td>
+
+                        
+
+                          <td class="col-md-2"> 
+                            <input id="s_perce1" name="s_perce[]" type="text" value="" placeholder="Percentage/Grade" class="form-control input-md" maxlength="5" required="">
+                          </td>
+
+                          
+                          <td class="col-md-2"> 
+                            <input id="s_rank1" name="s_rank[]" type="text" value="" placeholder="Percentage/Grade" class="form-control input-md" maxlength="5" required="">
+                          </td>
 
 
-              </tr>
-              
-              <tr height="60px">
-                <td class="col-md-2">  
-                    <input id="hsc_ssc2" name="hsc_ssc[]" type="text" value="10th" placeholder="" class="form-control input-md" readonly="" required=""> 
-                </td>
+                        </tr>
+                        
+                        <tr height="60px">
+                          <td class="col-md-2">  
+                              <input id="hsc_ssc2" name="hsc_ssc[]" type="text" value="10th" placeholder="" class="form-control input-md" readonly="" required=""> 
+                          </td>
 
-                <td class="col-md-2"> 
-                    <input id="school2" name="school[]" type="text" value=""  placeholder="School" class="form-control input-md" maxlength="80" required=""> 
-                  </td>
-                <td class="col-md-2"> 
-                  <input id="passing_year2" name="passing_year[]" type="text" value=""  placeholder="Passing Year" class="form-control input-md" maxlength="5" required=""> 
-                </td>
+                          <td class="col-md-2"> 
+                              <input id="school2" name="school[]" type="text" value="" placeholder="School" class="form-control input-md" maxlength="80" required=""> 
+                            </td>
+                          <td class="col-md-2"> 
+                            <input id="passing_year2" name="passing_year[]" type="text" value="" placeholder="Passing Year" class="form-control input-md" maxlength="5" required=""> 
+                          </td>
 
-              
+                        
 
-                <td class="col-md-2"> 
-                  <input id="s_perce2" name="s_perce[]" type="text" value=""  placeholder="Percentage/Grade" class="form-control input-md" maxlength="5" required="">
-                </td>
+                          <td class="col-md-2"> 
+                            <input id="s_perce2" name="s_perce[]" type="text" value="" placeholder="Percentage/Grade" class="form-control input-md" maxlength="5" required="">
+                          </td>
 
-                 
-                <td class="col-md-2"> 
-                  <input id="s_rank2" name="s_rank[]" type="text" value=""  placeholder="Percentage/Grade" class="form-control input-md" maxlength="5" required="">
-                </td>
+                          
+                          <td class="col-md-2"> 
+                            <input id="s_rank2" name="s_rank[]" type="text" value="" placeholder="Percentage/Grade" class="form-control input-md" maxlength="5" required="">
+                          </td>
 
 
-              </tr>
-                            
-           
-          </table>
-
-      </div>
+                        </tr>
+                        <?php
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
- 
+
 <div class="row">
     <div class="col-md-12">
-      <div class="panel panel-success">
-      <div class="panel-heading">(E) Additional Educational Qualification (If any)
-        <button class="btn btn-sm btn-danger" id="add_more_acde">Add More</button>
-      </div>
-        <div class="panel-body">
-          <table class="table table-bordered">
-              <tbody id="acde">
-              
-              <tr height="30px">
-                <th class="col-md-2"> Degree/Certificate </th>
-                <th class="col-md-2"> University/Institute </th>
-                <th class="col-md-2"> Branch/Stream </th>
-                <th class="col-md-1"> Year of Joining</th>
-                <th class="col-md-1"> Year of Completion </th>
-                <th class="col-md-1"> Duration (in years)</th>
-                <th class="col-md-3"> Percentage/ CGPA </th>
-                <th class="col-md-3"> Division/Class</th>
-              </tr>
-              
-                            
-           
-            </tbody>
-          </table>
+        <div class="panel panel-success">
+            <div class="panel-heading">(E) Additional Educational Qualification (If any)
+                <button class="btn btn-sm btn-danger" id="add_more_acde">Add More</button>
+            </div>
+            <div class="panel-body">
+                <table class="table table-bordered">
+                    <tbody id="acde">
 
-      </div>
+                    <tr height="30px">
+                      <th class="col-md-2"> Degree/Certificate </th>
+                      <th class="col-md-2"> University/Institute </th>
+                      <th class="col-md-2"> Branch/Stream </th>
+                      <th class="col-md-1"> Year of Joining</th>
+                      <th class="col-md-1"> Year of Completion </th>
+                      <th class="col-md-1"> Duration (in years)</th>
+                      <th class="col-md-3"> Percentage/ CGPA </th>
+                      <th class="col-md-3"> Division/Class</th>
+                    </tr>
+
+                        <?php
+                        // Iterate through additional qualification data and populate the fields
+                        if (!empty($additional_qualifications)) {
+                          foreach ($additional_qualifications as $index => $qualification) {
+                        ?>
+                          <tr height="60px">
+                            <td class="col-md-2">
+                              <input id="add_degree<?= $index + 1 ?>" name="add_degree[]" type="text" placeholder="Degree/Certificate" class="form-control input-md" autofocus="" value="<?= $qualification['degree'] ?? '' ?>">
+                            </td>
+                            <td class="col-md-2">
+                              <input id="add_college<?= $index + 1 ?>" name="add_college[]" type="text" placeholder="University/Institute" class="form-control input-md" autofocus="" value="<?= $qualification['college'] ?? '' ?>">
+                            </td>
+                            <td class="col-md-2">
+                              <input id="add_stream<?= $index + 1 ?>" name="add_stream[]" type="text" placeholder="Branch/Stream" class="form-control input-md" autofocus="" value="<?= $qualification['stream'] ?? '' ?>">
+                            </td>
+                            <td class="col-md-1">
+                              <input id="add_yoj<?= $index + 1 ?>" name="add_yoj[]" type="text" placeholder="Year of Joining" class="form-control input-md" autofocus="" value="<?= $qualification['yoj'] ?? '' ?>">
+                            </td>
+                            <td class="col-md-1">
+                              <input id="add_yoc<?= $index + 1 ?>" name="add_yoc[]" type="text" placeholder="Year of Completion" class="form-control input-md" autofocus="" value="<?= $qualification['yoc'] ?? '' ?>">
+                            </td>
+                            <td class="col-md-1">
+                              <input id="add_duration<?= $index + 1 ?>" name="add_duration[]" type="text" placeholder="Duration (in years)" class="form-control input-md" autofocus="" value="<?= $qualification['duration'] ?? '' ?>">
+                            </td>
+                            <td class="col-md-3">
+                              <input id="add_percentage<?= $index + 1 ?>" name="add_percentage[]" type="text" placeholder="Percentage/CGPA" class="form-control input-md" autofocus="" value="<?= $qualification['percentage'] ?? '' ?>">
+                            </td>
+                            <td class="col-md-3">
+                              <input id="add_division<?= $index + 1 ?>" name="add_division[]" type="text" placeholder="Division/Class" class="form-control input-md" autofocus="" value="<?= $qualification['division'] ?? '' ?>">
+                            </td>
+                          </tr>
+                        <?php
+                          }
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
-
 
             <!-- Form Name -->
 
