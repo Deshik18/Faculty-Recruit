@@ -1,6 +1,6 @@
 <?php
 // Include your database connection or use any database connection method you prefer.
-include('../config.php'); // Change to your actual database connection file
+include('config.php'); // Change to your actual database connection file
 
 // Start the session
 session_start();
