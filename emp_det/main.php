@@ -141,8 +141,8 @@ var counter_ind_exp=1;
         create_serial('exp');
         create_input('position[]', 'Position','position'+counter_exp, 'exp',counter_exp, 'exp');
         create_input('org[]', 'Organization/Institution', 'org'+counter_exp,'exp',counter_exp, 'exp');
-        create_input('doj[]', 'DD/MM/YYYY', 'doj'+counter_exp,'exp',counter_exp, 'exp');
-        create_input('dol[]', 'DD/MM/YYYY', 'dol'+counter_exp,'exp',counter_exp, 'exp');
+        create_input('doj[]', 'DD/MM/YYYY', 'doj'+counter_exp,'exp',counter_exp, 'exp',  false, false, true);
+        create_input('dol[]', 'DD/MM/YYYY', 'dol'+counter_exp,'exp',counter_exp, 'exp',  false, false, true);
         create_input('duration[]', 'Duration','duration'+counter_exp, 'exp',counter_exp,'exp', true);
         counter_exp++;
         return false;
@@ -156,8 +156,8 @@ var counter_ind_exp=1;
         create_input('te_course[]', 'Courses', 'te_course'+counter_t_exp,'t_exp',counter_t_exp, 't_exp');
         create_input('te_ug_pg[]', 'UG/PG', 'te_ug_pg'+counter_t_exp,'t_exp',counter_t_exp, 't_exp');
         create_input('te_no_stu[]', 'No. of Students', 'te_no_stu'+counter_t_exp,'t_exp',counter_t_exp, 't_exp');
-        create_input('te_doj[]', 'DD/MM/YYYY', 'te_doj'+counter_t_exp,'t_exp',counter_t_exp, 't_exp');
-        create_input('te_dol[]', 'DD/MM/YYYY', 'te_dol'+counter_t_exp,'t_exp',counter_t_exp, 't_exp');
+        create_input('te_doj[]', 'DD/MM/YYYY', 'te_doj'+counter_t_exp,'t_exp',counter_t_exp, 't_exp',  false, false, true);
+        create_input('te_dol[]', 'DD/MM/YYYY', 'te_dol'+counter_t_exp,'t_exp',counter_t_exp, 't_exp',  false, false, true);
         create_input('te_duration[]', 'Duration', 'te_duration'+counter_t_exp,'t_exp',counter_t_exp, 't_exp', true);
         counter_t_exp++;
         return false;
@@ -170,8 +170,8 @@ var counter_ind_exp=1;
         create_input('r_exp_position[]', 'Position','r_exp_position'+counter_r_exp, 'r_exp',counter_r_exp, 'r_exp');
         create_input('r_exp_institute[]', 'Institute', 'r_exp_institute'+counter_r_exp,'r_exp',counter_r_exp, 'r_exp');
         create_input('r_exp_supervisor[]', 'Supervisor', 'r_exp_supervisor'+counter_r_exp,'r_exp',counter_r_exp, 'r_exp');
-        create_input('r_exp_doj[]', 'DD/MM/YYYY', 'r_exp_doj'+counter_r_exp,'r_exp',counter_r_exp, 'r_exp');
-        create_input('r_exp_dol[]', 'DD/MM/YYYY', 'r_exp_dol'+counter_r_exp,'r_exp',counter_r_exp, 'r_exp');
+        create_input('r_exp_doj[]', 'DD/MM/YYYY', 'r_exp_doj'+counter_r_exp,'r_exp',counter_r_exp, 'r_exp', false, false, true);
+        create_input('r_exp_dol[]', 'DD/MM/YYYY', 'r_exp_dol'+counter_r_exp,'r_exp',counter_r_exp, 'r_exp',  false, false, true);
         create_input('r_exp_duration[]', 'Duration', 'r_exp_duration'+counter_r_exp,'r_exp',counter_r_exp, 'r_exp', true);
         counter_r_exp++;
         return false;
@@ -184,14 +184,12 @@ $("#add_more_ind_exp").click(function(){
     create_serial('ind_exp');
     create_input('ind_org[]', 'Organization','ind_org'+counter_ind_exp, 'ind_exp',counter_ind_exp, 'ind_exp');
     create_input('ind_work[]', 'Work Profile', 'ind_work'+counter_ind_exp,'ind_exp',counter_ind_exp, 'ind_exp');
-    create_input('ind_doj[]', 'DD/MM/YYYY', 'ind_doj'+counter_ind_exp,'ind_exp',counter_ind_exp, 'ind_exp');
-    create_input('ind_dol[]', 'DD/MM/YYYY', 'ind_dol'+counter_ind_exp,'ind_exp',counter_ind_exp, 'ind_exp');
-    create_input('period[]', 'Duration', 'period'+counter_ind_exp,'ind_exp',counter_ind_exp, 'ind_exp',true);
+    create_input('ind_doj[]', 'DD/MM/YYYY', 'ind_doj'+counter_ind_exp,'ind_exp',counter_ind_exp, 'ind_exp', false, false, true);
+    create_input('ind_dol[]', 'DD/MM/YYYY', 'ind_dol'+counter_ind_exp,'ind_exp',counter_ind_exp, 'ind_exp',  false, false, true);
+    create_input('period[]', 'Duration', 'period'+counter_ind_exp,'ind_exp',counter_ind_exp, 'ind_exp', true);
     counter_ind_exp++;
     return false;
   });
-
-  
 
 });
 
@@ -221,6 +219,14 @@ $("#add_more_ind_exp").click(function(){
     obj.className += " datepicker";
     return obj;
 
+  }
+
+// Function to initialize datepicker
+  function initializeDatepicker(elementId) {
+      $(elementId).datepicker({
+          format: 'dd/mm/yyyy',
+          autoclose: true,
+      });
   }
   
   function create_input(t_name, place_value, id, tbody_id, counter, remove_name, btn=false, select=false, datepicker_set=false)
@@ -255,7 +261,7 @@ $("#add_more_ind_exp").click(function(){
     }
     if(datepicker_set==true)
     {
-      input=for_date_picker(input);
+      input = for_date_picker(input);
     }
     if(btn==true)
     {
@@ -347,12 +353,12 @@ $("#add_more_ind_exp").click(function(){
 
           <span class="col-md-2 control-label" for="pres_emp_doj">Date of Joining</span>  
           <div class="col-md-4">
-          <input id="pres_emp_doj" name="pres_emp_doj" type="text" placeholder="Date of Joining" value="<?php echo (is_array($pres_emp_det) && array_key_exists('doj', $pres_emp_det)) ? $pres_emp_det['doj'] : ''; ?>" class="form-control input-md" required="">
+          <input id="pres_emp_doj" name="pres_emp_doj" type="text" placeholder="Date of Joining" value="<?php echo (is_array($pres_emp_det) && array_key_exists('doj', $pres_emp_det)) ? $pres_emp_det['doj'] : ''; ?>" class="form-control input-md datepicker" required="">
           </div>
 
           <span class="col-md-2 control-label" for="pres_emp_dol">Date of Leaving <br />(Mention Continue if working)</span>  
           <div class="col-md-4">
-          <input id="pres_emp_dol" value="<?php echo (is_array($pres_emp_det) && array_key_exists('dol', $pres_emp_det)) ? $pres_emp_det['dol'] : ''; ?>" name="pres_emp_dol" type="text" placeholder="Date of Leaving" class="form-control input-md" required="">
+          <input id="pres_emp_dol" value="<?php echo (is_array($pres_emp_det) && array_key_exists('dol', $pres_emp_det)) ? $pres_emp_det['dol'] : ''; ?>" name="pres_emp_dol" type="text" placeholder="Date of Leaving" class="form-control input-md datepicker" required="">
           </div>
           
           <span class="col-md-2 control-label" for="pres_emp_duration">Duration (in years & months)</span>  
@@ -390,6 +396,7 @@ $("#add_more_ind_exp").click(function(){
                 foreach ($emp_hist as $index => $qualification) {
             ?>
                     <tr height="60px">
+                    <td class="col-md-1"><?php echo $index + 1; ?></td>
                         <td class="col-md-2">
                             <input id="position<?= $index + 1 ?>" name="position[]" type="text" placeholder="Position" class="form-control input-md" autofocus="" value="<?= $qualification['position'] ?? '' ?>">
                         </td>
@@ -397,10 +404,10 @@ $("#add_more_ind_exp").click(function(){
                           <input id="org<?= $index + 1 ?>" name="org[]" type="text" placeholder="Employer" class="form-control input-md" autofocus="" value="<?= $qualification['org'] ?? '' ?>">
                         </td>
                         <td class="col-md-2">
-                          <input id="doj<?= $index + 1 ?>" name="doj[]" type="text" placeholder="Course Taught" class="form-control input-md" autofocus="" value="<?= $qualification['doj'] ?? '' ?>">
+                          <input id="doj<?= $index + 1 ?>" name="doj[]" type="text" placeholder="Course Taught" class="form-control input-md datepicker" autofocus="" value="<?= $qualification['doj'] ?? '' ?>">
                         </td>
                         <td class="col-md-1">
-                            <input id="dol<?= $index + 1 ?>" name="dol[]" type="text" placeholder="UG/PG" class="form-control input-md" autofocus="" value="<?= $qualification['dol'] ?? '' ?>">
+                            <input id="dol<?= $index + 1 ?>" name="dol[]" type="text" placeholder="UG/PG" class="form-control input-md datepicker" autofocus="" value="<?= $qualification['dol'] ?? '' ?>">
                         </td>
                         <td class="col-md-1">
                           <input id="duration<?= $index + 1 ?>" name="duration[]" type="text" placeholder="No. of Students" class="form-control input-md" autofocus="" value="<?= $qualification['duration'] ?? '' ?>">
@@ -456,6 +463,7 @@ $("#add_more_ind_exp").click(function(){
                 foreach ($te_exp as $index => $qualification) {
             ?>
                     <tr height="60px">
+                        <td class="col-md-1"><?php echo $index + 1; ?></td>
                         <td class="col-md-2">
                             <input id="te_position<?= $index + 1 ?>" name="te_position[]" type="text" placeholder="Position" class="form-control input-md" autofocus="" value="<?= $qualification['position'] ?? '' ?>">
                         </td>
@@ -472,10 +480,10 @@ $("#add_more_ind_exp").click(function(){
                           <input id="te_no_stu<?= $index + 1 ?>" name="te_no_stu[]" type="text" placeholder="No. of Students" class="form-control input-md" autofocus="" value="<?= $qualification['no_stu'] ?? '' ?>">
                         </td>
                         <td class="col-md-1">
-                          <input id="te_doj<?= $index + 1 ?>" name="te_doj[]" type="text" placeholder="Date of Joining the Institue" class="form-control input-md" autofocus="" value="<?= $qualification['doj'] ?? '' ?>">
+                          <input id="te_doj<?= $index + 1 ?>" name="te_doj[]" type="text" placeholder="Date of Joining the Institue" class="form-control input-md datepicker" autofocus="" value="<?= $qualification['doj'] ?? '' ?>">
                         </td>
                         <td class="col-md-3">
-                          <input id="te_dol<?= $index + 1 ?>" name="te_dol[]" type="text" placeholder="Date of Leaving the Institue" class="form-control input-md" autofocus="" value="<?= $qualification['dol'] ?? '' ?>">
+                          <input id="te_dol<?= $index + 1 ?>" name="te_dol[]" type="text" placeholder="Date of Leaving the Institue" class="form-control input-md datepicker" autofocus="" value="<?= $qualification['dol'] ?? '' ?>">
                         </td>
                         <td class="col-md-3">
                           <input id="te_duration<?= $index + 1 ?>" name="te_duration[]" type="text" placeholder="Duration(in years & months)" class="form-control input-md" autofocus="" value="<?= $qualification['duration'] ?? '' ?>">
@@ -499,52 +507,52 @@ $("#add_more_ind_exp").click(function(){
   <div class="panel panel-success">
   <div class="panel-heading">(D) Research Experience (Post PhD, including Post Doctoral)&nbsp;&nbsp;&nbsp;<button class="btn btn-sm btn-danger" id="add_more_r_exp">Add Details</button></div>
     <div class="panel-body">
-      <table class="table table-bordered">
-          <tbody id="r_exp">
-          
-          <tr height="30px">
-            <th class="col-md-1"> S. No.</th>
-            <th class="col-md-1"> Position </th>
-            <th class="col-md-2"> Institute</th>
-            <th class="col-md-2"> Supervisor</th>
-            <!-- <th class="col-md-2"> Topic </th> -->
-            <th class="col-md-1"> Date of Joining</th>
-            <th class="col-md-1"> Date of Leaving</th>
-            <th class="col-md-1"> Duration (in years & months) </th>
-            
-          </tr>
-          <?php
-            // Iterate through additional qualification data and populate the fields
-            if (!empty($r_exp)) {
-                foreach ($r_exp as $index => $qualification) {
-            ?>
-                    <tr height="60px">
-                        <td class="col-md-2">
-                            <input id="r_exp_position<?= $index + 1 ?>" name="r_exp_position[]" type="text" placeholder="Position" class="form-control input-md" autofocus="" value="<?= $qualification['position'] ?? '' ?>">
-                        </td>
-                        <td class="col-md-2">
-                          <input id="r_exp_institute<?= $index + 1 ?>" name="r_exp_institute[]" type="text" placeholder="Institute" class="form-control input-md" autofocus="" value="<?= $qualification['institute'] ?? '' ?>">
-                        </td>
-                        <td class="col-md-2">
-                          <input id="r_exp_supervisor<?= $index + 1 ?>" name="r_exp_supervisor[]" type="text" placeholder="Supervisor" class="form-control input-md" autofocus="" value="<?= $qualification['supervisor'] ?? '' ?>">
-                        </td>
-                        <td class="col-md-1">
-                          <input id="r_exp_doj<?= $index + 1 ?>" name="r_exp_doj[]" type="text" placeholder="Date of Joining" class="form-control input-md" autofocus="" value="<?= $qualification['doj'] ?? '' ?>">
-                        </td>
-                        <td class="col-md-3">
-                          <input id="r_exp_dol<?= $index + 1 ?>" name="r_exp_dol[]" type="text" placeholder="Date of Leaving" class="form-control input-md" autofocus="" value="<?= $qualification['dol'] ?? '' ?>">
-                        </td>
-                        <td class="col-md-3">
-                          <input id="r_exp_duration<?= $index + 1 ?>" name="r_exp_duration[]" type="text" placeholder="Duration(in years & months)" class="form-control input-md" autofocus="" value="<?= $qualification['duration'] ?? '' ?>">
-                        </td>
-                  </tr>
-          <?php
-                }
+    <table class="table table-bordered">
+    <thead>
+        <tr>
+            <th class="col-md-1">S. No.</th>
+            <th class="col-md-1">Position</th>
+            <th class="col-md-2">Institute</th>
+            <th class="col-md-2">Supervisor</th>
+            <th class="col-md-1">Date of Joining</th>
+            <th class="col-md-1">Date of Leaving</th>
+            <th class="col-md-1">Duration (in years & months)</th>
+        </tr>
+    </thead>
+    <tbody id="r_exp">
+        <?php
+        // Iterate through additional qualification data and populate the fields
+        if (!empty($r_exp)) {
+            foreach ($r_exp as $index => $qualification) {
+                ?>
+                <tr height="60px">
+                    <td class="col-md-1"><?php echo $index + 1; ?></td>
+                    <td class="col-md-2">
+                        <input id="r_exp_position<?= $index + 1 ?>" name="r_exp_position[]" type="text" placeholder="Position" class="form-control input-md" autofocus="" value="<?= $qualification['position'] ?? '' ?>">
+                    </td>
+                    <td class="col-md-2">
+                        <input id="r_exp_institute<?= $index + 1 ?>" name="r_exp_institute[]" type="text" placeholder="Institute" class="form-control input-md" autofocus="" value="<?= $qualification['institute'] ?? '' ?>">
+                    </td>
+                    <td class="col-md-2">
+                        <input id="r_exp_supervisor<?= $index + 1 ?>" name="r_exp_supervisor[]" type="text" placeholder="Supervisor" class="form-control input-md" autofocus="" value="<?= $qualification['supervisor'] ?? '' ?>">
+                    </td>
+                    <td class="col-md-1">
+                        <input id="r_exp_doj<?= $index + 1 ?>" name="r_exp_doj[]" type="text" placeholder="Date of Joining" class="form-control input-md datepicker" autofocus="" value="<?= $qualification['doj'] ?? '' ?>">
+                    </td>
+                    <td class="col-md-1">
+                        <input id="r_exp_dol<?= $index + 1 ?>" name="r_exp_dol[]" type="text" placeholder="Date of Leaving" class="form-control input-md datepicker" autofocus="" value="<?= $qualification['dol'] ?? '' ?>">
+                    </td>
+                    <td class="col-md-1">
+                        <input id="r_exp_duration<?= $index + 1 ?>" name="r_exp_duration[]" type="text" placeholder="Duration (in years & months)" class="form-control input-md" autofocus="" value="<?= $qualification['duration'] ?? '' ?>">
+                    </td>
+                </tr>
+                <?php
             }
-          ?>
-            
-        </tbody>
-      </table>
+        }
+        ?>
+    </tbody>
+</table>
+
       </div>
     </div>
   </div>
@@ -554,52 +562,54 @@ $("#add_more_ind_exp").click(function(){
 <!-- g)  Industrial Experience Interaction -->
 <div class="row">
     <div class="col-md-12">
-      <div class="panel panel-success">
-      <div class="panel-heading">(E) Industrial Experience &nbsp;&nbsp;&nbsp;<button class="btn btn-sm btn-danger" id="add_more_ind_exp">Add Details</button></div>
-        <div class="panel-body">
+        <div class="panel panel-success">
+            <div class="panel-heading">(E) Industrial Experience &nbsp;&nbsp;&nbsp;<button class="btn btn-sm btn-danger" id="add_more_ind_exp">Add Details</button></div>
+            <div class="panel-body">
 
-            <table class="table table-bordered">
-                <tbody id="ind_exp">
-                
-                <tr height="30px">
-                  <th class="col-md-1"> S. No.</th>
-                  <th class="col-md-2"> Organization </th>
-                  <th class="col-md-3"> Work Profile</th>
-                  <th class="col-md-2"> Date of Joining</th>
-                  <th class="col-md-2"> Date of Leaving</th>
-                  <th class="col-md-2"> Duration (in years & months)</th>
-                </tr>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr height="30px">
+                            <th class="col-md-1">S. No.</th>
+                            <th class="col-md-2">Organization</th>
+                            <th class="col-md-3">Work Profile</th>
+                            <th class="col-md-2">Date of Joining</th>
+                            <th class="col-md-2">Date of Leaving</th>
+                            <th class="col-md-2">Duration (in years & months)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ind_exp">
 
-                <?php
-                // Iterate through additional qualification data and populate the fields
-                if (!empty($ind_exp)) {
-                    foreach ($ind_exp as $index => $qualification) {
-                ?>
-                    <tr height="60px">
-                        <td class="col-md-2">
-                            <input id="ind_org<?= $index + 1 ?>" name="ind_org[]" type="text" placeholder="Organization" class="form-control input-md" autofocus="" value="<?= $qualification['org'] ?>">
-                            </td>
-                        <td class="col-md-3">
-                            <input id="ind_work<?= $index + 1 ?>" name="ind_work[]" type="text" placeholder="Work Profile" class="form-control input-md" autofocus="" value="<?= $qualification['work'] ?>">
-                        </td>
-                        <td class="col-md-2">
-                            <input id="ind_doj<?= $index + 1 ?>" name="ind_doj[]" type="text" placeholder="Date of Joining" class="form-control input-md" value="<?= $qualification['doj'] ?>">
-                        </td>
-                        <td class="col-md-2">
-                            <input id="ind_dol<?= $index + 1 ?>" name="ind_dol[]" type="text" placeholder="Date of Leaving" class="form-control input-md" value="<?= $qualification['dol'] ?>">
-                        </td>
-                        <td class="col-md-3">
-                            <input id="period<?= $index + 1 ?>" name="period[]" type="text" placeholder="Duration (in years & months)" class="form-control input-md" value="<?= $qualification['period'] ?>">
-                        </td>
-                    </tr>
-                <?php
-                    }
-                }
-                ?>
-                </tbody>
-            </table>
-          </div>
-      </div>
+                        <?php
+                        // Iterate through additional qualification data and populate the fields
+                        if (!empty($ind_exp)) {
+                            foreach ($ind_exp as $index => $qualification) {
+                        ?>
+                                <tr height="60px">
+                                    <td class="col-md-1"><?php echo $index + 1; ?></td>
+                                    <td class="col-md-2">
+                                        <input id="ind_org<?= $index + 1 ?>" name="ind_org[]" type="text" placeholder="Organization" class="form-control input-md" autofocus="" value="<?= $qualification['org'] ?>">
+                                    </td>
+                                    <td class="col-md-3">
+                                        <input id="ind_work<?= $index + 1 ?>" name="ind_work[]" type="text" placeholder="Work Profile" class="form-control input-md" autofocus="" value="<?= $qualification['work'] ?>">
+                                    </td>
+                                    <td class="col-md-2">
+                                        <input id="ind_doj<?= $index + 1 ?>" name="ind_doj[]" type="text" placeholder="Date of Joining" class="form-control input-md datepicker" value="<?= $qualification['doj'] ?>">
+                                    </td>
+                                    <td class="col-md-2">
+                                        <input id="ind_dol<?= $index + 1 ?>" name="ind_dol[]" type="text" placeholder="Date of Leaving" class="form-control input-md datepicker" value="<?= $qualification['dol'] ?>">
+                                    </td>
+                                    <td class="col-md-2">
+                                        <input id="period<?= $index + 1 ?>" name="period[]" type="text" placeholder="Duration (in years & months)" class="form-control input-md" value="<?= $qualification['period'] ?>">
+                                    </td>
+                                </tr>
+                        <?php
+                            }
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 
