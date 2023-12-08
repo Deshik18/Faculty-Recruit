@@ -1,184 +1,133 @@
 <!-- Add this PHP code at the top of your HTML page -->
 <?php
 session_start(); // Start the session (make sure this is at the top of your PHP file)
+
+$application_details = $personal_details = $cadd_det = $contact_det = array();
+$sql = "SELECT application_details, per_det, cadd_det, padd_det, contact_det FROM faculty_details WHERE email = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $_SESSION['email']);
+$stmt->execute();
+$stmt->bind_result($app_details, $per_det, $cadd_det, $padd_det, $contact_det);
+$stmt->fetch();
+$stmt->close();
+
+// Decode JSON data
+$application_details = json_decode($app_details, true);
+$personal_details = json_decode($per_det, true);
+$cadd_det = json_decode($cadd_det, true);
+$padd_det = json_decode($padd_det, true);
+$contact_det = json_decode($contact_det, true);
 ?>
 <!-- saved from url=(0059)https://ofa.iiti.ac.in/facrec_che_2023_july_02/facultypanel -->
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>Update your personal details</title>
-	<link rel="stylesheet" type="text/css" href="../favicon.ico" type="image/x-icon">
-	<link rel="icon" href="../favicon.ico" type="image/x-icon">
-	<link rel="stylesheet" type="text/css" href="../bootstrap.css">
-	<link rel="stylesheet" type="text/css" href="../bootstrap-datepicker.css">
-	<script type="text/javascript" src="../jquery.js"></script>
-	<script type="text/javascript" src="../bootstrap.js"></script>
-	<script type="text/javascript" src="../bootstrap-datepicker.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Update your personal details</title>
+    <link rel="stylesheet" type="text/css" href="../favicon.ico" type="image/x-icon">
+    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="../bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../bootstrap-datepicker.css">
+    <script type="text/javascript" src="../jquery.js"></script>
+    <script type="text/javascript" src="../bootstrap.js"></script>
+    <script type="text/javascript" src="../bootstrap-datepicker.js"></script>
+    <link href="../files/css" rel="stylesheet"> 
+    <link href="../files/css(1)" rel="stylesheet"> 
+    <link href="../files/css(2)" rel="stylesheet"> 
+    <link href="../files/css(3)" rel="stylesheet"> 
+    <link href="../files/css(4)" rel="stylesheet"> 
+    <link rel="preconnect" href="https://fonts.gstatic.com/">
+    <link href="../files/css2" rel="stylesheet">
 
-	<link href="../files/css" rel="stylesheet"> 
-	<link href="../files/css(1)" rel="stylesheet"> 
-	<link href="../files/css(2)" rel="stylesheet"> 
-	<link href="../files/css(3)" rel="stylesheet"> 
-	<link href="../files/css(4)" rel="stylesheet"> 
-	<link rel="preconnect" href="https://fonts.gstatic.com/">
-	<link href="../files/css2" rel="stylesheet">
-
-
-	
-<style type="text/css">
-	body { background-color: lightgray; padding-top:0px!important;}
-
-</style></head>
+    <style type="text/css">
+        body { background-color: lightgray; padding-top:0px!important; }
+    </style>
+</head>
 
 <body>
-<div class="container-fluid" style="background-color: #f7ffff; margin-bottom: 10px;">
-	<div class="container">
-        <div class="row" style="margin-bottom:10px; ">
-        	<div class="col-md-8 col-md-offset-2">
-
-        		<!--  <img src="https://ofa.iiti.ac.in/facrec_che_2023_july_02/images/IITIndorelogo.png" alt="logo1" class="img-responsive" style="padding-top: 5px; height: 120px; float: left;"> 
-
-        		<h3 style="text-align:center;color:#414002!important;font-weight: bold;font-size: 2.3em; margin-top: 3px; font-family: &#39;Noto Sans&#39;, sans-serif;">भारतीय प्रौद्योगिकी संस्थान इंदौर</h3> -->
-    			<h3 style="text-align:center;color: #414002!important;font-weight: bold;font-family: &#39;Oswald&#39;, sans-serif!important;font-size: 2.2em; margin-top: 0px;">Indian Institute of Technology Patna</h3>
-    			
-
-        	</div>
-        	
-
-    	   
+    <div class="container-fluid" style="background-color: #f7ffff; margin-bottom: 10px;">
+        <div class="container">
+            <div class="row" style="margin-bottom:10px; ">
+                <div class="col-md-8 col-md-offset-2">
+                    <h3 style="text-align:center;color: #414002!important;font-weight: bold;font-family: 'Oswald', sans-serif!important;font-size: 2.2em; margin-top: 0px;">Indian Institute of Technology Patna</h3>
+                </div>
+            </div>
         </div>
-		    <!-- <h3 style="text-align:center; color: #414002; font-weight: bold;  font-family: 'Fjalla One', sans-serif!important; font-size: 2em;">Application for Academic Appointment</h3> -->
     </div>
-   </div> 
-			<h3 style="color: rgb(225, 4, 37); margin-bottom: 20px; font-weight: bold; text-align: center; font-family: &quot;Noto Serif&quot;, serif; opacity: 0.459205;" class="blink_me">Application for Faculty Position</h3>
 
-<!-- <body onload="updateAb()">  -->
+    <h3 style="color: rgb(225, 4, 37); margin-bottom: 20px; font-weight: bold; text-align: center; font-family: 'Noto Serif', serif; opacity: 0.459205;" class="blink_me">Application for Faculty Position</h3>
 
-<style type="text/css">
-body { padding-top:30px; }
-.floating-box {
-display: inline-block;
-width: 150px;
-height: 75px;
-margin: 10px;
-border: 3px solid #73AD21;  
-}
-</style>
-<style type="text/css">
-body { padding-top:30px; }
-.form-control { margin-bottom: 20px; }
-label{
-padding: 0 !important;
-text-align: left!important;
-font-family: 'Noto Serif', serif;
-}
+    <style type="text/css">
+        body { padding-top:30px; }
+        .floating-box {
+            display: inline-block;
+            width: 150px;
+            height: 75px;
+            margin: 10px;
+            border: 3px solid #73AD21;
+        }
+    </style>
 
-span{
-font-size: 1.2em;
-font-family: 'Oswald', sans-serif!important;
-text-align: left!important;
-padding: 0px 10px 0px 0px!important;
-/*font-family: 'Noto Serif', serif;*/
-font-weight: bold;
-color: #414002;
-/*margin-bottom: 20px!important;*/
+    <style type="text/css">
+        body { padding-top:30px; }
+        .form-control { margin-bottom: 20px; }
+        label{
+            padding: 0 !important;
+            text-align: left!important;
+            font-family: 'Noto Serif', serif;
+        }
 
-}
-hr{
-border-top: 1px solid #025198 !important;
-border-style: dashed!important;
-border-width: 1.2px;
-}
+        span{
+            font-size: 1.2em;
+            font-family: 'Oswald', sans-serif!important;
+            text-align: left!important;
+            padding: 0px 10px 0px 0px!important;
+            font-weight: bold;
+            color: #414002;
+        }
 
-.panel-heading{
-font-size: 1.3em;
-font-family: 'Oswald', sans-serif!important;
-letter-spacing: .5px;
-}
-.btn-primary{
-padding: 9px;
-}
-</style>
+        hr{
+            border-top: 1px solid #025198 !important;
+            border-style: dashed!important;
+            border-width: 1.2px;
+        }
 
+        .panel-heading{
+            font-size: 1.3em;
+            font-family: 'Oswald', sans-serif!important;
+            letter-spacing: .5px;
+        }
 
+        .btn-primary{
+            padding: 9px;
+        }
+    </style>
 
+    <script type="text/javascript">
+        function ageCalculator() {
+            // Your age calculation logic here
+        }
+    </script>
 
-<script type="text/javascript">  
-function ageCalculator() 
-{
-// alert('HI');  
+    <script type="text/javascript">
+        function updateAb(selected) {
+            alert('hi');
+        }
+    </script>
 
-debugger;  
-var birthdate = document.getElementById('dob').value; // in "dd/MM/yyyy" format  
-var senddate = document.getElementById('Date').value; // in "dd/MM/yyyy" format  
-var x = birthdate.split("/");  
-var y = senddate.split("/");  
-var bdays = x[0];  
-var bmonths = x[1];  
-var byear = x[2];  
-//alert(bdays);  
-var sdays = y[0];  
-var smonths = y[1];  
-var syear = y[2];  
-// alert(sdays);  
-if (sdays < bdays) {  
-sdays = parseInt(sdays) + 30;  
-smonths = parseInt(smonths) - 1;  
-//alert(sdays);  
-var fdays = sdays - bdays;  
-//alert(fdays);  
-}  
-else {  
-var fdays = sdays - bdays;  
-}  
-if (smonths < bmonths) {  
-smonths = parseInt(smonths) + 12;  
-syear = syear - 1;  
-var fmonths = smonths - bmonths;  
-}  
-else {  
-var fmonths = smonths - bmonths;  
-}  
-var fyear = syear - byear; 
-var year_to_days = fyear*365; 
-var month_to_days = fmonths*30;
-var newage = (fyear + ' years ' + fmonths + ' months ' + fdays + ' days');
-
-
-var newage_year = (year_to_days+month_to_days+fdays);
-
-document.getElementById("age").value = newage;
-document.getElementById("age_days").value = newage_year;
-// alert(newage);  
-// document.getElementById("btnClickedValue").value = newage;
-// window.location.href = window.location.href+'?newage='+newage;
-}  
-
-
-</script> 
-
-<script type="text/javascript">
-function updateAb(){     
-
-alert('hi');   
-}
-</script>
-<script type="text/javascript">
-$(function () 
-{
-// $('#dob').datepicker({
-//     format: 'dd/mm/yyyy',
-//     autoclose: true,
-//     onSelect: function() {
-//              updateAb(selected);
-//         }
-
-// });
-});
-</script>
-<!-- all bootstrap buttons classes -->
-<!-- 
-class="btn btn-sm, btn-lg, "
-color - btn-success, btn-primary, btn-default, btn-danger, btn-info, btn-warning
--->
+    <script type="text/javascript">
+        $(function () {
+            $('#dob').datepicker({
+                format: 'dd/mm/yyyy',
+                autoclose: true,
+                onSelect: function(dateText, inst) {
+                    updateAb(dateText);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
 
 
 
@@ -208,57 +157,57 @@ color - btn-success, btn-primary, btn-default, btn-danger, btn-info, btn-warning
 </legend>   
      
 <div id="project_show">
-
 <div class="row">
   <div class="col-md-12">
 
-      <label class="col-md-2 control-label" for="adv_num">Advertisement Number *</label>    
-      <div class="col-md-4">
-
+    <!-- Advertisement Number field -->
+    <label class="col-md-2 control-label" for="adv_num">Advertisement Number *</label>
+    <div class="col-md-4">
       <select id="adv_num" name="adv_num" class="form-control input-md" required="">
-
-          <option value="">Select</option>
-          <option selected="selected" value="IITP/FACREC/2023/NOV/02">IITP/FACREC/2023/NOV/02</option>
+        <option value="">Select</option>
+        <option <?php echo ($application_details['adv_num'] === 'IITP/FACREC/2023/NOV/02') ? 'selected="selected"' : ''; ?> value="IITP/FACREC/2023/NOV/02">IITP/FACREC/2023/NOV/02</option>
       </select>
-        
-      </div>
+    </div>
 
-      <label class="col-md-2 control-label" for="doa">Date of Application </label>  
-      <div class="col-md-4">
+    <!-- Date of Application field -->
+    <label class="col-md-2 control-label" for="doa">Date of Application </label>
+    <div class="col-md-4">
       <input id="doa" name="doa" type="text" readonly="readonly" value="<?php echo $_SESSION['doa']; ?>" placeholder="" class="form-control input-md" required="">
-     </div>
+    </div>
 
-      <label class="col-md-2 control-label" for="ref_num">Application Number</label>  
-      <div class="col-md-4">
-
+    <!-- Application Number field -->
+    <label class="col-md-2 control-label" for="ref_num">Application Number</label>
+    <div class="col-md-4">
       <input id="ref_num" name="ref_num" type="text" readonly="readonly" value="1698404495" placeholder="" class="form-control input-md" required="">
-     </div>
+    </div>
 
-      <label class="col-md-2 control-label" for="post">Post Applied for *</label>  
-      <div class="col-md-4">
+    <!-- Post Applied for field -->
+    <label class="col-md-2 control-label" for="post">Post Applied for *</label>
+    <div class="col-md-4">
       <select id="post" name="post" class="form-control input-md" required="">
-          <option value="">Select</option>
-          <option value="Professor">Professor</option>
-          <option value="Associate Professor">Associate Professor</option>
-          <option value="Assistant Professor Grade I">Assistant Professor Grade I</option>
-          <option selected="selected" value="Assistant Professor Grade II">Assistant Professor Grade II</option>
+        <option value="">Select</option>
+        <option <?php echo ($application_details['post'] === 'Professor') ? 'selected="selected"' : ''; ?> value="Professor">Professor</option>
+        <option <?php echo ($application_details['post'] === 'Associate Professor') ? 'selected="selected"' : ''; ?> value="Associate Professor">Associate Professor</option>
+        <option <?php echo ($application_details['post'] === 'Assistant Professor Grade I') ? 'selected="selected"' : ''; ?> value="Assistant Professor Grade I">Assistant Professor Grade I</option>
+        <option <?php echo ($application_details['post'] === 'Assistant Professor Grade II') ? 'selected="selected"' : ''; ?> value="Assistant Professor Grade II">Assistant Professor Grade II</option>
       </select>
-      </div>
+    </div>
 
-      <label class="col-md-2 control-label" for="dept">Department/School *</label>  
-      <div class="col-md-4">
+    <!-- Department/School field -->
+    <label class="col-md-2 control-label" for="dept">Department/School *</label>
+    <div class="col-md-4">
       <select id="dept" name="dept" class="form-control input-md" required="">
-          <option value="">Select</option>
-          <option selected="selected" value="Chemical Engineering">Chemical Engineering</option>
-          <option selected="selected" value="Computer Science and Engineering">Computer Science and Engineering</option>
-          <option selected="selected" value="Electrical Engineering">Electrical Engineering</option>
-          <option selected="selected" value="Mechanical Engineering">Mechanical Engineering</option>
-          <option selected="selected" value="Civil Engineering">Civil Engineering</option>
-          <option selected="selected" value="Mettallurgical and Materials Engineering">Mettallurgical and Materials Engineering</option>
+        <option value="">Select</option>
+        <option <?php echo ($application_details['dept'] === 'Chemical Engineering') ? 'selected="selected"' : ''; ?> value="Chemical Engineering">Chemical Engineering</option>
+        <option <?php echo ($application_details['dept'] === 'Computer Science and Engineering') ? 'selected="selected"' : ''; ?> value="Computer Science and Engineering">Computer Science and Engineering</option>
+        <option <?php echo ($application_details['dept'] === 'Electrical Engineering') ? 'selected="selected"' : ''; ?> value="Electrical Engineering">Electrical Engineering</option>
+        <option <?php echo ($application_details['dept'] === 'Mechanical Engineering') ? 'selected="selected"' : ''; ?> value="Mechanical Engineering">Mechanical Engineering</option>
+        <option <?php echo ($application_details['dept'] === 'Civil Engineering') ? 'selected="selected"' : ''; ?> value="Civil Engineering">Civil Engineering</option>
+        <option <?php echo ($application_details['dept'] === 'Mettallurgical and Materials Engineering') ? 'selected="selected"' : ''; ?> value="Mettallurgical and Materials Engineering">Mettallurgical and Materials Engineering</option>
       </select>
-        
-      </div>
-</div>
+    </div>
+
+  </div>
 </div>
 <hr>
 
@@ -270,257 +219,195 @@ color - btn-success, btn-primary, btn-default, btn-danger, btn-info, btn-warning
 <!-- <h5><font color="#025198"><strong>1. Name:</strong></font></h5>             -->
 <div class="row">
     <div class="col-md-12">
-      <div class="panel panel-success">
-      <div class="panel-heading">1. Personal Details <small class="pull-right">Upload/Update Photo *</small></div>
-        <div class="panel-body" style="height: 390px">
-            <div class="col-md-10">
-              <div class="row">
+        <div class="panel panel-success">
+            <div class="panel-heading">1. Personal Details <small class="pull-right">Upload/Update Photo *</small></div>
+            <div class="panel-body" style="height: 390px">
+                <div class="col-md-10">
+                    <div class="row">
+                        <!-- First Name field -->
+                        <span class="col-md-2 control-label" for="fname">First Name *</span>
+                        <div class="col-md-4">
+                            <input id="fname" value="<?php echo isset($personal_details['fname']) ? $personal_details['fname'] : ''; ?>" name="fname" type="text" placeholder="First name" class="form-control input-md" maxlength="15" required="">
+                        </div>
 
-                <span class="col-md-2 control-label" for="fname">First Name *</span>  
-                  <div class="col-md-4">
-                  <input id="fname" value="" name="fname" type="text" placeholder="First name" class="form-control input-md" maxlength="15" required="">
-                </div>
-              
+                        <!-- Middle Name field -->
+                        <span class="col-md-2 control-label" for="mname">Middle Name</span>
+                        <div class="col-md-4">
+                            <input id="mname" value="<?php echo isset($personal_details['mname']) ? $personal_details['mname'] : ''; ?>" name="mname" type="text" placeholder="Middle name" class="form-control input-md" maxlength="12">
+                        </div>
 
-                <span class="col-md-2 control-label" for="mname">Middle Name</span>  
-                  <div class="col-md-4">
-                  <input id="mname" value="" name="mname" name="mname" type="text" placeholder="Middle name" class="form-control input-md" maxlength="12">
-                  </div>
+                        <!-- Last Name field -->
+                        <span class="col-md-2 control-label" for="lname">Last Name *</span>
+                        <div class="col-md-4">
+                            <input id="lname" value="<?php echo isset($personal_details['lname']) ? $personal_details['lname'] : ''; ?>" name="lname" type="text" placeholder="Last name" class="form-control input-md" maxlength="15" required="">
+                        </div>
 
-                <span class="col-md-2 control-label" for="lname">Last Name *</span>  
-                  <div class="col-md-4">
-                  <input id="lname" value="" name="lname"name="lname" type="text" placeholder="Last name" class="form-control input-md" maxlength="15" required="">
-                  </div>
+                        <!-- Nationality field -->
+                        <span class="col-md-2 control-label" for="nationality">Nationality *</span>
+                        <div class="col-md-4">
+                            <select id="nationality" name="nationality" class="form-control input-md" required="">
+                                <option value="">Select</option>
+                                <option <?php echo ($personal_details['nationality'] === 'Indian') ? 'selected="selected"' : ''; ?> value="Indian">Indian</option>
+                                <option <?php echo ($personal_details['nationality'] === 'OCI') ? 'selected="selected"' : ''; ?> value="OCI">OCI</option>
+                            </select>
+                        </div>
 
+                        <!-- Date of Birth field -->
+                        <span class="col-md-2 control-label" for="dob">Date of Birth DD/MM/YYYY *</span>
+                        <div class="col-md-4">
+                            <input id="dob" name="dob" value="<?php echo isset($personal_details['dob']) ? $personal_details['dob'] : ''; ?>" type="text" placeholder="DD/MM/YYYY" class="form-control input-md" required="" onfocusout="ageCalculator()">
+                            <input type="hidden" name="Date" id="Date" value="31/08/2023" />
+                        </div>
 
-                <span class="col-md-2 control-label" for="nationality">Nationality *</span>
-                <div class="col-md-4"> 
-                  <select id="nationality" name="nationality" class="form-control input-md" required="">
-                    <option value="">Select</option>
-                    <!-- <option  value=" India"> India</option> -->
-                    <option  value=" Indian"> Indian</option>
-                    <!-- <option  value="PIO">PIO</option> -->
-                    <option  value="OCI">OCI</option>
-                  </select>
-                </div>
+                        <!-- Gender field -->
+                        <span class="col-md-2 control-label" for="gender">Gender *</span>
+                        <div class="col-md-4">
+                            <select id="gender" name="gender" class="form-control input-md" required="">
+                                <option value="">Select</option>
+                                <option <?php echo ($personal_details['gender'] === 'Male') ? 'selected="selected"' : ''; ?> value="Male">Male</option>
+                                <option <?php echo ($personal_details['gender'] === 'Female') ? 'selected="selected"' : ''; ?> value="Female">Female</option>
+                                <option <?php echo ($personal_details['gender'] === 'Other') ? 'selected="selected"' : ''; ?> value="Other">Other</option>
+                            </select>
+                        </div>
 
+                        <!-- Marital Status field -->
+                        <span class="col-md-2 control-label" for="mstatus">Marital Status *</span>
+                        <div class="col-md-4">
+                            <select id="mstatus" name="mstatus" class="form-control input-md" required="">
+                                <option value="">Select</option>
+                                <option <?php echo ($personal_details['mstatus'] === 'Married') ? 'selected="selected"' : ''; ?> value="Married">Married</option>
+                                <option <?php echo ($personal_details['mstatus'] === 'Unmarried') ? 'selected="selected"' : ''; ?> value="Unmarried">Unmarried</option>
+                                <option <?php echo ($personal_details['mstatus'] === 'Other') ? 'selected="selected"' : ''; ?> value="Other">Other</option>
+                            </select>
+                        </div>
 
+                        <!-- Category field -->
+                        <span class="col-md-2 control-label" for="cast">Category</span>
+                        <div class="col-md-4">
+                            <input id="cast" name="cast" type="text" placeholder="cast" readonly='readonly' value="<?php echo $_SESSION['cast']; ?>" class="form-control input-md" required="">
+                        </div>
 
-               <!--  <span class="col-md-2 control-label" for="nationality">Nationality </span>  
-                <div class="col-md-4">
-                <input id="nationality" value="" name="nationality" type="text" placeholder="Nationality" class="form-control input-md" maxlength="15" required="">
-                </div> -->
+                        <!-- ID Proof field -->
+                        <span class="col-md-2 control-label" for="id_proof">ID Proof *</span>
+                        <div class="col-md-4">
+                            <select id="id_proof" name="id_proof" class="form-control input-md" required="">
+                                <option value="">Select</option>
+                                <option <?php echo ($personal_details['id_proof'] === 'AADHAR') ? 'selected="selected"' : ''; ?> value="AADHAR">AADHAR</option>
+                                <option <?php echo ($personal_details['id_proof'] === 'PAN-CARD') ? 'selected="selected"' : ''; ?> value="PAN-CARD">PAN-CARD</option>
+                                <option <?php echo ($personal_details['id_proof'] === 'DRIVING-LICENSE') ? 'selected="selected"' : ''; ?> value="DRIVING-LICENSE">DRIVING-LICENSE</option>
+                                <option <?php echo ($personal_details['id_proof'] === 'VOTER ID') ? 'selected="selected"' : ''; ?> value="VOTER ID">VOTER ID</option>
+                                <option <?php echo ($personal_details['id_proof'] === 'PASSPORT') ? 'selected="selected"' : ''; ?> value="PASSPORT">PASSPORT</option>
+                                <option <?php echo ($personal_details['id_proof'] === 'RATION CARD') ? 'selected="selected"' : ''; ?> value="RATION CARD">RATION CARD</option>
+                                <option <?php echo ($personal_details['id_proof'] === 'OTHERS') ? 'selected="selected"' : ''; ?> value="OTHERS">OTHERS</option>
+                            </select>
+                        </div>
 
-                <span class="col-md-2 control-label" for="dob">Date of Birth DD/MM/YYYY *</span>  
-                <div class="col-md-4">
-                 <!--  <p id="dobdiv"> -->
-                <input id="dob" name="dob" value=""  type="text" placeholder="DD/MM/YYYY" class="form-control input-md" required="" onfocusout = "ageCalculator()">
-              <!-- </p> -->
+                        <!-- Upload ID Proof field -->
+                        <span class="col-md-2 control-label" for="id_card_file">Upload ID Proof *</span>
+                        <div class="col-md-4">
+                            <input id="id_card_file" name="userfile2" type="file" class="form-control input-md" required="">
+                        </div>
 
-                <input type="hidden" name="Date" id="Date" value ="31/08/2023" />
-                <!-- <br/> 
-                <input type="hidden" id="btnClickedValue" name="btnClickedValue" value="" />
-                <button type="Button" onclick="ageCalculator()">Calculate</button >   -->
-
-                  
-                </div>
-
-               <!--  <span class="col-md-2 control-label" for="age">Age</span>  
-                <div class="col-md-4">
-                <input id="age" name="age"  value="" type="text" class="form-control input-md" readonly>
-
-                <input id="age_days" name="age_days"  value="" type="hidden" class="form-control input-md" readonly>
-                </div> -->
-
-               
-                <span class="col-md-2 control-label" for="gender">Gender *</span>
-                <div class="col-md-4"> 
-                  <select id="gender" name="gender" class="form-control input-md" required="">
-                    <option value="">Select</option>
-                    <option  value="Male">Male</option>
-                    <option  value="Female">Female</option>
-                    <option  value="Other">Other</option>
-                  </select>
-                </div>
-
-
-                <span class="col-md-2 control-label" for="mstatus">Marital Status *</span>
-                <div class="col-md-4"> 
-                  <select id="mstatus" name="mstatus" class="form-control input-md" required="">
-                    <option value="">Select</option>
-                    <option  value="Married">Married</option>
-                    <option  value="Unmarried">Unmarried</option>
-                    <option  value="Other">Other</option>
-                  </select>
-                </div>
-
-                <span class="col-md-2 control-label" for="cast">Category</span>
-                <div class="col-md-4"> 
-                  <input id="cast" name="cast" type="text" placeholder="cast" readonly='readonly' value="<?php echo $_SESSION['cast']; ?>" class="form-control input-md" required="">
-                </div>
-
-               <!--  <span class="col-md-2 control-label" for="disability_type">Type of Disability</span>
-                <div class="col-md-4"> 
-                  <input id="disability_type" value="" name="disability_type"name="disability_type" type="text" placeholder="Type of Disability" class="form-control input-md" required="">
-                </div>
-                   -->
-
-               <!--  <div class="col-md-6"> 
-                </div> -->
-              </div>
-
-              <div class="row">
-                <span class="col-md-2 control-label" for="mstatus">ID Proof *</span>
-                <div class="col-md-4"> 
-                 
-                    <select id="id_proof" name="id_proof" class="form-control input-md" required="">
-                    <option value="">Select</option>
-                     <!-- <option value="">Select</option> -->
-                    <!--  <option value="AADHAR">AADHAR</option>
-                     <option value="PAN-CARD">PAN-CARD</option>
-                     <option value="DRIVING-LICENSE">DRIVING-LICENSE</option>
-                     <option value="PASSPORT">PASSPORT</option>
-                     <option value="OTHER">OTHER</option> -->
-
-
-                    <option  value="AADHAR">AADHAR</option>
-                    <option  value="PAN-CARD">PAN-CARD</option>
-                    <option  value="DRIVING-LICENSE">
-                    DRIVING-LICENSE</option>
-                    <option  value="VOTER ID">VOTER ID</option>
-                    <option  value="PASSPORT">PASSPORT</option>
-                    <option  value="RATION CARD">RATION CARD</option>
-                    
-                    <option  value="OTHERS">OTHERS</option>
-                  </select>
-                </div>
-
-               
-                
-                                      <span class="col-md-2 control-label" for="cast">Upload ID Proof *</span>
-                   <div class="col-md-4"> 
-                  <input id="id_card_file" name="userfile2" type="file" class="form-control input-md" required="">
-                </div>
-                  
-                  <span class="col-md-2 control-label" for="father_name">Father's Name *</span>  
-                    <div class="col-md-4">
-                    <input id="father_name" value="" name="father_name"name="father_name" type="text" placeholder="Father's Name" class="form-control input-md" maxlength="30" required="">
+                        <!-- Father's Name field -->
+                        <span class="col-md-2 control-label" for="father_name">Father's Name *</span>
+                        <div class="col-md-4">
+                            <input id="father_name" value="<?php echo isset($personal_details['father_name']) ? $personal_details['father_name'] : ''; ?>" name="father_name" type="text" placeholder="Father's Name" class="form-control input-md" maxlength="30" required="">
+                        </div>
                     </div>
                 </div>
+
+                <div class="col-md-2 pull-right">
+                  <img src="https://placekitten.com/150/130" class="thumbnail pull-right" height="150" width="130" />
+                  <input id="photo" name="userfile" type="file" class="form-control input-md" required="">
+                  <strong>Please upload your recent photo <font color="red">( <1 MB) in JPG | JPEG format</font> only.</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-success">
+      <!-- Correspondence Address -->
+      <div class="panel-heading">2. Correspondence Address</div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-md-6">
+            <span class="control-label" for="cadd">Correspondence Address </span>
+            <br />
+            <br />
+            <textarea style="height:40px" placeholder="Street" class="form-control input-md" name="cadd" maxlength="200" required=""><?php echo isset($cadd_det['street']) ? $cadd_det['street'] : ''; ?></textarea>
+
+            <textarea style="height:40" placeholder="City" class="form-control input-md" name="cadd1" maxlength="200" required=""><?php echo isset($cadd_det['city']) ? $cadd_det['city'] : ''; ?></textarea>
+
+            <textarea style="height:40" placeholder="State" class="form-control input-md" name="cadd2" maxlength="200" required=""><?php echo isset($cadd_det['state']) ? $cadd_det['state'] : ''; ?></textarea>
+
+            <textarea style="height:40" placeholder="Country" class="form-control input-md" name="cadd3" maxlength="200" required=""><?php echo isset($cadd_det['country']) ? $cadd_det['country'] : ''; ?></textarea>
+
+            <textarea style="height:40;" placeholder="PIN/ZIP" class="form-control input-md" name="cadd4" maxlength="6" required=""><?php echo isset($cadd_det['pin']) ? $cadd_det['pin'] : ''; ?></textarea>
           </div>
-
-      <div class="col-md-2 pull-right">
-        
-        <img src="https://ofa.iiti.ac.in/facrec_che_2023_july_02/images/no-photo.png" class="thumbnail pull-right" height="150" width="130" />
-        <input id="photo" name="userfile" type="file" class="form-control input-md" required="">
-        <strong>Please upload your recent photo <font color="red">( <1 MB) in JPG | JPEG format</font> only.</strong>
-       
-      </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
-
-
-
 <div class="row">
-<div class="col-md-12">
-<div class="panel panel-success">
-<!-- <div class="panel-heading">2. Address *</div> -->
-<div class="panel-body">
-  <div class="row">
-    <div class="col-md-6">
-      <span class="control-label" for="cadd">Correspondence Address </span>
-      <br />
-      <br />
-     <textarea style="height:40px" placeholder="Street" class="form-control input-md" name="cadd" maxlength="200" required=""></textarea>
+  <div class="col-md-12">
+    <div class="panel panel-success">
+      <!-- Permanent Address -->
+      <div class="panel-heading">3. Permanent Address</div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-md-6">
+            <span class="control-label" for="padd">Permanent Address </span>
+            <br />
+            <br />
+            <textarea style="height:40px" placeholder="Street" class="form-control input-md" name="padd" maxlength="200" required=""><?php echo isset($padd_det['street']) ? $padd_det['street'] : ''; ?></textarea>
 
-     <textarea style="height:40" placeholder="City" class="form-control input-md" name="cadd1" maxlength="200" required=""></textarea>
+            <textarea style="height:40" placeholder="City" class="form-control input-md" name="padd1" maxlength="200" required=""><?php echo isset($padd_det['city']) ? $padd_det['city'] : ''; ?></textarea>
 
-     <textarea style="height:40" placeholder="State" class="form-control input-md" name="cadd2" maxlength="200" required=""></textarea>
+            <textarea style="height:40" placeholder="State" class="form-control input-md" name="padd2" maxlength="200" required=""><?php echo isset($padd_det['state']) ? $padd_det['state'] : ''; ?></textarea>
 
-     <textarea style="height:40" placeholder="Country" class="form-control input-md" name="cadd3" maxlength="200" required=""></textarea>
+            <textarea style="height:40" placeholder="Country" class="form-control input-md" name="padd3" maxlength="200" required=""><?php echo isset($padd_det['country']) ? $padd_det['country'] : ''; ?></textarea>
 
-     <textarea style="height:40;" placeholder="PIN/ZIP" class="form-control input-md" name="cadd4" maxlength="6" required=""></textarea>
-
-
+            <textarea style="height:40;" placeholder="PIN/ZIP" class="form-control input-md" name="padd4" maxlength="6" required=""><?php echo isset($padd_det['pin']) ? $padd_det['pin'] : ''; ?></textarea>
+          </div>
+        </div>
+      </div>
     </div>
-
-
-    <div class="col-md-6">
-      <span class="control-label" for="padd">Permanent Address </span>
-      <br />
-      <br />
-     <textarea style="height:40px" placeholder="Street" class="form-control input-md" name="padd" maxlength="200" required=""></textarea>
-
-     <textarea style="height:40" placeholder="City" class="form-control input-md" name="padd1" maxlength="200" required=""></textarea>
-
-     <textarea style="height:40" placeholder="State" class="form-control input-md" name="padd2" maxlength="200" required=""></textarea>
-
-     <textarea style="height:40" placeholder="Country" class="form-control input-md" name="padd3" maxlength="200" required=""></textarea>
-
-
-     <textarea style="height:40;" placeholder="PIN/ZIP" class="form-control input-md" name="padd4" maxlength="6" required=""></textarea>
-
-  
-    </div>
-
   </div>
-
-    
-  </div>
-</div>
-</div>
 </div>
 
 <div class="row">
-<div class="col-md-12">
-<div class="panel panel-success">
-<!-- <div class="panel-heading">3. Contact Details (with STD/ISD code)</div> -->
-<div class="panel-body">
-<span class="col-md-2 control-label" for="mobile">Mobile *</span>  
-<div class="col-md-4">
-<input id="mobile" value="" name="mobile" type="text" placeholder="Mobile" class="form-control input-md" required="" maxlength="20">
-</div>
+  <div class="col-md-12">
+    <div class="panel panel-success">
+      <!-- Contact Details -->
+      <div class="panel-heading">4. Contact Details (with STD/ISD code)</div>
+      <div class="panel-body">
+        <span class="col-md-2 control-label" for="mobile">Mobile *</span>
+        <div class="col-md-4">
+          <input id="mobile" value="<?php echo isset($contact_det['mobile']) ? $contact_det['mobile'] : ''; ?>" name="mobile" type="text" placeholder="Mobile" class="form-control input-md" required="" maxlength="20">
+        </div>
 
+        <span class="col-md-2 control-label" for="email">Email</span>
+        <div class="col-md-4">
+          <input id="email" name="email" type="text" placeholder="email" readonly='readonly' value="<?php echo $_SESSION['email']; ?>" class="form-control input-md" required="">
+        </div>
 
+        <!-- ... (repeat for other fields in Contact Details) ... -->
 
-<span class="col-md-2 control-label" for="email">Email</span>  
-<div class="col-md-4">
-<input id="email" name="email" type="text" placeholder="email" readonly='readonly' value="<?php echo $_SESSION['email']; ?>" class="form-control input-md" required="">
-</div>
-
-<span class="col-md-2 control-label" for="mobile_2">Alternate Mobile </span>  
-<div class="col-md-4">
-<input id="mobile_2" value="" name="mobile_2" type="text" placeholder="Alternate Mobile " class="form-control input-md" maxlength="20">
-</div>
-
-<span class="col-md-2 control-label" for="email_2">Alternate Email </span>  
-<div class="col-md-4">
-<input id="email_2" value="" name="email_2" type="email" placeholder="Alternate Email" class="form-control input-md">
-</div> 
-
-
-<span class="col-md-2 control-label" for="landline">Landline Number</span>  
-<div class="col-md-4">
-<input id="landline" value="" name="landline" type="text" placeholder="Landline Number" class="form-control input-md" maxlength="20">
-</div> 
-
-
-
-</div>
-</div>
-</div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="form-group">
-
-<div class="col-md-12">
-<button id="submit" type="submit" name="submit" value="Submit" class="btn btn-success pull-right">SAVE & NEXT</button>
+  <div class="col-md-12">
+    <button id="submit" type="submit" name="submit" value="Submit" class="btn btn-success pull-right">SAVE & NEXT</button>
+  </div>
 </div>
 
-</div>
 
 <!-- add the div for hide -->
 </div>

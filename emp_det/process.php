@@ -13,6 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $pres_emp_doj = $_POST['pres_emp_doj'];
     $pres_emp_dol = $_POST['pres_emp_dol'];
     $pres_emp_duration = $_POST['pres_emp_duration'];
+    $teach_exp = $_POST['teach_exp'];
 
     $pres_emp_det = json_encode(array(
         'position' => $pres_emp_position,
@@ -93,10 +94,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     ));
 
     // Update the faculty_details table with the new data
-    $updateQuery = "UPDATE faculty_details SET pre_emp_det = ?, his_det = ?, te_det = ?, r_det = ?, ind_det = ?, area_det = ? WHERE email = ?";
+    $updateQuery = "UPDATE faculty_details SET teach_exp = ?, pre_emp_det = ?, his_det = ?, te_det = ?, r_det = ?, ind_det = ?, area_det = ? WHERE email = ?";
 
     $stmt = $conn->prepare($updateQuery);
-    $stmt->bind_param("sssssss", $pres_emp_det, $emp_hist_json, $te_exp_json, $r_exp_json, $ind_exp_json, $area_det, $_SESSION['email']);
+    $stmt->bind_param("ssssssss", $teach_exp, $pres_emp_det, $emp_hist_json, $te_exp_json, $r_exp_json, $ind_exp_json, $area_det, $_SESSION['email']);
 
     if ($stmt->execute()) {
         // Update successful
