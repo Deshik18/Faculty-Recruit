@@ -1,7 +1,7 @@
 <!-- Add this PHP code at the top of your HTML page -->
 <?php
 session_start(); // Start the session (make sure this is at the top of your PHP file)
-
+include '../config.php';
 $application_details = $personal_details = $cadd_det = $contact_det = array();
 $sql = "SELECT application_details, per_det, cadd_det, padd_det, contact_det FROM faculty_details WHERE email = ?";
 $stmt = $conn->prepare($sql);
@@ -338,13 +338,13 @@ $contact_det = json_decode($contact_det, true);
             <br />
             <textarea style="height:40px" placeholder="Street" class="form-control input-md" name="cadd" maxlength="200" required=""><?php echo isset($cadd_det['street']) ? $cadd_det['street'] : ''; ?></textarea>
 
-            <textarea style="height:40" placeholder="City" class="form-control input-md" name="cadd1" maxlength="200" required=""><?php echo isset($cadd_det['city']) ? $cadd_det['city'] : ''; ?></textarea>
+            <textarea style="height:40px" placeholder="City" class="form-control input-md" name="cadd1" maxlength="200" required=""><?php echo isset($cadd_det['city']) ? $cadd_det['city'] : ''; ?></textarea>
 
-            <textarea style="height:40" placeholder="State" class="form-control input-md" name="cadd2" maxlength="200" required=""><?php echo isset($cadd_det['state']) ? $cadd_det['state'] : ''; ?></textarea>
+            <textarea style="height:40px" placeholder="State" class="form-control input-md" name="cadd2" maxlength="200" required=""><?php echo isset($cadd_det['state']) ? $cadd_det['state'] : ''; ?></textarea>
 
-            <textarea style="height:40" placeholder="Country" class="form-control input-md" name="cadd3" maxlength="200" required=""><?php echo isset($cadd_det['country']) ? $cadd_det['country'] : ''; ?></textarea>
+            <textarea style="height:40px" placeholder="Country" class="form-control input-md" name="cadd3" maxlength="200" required=""><?php echo isset($cadd_det['country']) ? $cadd_det['country'] : ''; ?></textarea>
 
-            <textarea style="height:40;" placeholder="PIN/ZIP" class="form-control input-md" name="cadd4" maxlength="6" required=""><?php echo isset($cadd_det['pin']) ? $cadd_det['pin'] : ''; ?></textarea>
+            <textarea style="height:40px" placeholder="PIN/ZIP" class="form-control input-md" name="cadd4" maxlength="6" required=""><?php echo isset($cadd_det['zip']) ? $cadd_det['zip'] : ''; ?></textarea>
           </div>
         </div>
       </div>
@@ -371,7 +371,7 @@ $contact_det = json_decode($contact_det, true);
 
             <textarea style="height:40" placeholder="Country" class="form-control input-md" name="padd3" maxlength="200" required=""><?php echo isset($padd_det['country']) ? $padd_det['country'] : ''; ?></textarea>
 
-            <textarea style="height:40;" placeholder="PIN/ZIP" class="form-control input-md" name="padd4" maxlength="6" required=""><?php echo isset($padd_det['pin']) ? $padd_det['pin'] : ''; ?></textarea>
+            <textarea style="height:40;" placeholder="PIN/ZIP" class="form-control input-md" name="padd4" maxlength="6" required=""><?php echo isset($padd_det['zip']) ? $padd_det['zip'] : ''; ?></textarea>
           </div>
         </div>
       </div>
@@ -384,20 +384,42 @@ $contact_det = json_decode($contact_det, true);
     <div class="panel panel-success">
       <!-- Contact Details -->
       <div class="panel-heading">4. Contact Details (with STD/ISD code)</div>
-      <div class="panel-body">
-        <span class="col-md-2 control-label" for="mobile">Mobile *</span>
-        <div class="col-md-4">
-          <input id="mobile" value="<?php echo isset($contact_det['mobile']) ? $contact_det['mobile'] : ''; ?>" name="mobile" type="text" placeholder="Mobile" class="form-control input-md" required="" maxlength="20">
+          <div class="panel-body">
+        <div class="form-group">
+            <label class="col-md-2 control-label" for="mobile">Mobile *</label>
+            <div class="col-md-4">
+                <input id="mobile" name="mobile" type="text" placeholder="Mobile" class="form-control input-md" required maxlength="20" value="<?php echo isset($contact_det['mobile']) ? $contact_det['mobile'] : ''; ?>">
+            </div>
         </div>
 
-        <span class="col-md-2 control-label" for="email">Email</span>
-        <div class="col-md-4">
-          <input id="email" name="email" type="text" placeholder="email" readonly='readonly' value="<?php echo $_SESSION['email']; ?>" class="form-control input-md" required="">
-        </div>
-
-        <!-- ... (repeat for other fields in Contact Details) ... -->
-
+        <div class="form-group">
+          <label class="col-md-2 control-label" for="email">Email</label>
+          <div class="col-md-4">
+              <input id="email" name="email" type="text" placeholder="email" readonly value="<?php echo $_SESSION['email']; ?>" class="form-control input-md" required>
+          </div>
       </div>
+
+
+        <div class="form-group">
+            <label class="col-md-2 control-label" for="mobile_2">Alternate Mobile </label>
+            <div class="col-md-4">
+                <input id="mobile_2" name="mobile_2" type="text" placeholder="Alternate Mobile" class="form-control input-md" maxlength="20" value="<?php echo isset($contact_det['mobile_2']) ? $contact_det['mobile_2'] : ''; ?>">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label" for="email_2">Alternate Email </label>
+            <div class="col-md-4">
+                <input id="email_2" name="email_2" type="email" placeholder="Alternate Email" class="form-control input-md" value="<?php echo isset($contact_det['email_2']) ? $contact_det['email_2'] : ''; ?>">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label" for="landline">Landline Number</label>
+            <div class="col-md-4">
+                <input id="landline" name="landline" type="text" placeholder="Landline Number" class="form-control input-md" maxlength="20" value="<?php echo isset($contact_det['landline']) ? $contact_det['landline'] : ''; ?>">
+            </div>
+        </div>
     </div>
   </div>
 </div>
