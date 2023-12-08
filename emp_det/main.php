@@ -206,7 +206,7 @@ $("#add_more_ind_exp").click(function(){
     //console.log(tbody_id);
     var td=document.createElement("td");
     // var x=0;
-     var x = document.getElementById(tbody_id).rows.length;
+     var x = document.getElementById(tbody_id).rows.length + 1;
     // if(document.getElementById(tbody_id).rows)
     // {
     // }
@@ -294,6 +294,28 @@ $("#add_more_ind_exp").click(function(){
     }
     
   }
+
+  function removeRow(button) {
+    // Get the row to be removed
+    var row = button.parentNode.parentNode;
+
+    // Remove the row from the table
+    row.parentNode.removeChild(row);
+
+    // Update S. No. after removing the row
+    updateSerialNumbers();
+  }
+
+  function updateSerialNumbers() {
+    var rows = document.querySelectorAll('#exp tr:not(:first-child)');
+
+    rows.forEach(function (row, index) {
+        // Update the serial number in the first cell of each row
+        row.cells[0].textContent = index + 1;
+    });
+}
+
+
 </script>
 <!-- all bootstrap buttons classes -->
 <!-- 
@@ -411,6 +433,7 @@ $("#add_more_ind_exp").click(function(){
                         </td>
                         <td class="col-md-1">
                           <input id="duration<?= $index + 1 ?>" name="duration[]" type="text" placeholder="No. of Students" class="form-control input-md" autofocus="" value="<?= $qualification['duration'] ?? '' ?>">
+                          <button type="button" class="btn btn-light btn-sm" style="background-color: white; color: lightgray; font-size: 14px;" onclick="removeRow(this)">x</button>
                         </td>
                   </tr>
             <?php
@@ -487,6 +510,7 @@ $("#add_more_ind_exp").click(function(){
                         </td>
                         <td class="col-md-3">
                           <input id="te_duration<?= $index + 1 ?>" name="te_duration[]" type="text" placeholder="Duration(in years & months)" class="form-control input-md" autofocus="" value="<?= $qualification['duration'] ?? '' ?>">
+                          <button type="button" class="btn btn-light btn-sm" style="background-color: white; color: lightgray; font-size: 14px; margin-left: 120px;"  onclick="removeRow(this)">x</button>
                         </td>
                   </tr>
             <?php
@@ -544,6 +568,7 @@ $("#add_more_ind_exp").click(function(){
                     </td>
                     <td class="col-md-1">
                         <input id="r_exp_duration<?= $index + 1 ?>" name="r_exp_duration[]" type="text" placeholder="Duration (in years & months)" class="form-control input-md" autofocus="" value="<?= $qualification['duration'] ?? '' ?>">
+                        <button type="button" class="btn btn-light btn-sm" style="background-color: white; color: lightgray; font-size: 22px; margin-left: 120px;" onclick="removeRow(this)">x</button>
                     </td>
                 </tr>
                 <?php
@@ -600,8 +625,8 @@ $("#add_more_ind_exp").click(function(){
                                     </td>
                                     <td class="col-md-2">
                                         <input id="period<?= $index + 1 ?>" name="period[]" type="text" placeholder="Duration (in years & months)" class="form-control input-md" value="<?= $qualification['period'] ?>">
+                                        <button type="button" class="btn btn-light btn-sm" style="background-color: white; color: lightgray; font-size: 14px; margin-left: 120px;" onclick="removeRow(this)">x</button>
                                     </td>
-                                </tr>
                         <?php
                             }
                         }
