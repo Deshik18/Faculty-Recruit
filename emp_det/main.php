@@ -7,12 +7,13 @@ include '../config.php';
 
 $pres_emp_det = $emp_hist = $te_exp = $r_exp = $ind_exp = $area_det = array(); // Initialize as empty arrays
 $additional_qualifications = array();
+$teach_exp = 'NULL';
 
-$sql = "SELECT pre_emp_det, his_det, te_det, r_det, ind_det, area_det FROM faculty_details WHERE email = ?";
+$sql = "SELECT teach_exp, pre_emp_det, his_det, te_det, r_det, ind_det, area_det FROM faculty_details WHERE email = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $_SESSION['email']);
 $stmt->execute();
-$stmt->bind_result($pres_emp_json, $emp_hist_json, $te_exp_json, $r_exp_json, $ind_exp_json, $area_det_json);
+$stmt->bind_result($teach_exp, $pres_emp_json, $emp_hist_json, $te_exp_json, $r_exp_json, $ind_exp_json, $area_det_json);
 $stmt->fetch();
 $stmt->close();
 
@@ -415,16 +416,14 @@ $("#add_more_ind_exp").click(function(){
 
               
               
-                            <h4 style="color:red;">
-              <div>
+          <h4 style="color:red;">
+            <div>
+              <textarea style="height:35px; font-weight: bold; color: red;" class="form-control input-md" name="teach_exp_declaration" readonly required="">Experience : Minimum 3 years’ post phd experience</textarea>
 
-                <textarea style="height:35px; font-weight: bold; color: red;" class="form-control input-md" name="teach_exp_declaration" readonly="" required="">Experience : Minimum 3 years’ post phd experience</textarea>
-                <input type="radio" name="teach_exp"  value="Yes" required="">Yes</input>
-                
-                <input type="radio" name="teach_exp"  value="No" required="">No</input>
-              </div>
-              </h4>
-                        </div>
+              <input type="radio" name="teach_exp" value="Yes" <?php echo ($teach_exp === 'Yes') ? 'checked' : ''; ?> required="">Yes</input>
+
+              <input type="radio" name="teach_exp" value="No" <?php echo ($teach_exp === 'No') ? 'checked' : ''; ?> required="">No</input>
+            </div>
         </div>
       </div>
     </div>
