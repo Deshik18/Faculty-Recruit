@@ -1,5 +1,10 @@
 <?php
 include '../config.php';
+session_start();
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+var_dump($_POST);
+
 // Check if the form was submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Sanitize and validate input data as needed
@@ -95,11 +100,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Redirect to a success page or perform other actions
         header("Location: ../acad_ind_exp/main.php");
         exit();
-    }else{
-        echo 'Some Error Ocurred'. $stmt->error;
+    } else {
+        echo 'Some Error Occurred: ' . $stmt->error;
     }
 } else {
     // Handle cases where the form was not submitted
-    echo "Form was not submitted.";
 }
 ?>

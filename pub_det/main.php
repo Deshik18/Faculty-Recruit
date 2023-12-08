@@ -119,143 +119,112 @@ hr{
 </script>
 
 <script type="text/javascript">
-var tr="";
-var counter_jour=1;
-// var counter_confer=1;
-var counter_book=1;
-var counter_book_chapter=1;
-var counter_patent=1;
-  $(document).ready(function(){
-
-    $("#add_more_jour").click(function(){
+var tr = "";
+var counter_jour = 1;
+var counter_book = 1;
+var counter_book_chapter = 1;
+var counter_patent = 1;
+$(document).ready(function () {
+    $("#add_more_jour").click(function () {
         create_tr();
         create_serial('jour');
-        create_input('author[]', 'Author', 'author'+counter_jour,'jour', counter_jour, 'jour');
-        create_input('title[]', 'Title', 'title'+counter_jour,'jour', counter_jour, 'jour');
-        create_input('journal[]', 'Journal', 'journal'+counter_jour,'jour', counter_jour, 'jour');
-        create_input('year[]', 'Year, Vol., Page', 'year'+counter_jour,'jour', counter_jour, 'jour');
-        create_input('impact[]', 'Impact Factor','impact'+counter_jour, 'jour', counter_jour, 'jour');
-        create_input('doi[]', 'DOI','doi'+counter_jour, 'jour', counter_jour, 'jour');
-        create_input('status[]', 'Status', 'status'+counter_jour,'jour', counter_jour,'jour',true, true);
+        create_input('author[]', 'Author', 'author' + counter_jour, 'jour', counter_jour, 'jour');
+        create_input('title[]', 'Title', 'title' + counter_jour, 'jour', counter_jour, 'jour');
+        create_input('journal[]', 'Journal', 'journal' + counter_jour, 'jour', counter_jour, 'jour');
+        create_input('year[]', 'Year, Vol., Page', 'year' + counter_jour, 'jour', counter_jour, 'jour');
+        create_input('impact[]', 'Impact Factor', 'impact' + counter_jour, 'jour', counter_jour, 'jour');
+        create_input('doi[]', 'DOI', 'doi' + counter_jour, 'jour', counter_jour, 'jour');
+        create_input('status[]', 'Status', 'status' + counter_jour, 'jour', counter_jour, 'jour', true, true);
         counter_jour++;
         return false;
     });
 
-    // $("#add_more_confer").click(function(){
-    //     create_tr();
-    //     create_serial('confer');
-    //     create_input('cname[]', 'Conference','cname'+counter_confer, 'confer',counter_confer, 'confer');
-    //     create_input('ctitle[]', 'Title', 'ctitle'+counter_confer,'confer',counter_confer, 'confer');
-    //     create_input('cyear[]', 'Year', 'cyear'+counter_confer,'confer',counter_confer, 'confer',true);
-    //     counter_confer++;
-    //     return false;
-    // });
-
-    $("#add_more_book").click(function(){
+    $("#add_more_book").click(function () {
         create_tr();
         create_serial('book');
-        create_input('bauthor[]', 'Book','bauthor'+counter_book, 'book',counter_book, 'book');
-        create_input('btitle[]', 'Title of the Book', 'btitle'+counter_book,'book',counter_book, 'book');
-        create_input('byear[]', 'Year', 'byear'+counter_book,'book',counter_book, 'book');
-        create_input('bisbn[]', 'ISBN', 'bisbn'+counter_book,'book',counter_book, 'book',true);
+        create_input('bauthor[]', 'Book', 'bauthor' + counter_book, 'book', counter_book, 'book');
+        create_input('btitle[]', 'Title of the Book', 'btitle' + counter_book, 'book', counter_book, 'book');
+        create_input('byear[]', 'Year', 'byear' + counter_book, 'book', counter_book, 'book');
+        create_input('bisbn[]', 'ISBN', 'bisbn' + counter_book, 'book', counter_book, 'book', true);
         counter_book++;
         return false;
     });
 
-
-    $("#add_more_book_chapter").click(function(){
+    $("#add_more_book_chapter").click(function () {
         create_tr();
         create_serial('book_chapter');
-        create_input('bc_author[]', 'Book Chapter','bc_author'+counter_book_chapter, 'book_chapter',counter_book_chapter, 'book_chapter');
-        create_input('bc_title[]', 'Title', 'bc_title'+counter_book_chapter,'book_chapter',counter_book_chapter, 'book_chapter');
-        create_input('bc_year[]', 'Year', 'bc_year'+counter_book_chapter,'book_chapter',counter_book_chapter, 'book_chapter');
-        create_input('bc_isbn[]', 'ISBN', 'bc_isbn'+counter_book_chapter,'book_chapter',counter_book_chapter, 'book_chapter',true);
+        create_input('bc_author[]', 'Book Chapter', 'bc_author' + counter_book_chapter, 'book_chapter', counter_book_chapter, 'book_chapter');
+        create_input('bc_title[]', 'Title', 'bc_title' + counter_book_chapter, 'book_chapter', counter_book_chapter, 'book_chapter');
+        create_input('bc_year[]', 'Year', 'bc_year' + counter_book_chapter, 'book_chapter', counter_book_chapter, 'book_chapter');
+        create_input('bc_isbn[]', 'ISBN', 'bc_isbn' + counter_book_chapter, 'book_chapter', counter_book_chapter, 'book_chapter', true);
         counter_book_chapter++;
         return false;
     });
 
-
-    $("#add_more_patent").click(function(){
+    $("#add_more_patent").click(function () {
         create_tr();
         create_serial('patent');
-        create_input('pauthor[]', 'Inventor(s)','pauthor'+counter_patent, 'patent',counter_patent, 'patent');
-        // create_input('p_year[]', 'Year of the patent','p_year'+counter_patent, 'patent',counter_patent, 'patent');
-        create_input('ptitle[]', 'Title of Patent', 'ptitle'+counter_patent,'patent',counter_patent, 'patent');
-        create_input('p_country[]', 'Country of patent','p_country'+counter_patent, 'patent',counter_patent, 'patent');
-        create_input('p_number[]', 'Patent Number','p_number'+counter_patent, 'patent',counter_patent, 'patent');
-        create_input('pyear_filed[]', 'DD/MM/YYYY','pyear_filed'+counter_patent, 'patent',counter_patent, 'patent');
-        create_input('pyear_published[]', 'DD/MM/YYYY','pyear_published'+counter_patent, 'patent',counter_patent, 'patent');
-        create_input('pyear_issued[]', 'DD/MM/YYYY','pyear_issued'+counter_patent, 'patent',counter_patent, 'patent',true);
+        create_input('pauthor[]', 'Inventor(s)', 'pauthor' + counter_patent, 'patent', counter_patent, 'patent');
+        create_input('ptitle[]', 'Title of Patent', 'ptitle' + counter_patent, 'patent', counter_patent, 'patent');
+        create_input('p_country[]', 'Country of patent', 'p_country' + counter_patent, 'patent', counter_patent, 'patent');
+        create_input('p_number[]', 'Patent Number', 'p_number' + counter_patent, 'patent', counter_patent, 'patent');
+        create_input('pyear_filed[]', 'DD/MM/YYYY', 'pyear_filed' + counter_patent, 'patent', counter_patent, 'patent');
+        create_input('pyear_published[]', 'DD/MM/YYYY', 'pyear_published' + counter_patent, 'patent', counter_patent, 'patent');
+        create_input('pyear_issued[]', 'DD/MM/YYYY', 'pyear_issued' + counter_patent, 'patent', counter_patent, 'patent', true);
         counter_patent++;
         return false;
     });
-  });
-  function create_select()
-  {
-    
-  }
-  function create_tr()
-  {
-    tr=document.createElement("tr");
-  }
-  function create_serial(tbody_id)
-  {
-    //console.log(tbody_id);
-    var td=document.createElement("td");
-    // var x=0;
-     var x = document.getElementById(tbody_id).rows.length;
-    // if(document.getElementById(tbody_id).rows)
-    // {
-    // }
-    td.innerHTML=x;
-     tr.appendChild(td);
-  }
-  function create_input(t_name, place_value, id, tbody_id, counter, remove_name, btn=false, select=false)
-  {
-    //console.log(counter);
-    if(select==false)
-    {
+});
 
-      var input=document.createElement("input");
-      input.setAttribute("type", "text");
-      input.setAttribute("name", t_name);
-      input.setAttribute("id", id);
-      input.setAttribute("placeholder", place_value);
-      input.setAttribute("class", "form-control input-md");
-      input.setAttribute("required", "");
-      var td=document.createElement("td");
-      td.appendChild(input);
-    }
-    if(select==true)
-    {
+function create_tr() {
+    tr = document.createElement("tr");
+}
 
-      var sel=document.createElement("select");
-      sel.setAttribute("name", t_name);
-      sel.setAttribute("id", id);
-      sel.setAttribute("class", "form-control input-md");
-      sel.innerHTML+="<option>Select</option>";
-      sel.innerHTML+="<option value='published'>Published</option>";
-      sel.innerHTML+="<option value='accepted'>Accepted</option>";
-      // sel.innerHTML+="<option value='in_preparation'>In-Preparation</option>";
-      var td=document.createElement("td");
-      td.appendChild(sel);
+function create_serial(tbody_id) {
+    var td = document.createElement("td");
+    var x = document.getElementById(tbody_id).rows.length;
+    td.innerHTML = x;
+    tr.appendChild(td);
+}
+
+function create_input(t_name, place_value, id, tbody_id, counter, remove_name, btn = false, select = false) {
+    if (select == false) {
+        var input = document.createElement("input");
+        input.setAttribute("type", "text");
+        input.setAttribute("name", t_name);
+        input.setAttribute("id", id);
+        input.setAttribute("placeholder", place_value);
+        input.setAttribute("class", "form-control input-md");
+        input.setAttribute("required", "");
+        var td = document.createElement("td");
+        td.appendChild(input);
     }
 
-    if(btn==true)
-    {
-      // alert();
-      var but=document.createElement("button");
-      but.setAttribute("class", "close");
-      but.setAttribute("onclick", "remove_row('"+remove_name+"','"+counter+"', '"+tbody_id+"')");
-      but.innerHTML="x";
-      td.appendChild(but);
+    if (select == true) {
+        var sel = document.createElement("select");
+        sel.setAttribute("name", t_name);
+        sel.setAttribute("id", id);
+        sel.setAttribute("class", "form-control input-md");
+        sel.innerHTML += "<option>Select</option>";
+        sel.innerHTML += "<option value='published'>Published</option>";
+        sel.innerHTML += "<option value='accepted'>Accepted</option>";
+        var td = document.createElement("td");
+        td.appendChild(sel);
     }
-    tr.setAttribute("id", "row"+counter);
+
+    if (btn == true) {
+        var but = document.createElement("button");
+        but.setAttribute("class", "close");
+        but.setAttribute("onclick", "remove_row('" + remove_name + "','" + counter + "', '" + tbody_id + "')");
+        but.innerHTML = "x";
+        td.appendChild(but);
+    }
+    tr.setAttribute("id", "row" + counter);
     tr.appendChild(td);
     document.getElementById(tbody_id).appendChild(tr);
-    
-  }
-  function remove_row(remove_name, n, tbody_id) {
+}
+
+function remove_row(remove_name, n, tbody_id) {
     var tab = document.getElementById(tbody_id);
     var tr = document.getElementById("row" + n);
     tab.removeChild(tr);
@@ -265,9 +234,9 @@ var counter_patent=1;
     for (var i = 0; i < rows.length; i++) {
         rows[i].getElementsByTagName("td")[0].textContent = i + 1;
     }
-  }
-
+}
 </script>
+
         
 <!-- all bootstrap buttons classes -->
 <!-- 
@@ -359,99 +328,62 @@ var counter_patent=1;
                 
 
                <div class="panel panel-success">
-                <div class="panel-heading">List of 10 Best Publications (Journal/Conference) &nbsp;&nbsp;&nbsp;
+               <div class="panel-heading">List of 10 Best Publications (Journal/Conference) &nbsp;&nbsp;&nbsp;
                   <button class="btn btn-sm btn-danger" id="add_more_jour">Add Details</button>
-                </div>
-                <table class="table table-bordered">
+              </div>
+              <table class="table table-bordered">
                   <tbody id="jour">
-                    
-                    <tr height="30px">
-                      <th class="col-md-1"> S. No.</th>
-                      <th class="col-md-2"> Author(s)</th>
-                      <th class="col-md-2"> Title</th>
-                      <th class="col-md-2"> Name of Journal/Conference</th>
-                      <th class="col-md-1"> Year, Vol., Page</th>
-                      <th class="col-md-1"> Impact Factor</th>
-                      <th class="col-md-1"> DOI</th>
-                      <th class="col-md-2"> Status</th>
-                    </tr>
+                      <tr height="30px">
+                          <th class="col-md-1"> S. No.</th>
+                          <th class="col-md-2"> Author(s)</th>
+                          <th class="col-md-2"> Title</th>
+                          <th class="col-md-2"> Name of Journal/Conference</th>
+                          <th class="col-md-1"> Year, Vol., Page</th>
+                          <th class="col-md-1"> Impact Factor</th>
+                          <th class="col-md-1"> DOI</th>
+                          <th class="col-md-2"> Status</th>
+                      </tr>
+                      <?php
+if (!empty($patent)) {
+    foreach ($patent as $index => $qualification) {
+?>
+        <tr height="60px">
+            <td class="col-md-2">
+                <input id="pauthor_<?= $index + 1 ?>" name="pauthor[]" type="text" placeholder="Author" class="form-control input-md" autofocus="" value="<?= $qualification['inventor'] ?? '' ?>">
+            </td>
+            <td class="col-md-2">
+                <input id="ptitle_<?= $index + 1 ?>" name="ptitle[]" type="text" placeholder="University/Institute" class="form-control input-md" autofocus="" value="<?= $qualification['title'] ?? '' ?>">
+            </td>
+            <td class="col-md-2">
+                <input id="p_country_<?= $index + 1 ?>" name="p_country[]" type="text" placeholder="Branch/Stream" class="form-control input-md" autofocus="" value="<?= $qualification['country'] ?? '' ?>">
+            </td>
+            <td class="col-md-1">
+                <input id="p_number_<?= $index + 1 ?>" name="p_number[]" type="text" placeholder="Year of Joining" class="form-control input-md" autofocus="" value="<?= $qualification['number'] ?? '' ?>">
+            </td>
+            <td class="col-md-1">
+                <input id="p_filed_<?= $index + 1 ?>" name="p_filed[]" type="text" placeholder="Year of Completion" class="form-control input-md" autofocus="" value="<?= $qualification['year_filed'] ?? '' ?>">
+            </td>
+            <td class="col-md-1">
+                <input id="pyear_published_<?= $index + 1 ?>" name="pyear_published[]" type="text" placeholder="Duration (in years)" class="form-control input-md" autofocus="" value="<?= $qualification['year_published'] ?? '' ?>">
+            </td>
+            <td class="col-md-3">
+                <input id="pyear_issued_<?= $index + 1 ?>" name="pyear_issued[]" type="text" placeholder="Percentage/CGPA" class="form-control input-md" autofocus="" value="<?= $qualification['year_issued'] ?? '' ?>">
+            </td>
+        </tr>
+<?php
+    }
+}
+?>
 
-                    <?php
-                    // Iterate through additional qualification data and populate the fields
-                    if (!empty($best_pub)) {
-                        foreach ($best_pub as $index => $qualification) {
-                            ?>
-                            <tr height="60px">
-                                <td class="col-md-2">
-                                    <input id="author<?= $index + 1 ?>" name="author[]" type="text" placeholder="Author(s)" class="form-control input-md" autofocus=""
-                                          value="<?= $qualification['author'] ?? '' ?>">
-                                </td>
-                                <td class="col-md-2">
-                                    <input id="title<?= $index + 1 ?>" name="title[]" type="text" placeholder="Title" class="form-control input-md" autofocus=""
-                                          value="<?= $qualification['title'] ?? '' ?>">
-                                </td>
-                                <td class="col-md-2">
-                                    <input id="journal<?= $index + 1 ?>" name="journal[]" type="text" placeholder="Name of Journal/Conference" class="form-control input-md"
-                                          autofocus="" value="<?= $qualification['journal'] ?? '' ?>">
-                                </td>
-                                <td class="col-md-1">
-                                    <input id="year<?= $index + 1 ?>" name="year[]" type="text" placeholder="Year, Vol., Page" class="form-control input-md" autofocus=""
-                                          value="<?= $qualification['year'] ?? '' ?>">
-                                </td>
-                                <td class="col-md-1">
-                                    <input id="impact<?= $index + 1 ?>" name="impact[]" type="text" placeholder="Impact Factor" class="form-control input-md" autofocus=""
-                                          value="<?= $qualification['impact'] ?? '' ?>">
-                                </td>
-                                <td class="col-md-1">
-                                    <input id="doi<?= $index + 1 ?>" name="doi[]" type="text" placeholder="DOI" class "form-control input-md" autofocus=""
-                                          value="<?= $qualification['doi'] ?? '' ?>">
-                                </td>
-                                <td class="col-md-3">
-                                    <input id="status<?= $index + 1 ?>" name="status[]" type="text" placeholder="Status" class="form-control input-md" autofocus=""
-                                          value="<?= $qualification['status'] ?? '' ?>">
-                                </td>
-                            </tr>
-                    <?php
-                        }
-                      }
-                    ?>
+
                   </tbody>
-                </table>
+              </table>
 
-               </div>
               
             </div>
 
               
             </div> 
- 
-                <!-- Conference input-->
-                
-          <!-- <div class="container-fluid table-responsive">
-              <div class="row">
-
-                <div class="panel panel-success">
-                 <div class="panel-heading">(B) Conference (List of 10 Best Publications)&nbsp;&nbsp;&nbsp;
-                  <button class="btn btn-sm btn-danger" id="add_more_confer">Add Details</button>
-                </div>
-                 <table class="table table-bordered">
-                     <tbody id="confer">
-                     
-                     <tr height="30px">
-                       <th class="col-md-2"> S. No. </th>
-                       <th class="col-md-3"> Name of the Conference</th>
-                       <th class="col-md-5"> Title of Paper </th>
-                       <th class="col-md-2"> Year </th>
-                     </tr>
-
-
-                                        </tbody>
-                 </table>
-            </div>
-
-              
-            </div> 
-          </div> -->
 
            <!-- Patent Text -->
 
@@ -484,26 +416,26 @@ var counter_patent=1;
                     <tr height="60px">
                       <td class="col-md-1"></td>
                       <td class="col-md-1">
-                        <input id="pauthor<?= $index + 1 ?>" type="text" name="pauthor[]" placeholder="Inventor(s)" class="form-control input-md" value="<?php echo $patent_item['inventor'] ?? ''; ?>">
+                        <input id="pauthor<?php echo $index + 1 ?>" type="text" name="pauthor[]" placeholder="Inventor(s)" class="form-control input-md" value="<?php echo $patent_item['inventor'] ?? ''; ?>">
                       </td>
                       <!-- Include additional fields if needed for the "Patent" section -->
                       <td class="col-md-2">
-                        <input id="ptitle<?= $index + 1 ?>" type="text" name="ptitle[]" placeholder="Title of Patent" class="form-control input-md" value="<?php echo $patent_item['title'] ?? ''; ?>">
+                        <input id="ptitle<?php echo $index + 1 ?>" type="text" name="ptitle[]" placeholder="Title of Patent" class="form-control input-md" value="<?php echo $patent_item['title'] ?? ''; ?>">
                       </td>
                       <td class="col-md-1">
-                        <input id="p_country<?= $index + 1 ?>" type="text" name="p_country[]" placeholder="Country of Patent" class="form-control input-md" value="<?php echo $patent_item['country'] ?? ''; ?>">
+                        <input id="p_country<?php echo $index + 1 ?>" type="text" name="p_country[]" placeholder="Country of Patent" class="form-control input-md" value="<?php echo $patent_item['country'] ?? ''; ?>">
                       </td>
                       <td class="col-md-1">
-                        <input id="p_number<?= $index + 1 ?>" type="text" name="p_number[]" placeholder="Patent Number" class="form-control input-md" value="<?php echo $patent_item['number'] ?? ''; ?>">
+                        <input id="p_number<?php echo $index + 1 ?>" type="text" name="p_number[]" placeholder="Patent Number" class="form-control input-md" value="<?php echo $patent_item['number'] ?? ''; ?>">
                       </td>
                       <td class="col-md-1">
-                        <input id="pyear_filed<?= $index + 1 ?>" type="text" name="pyear_filed[]" placeholder="Date of Filing" class="form-control input-md" value="<?php echo $patent_item['year_filed'] ?? ''; ?>">
+                        <input id="pyear_filed<?php echo $index + 1 ?>" type="text" name="pyear_filed[]" placeholder="Date of Filing" class="form-control input-md" value="<?php echo $patent_item['year_filed'] ?? ''; ?>">
                       </td>
                       <td class="col-md-1">
-                        <input id="pyear_published<?= $index + 1 ?>" type="text" name="pyear_published[]" placeholder="Date of Published" class="form-control input-md" value="<?php echo $patent_item['year_published'] ?? ''; ?>">
+                        <input id="pyear_published<?php echo $index + 1 ?>" type="text" name="pyear_published[]" placeholder="Date of Published" class="form-control input-md" value="<?php echo $patent_item['year_published'] ?? ''; ?>">
                       </td>
                       <td class="col-md-1">
-                        <input id="pyear_issued<?= $index + 1 ?>" type="text" name="pyear_issued[]" placeholder="Status Filed/Published/Granted" class="form-control input-md" value="<?php echo $patent_item['year_issued'] ?? ''; ?>">
+                        <input id="pyear_issued<?php echo $index + 1 ?>" type="text" name="pyear_issued[]" placeholder="Status Filed/Published/Granted" class="form-control input-md" value="<?php echo $patent_item['year_issued'] ?? ''; ?>">
                       </td>
                       <!-- Include additional fields if needed for the "Patent" section -->
                       <td class="col-md-2">
@@ -547,16 +479,16 @@ var counter_patent=1;
                     <tr height="60px">
                       <td class="col-md-1"></td>
                       <td class="col-md-2">
-                        <input id="bauthor<?= $index + 1 ?>" type="text" name="bauthor[]" placeholder="Author(s)" class="form-control input-md" value="<?php echo $book_item['bauthor'] ?? ''; ?>">
+                        <input id="bauthor<?php echo $index + 1 ?>" type="text" name="bauthor[]" placeholder="Author(s)" class="form-control input-md" value="<?php echo $book_item['bauthor'] ?? ''; ?>">
                       </td>
                       <td class="col-md-2">
-                        <input id="btitle<?= $index + 1 ?>" type="text" name="btitle[]" placeholder="Title of the Book" class="form-control input-md" value="<?php echo $book_item['btitle'] ?? ''; ?>">
+                        <input id="btitle<?php echo $index + 1 ?>" type="text" name="btitle[]" placeholder="Title of the Book" class="form-control input-md" value="<?php echo $book_item['btitle'] ?? ''; ?>">
                       </td>
                       <td class="col-md-2">
-                        <input id="byear<?= $index + 1 ?>" type="text" name="byear[]" placeholder="Year of Publication" class="form-control input-md" value="<?php echo $book_item['byear'] ?? ''; ?>">
+                        <input id="byear<?php echo $index + 1 ?>" type="text" name="byear[]" placeholder="Year of Publication" class="form-control input-md" value="<?php echo $book_item['byear'] ?? ''; ?>">
                       </td>
                       <td class="col-md-2">
-                        <input id="bisbn<?= $index + 1 ?>" type="text" name="bisbn[]" placeholder="ISBN" class="form-control input-md" value="<?php echo $book_item['bisbn'] ?? ''; ?>">
+                        <input id="bisbn<?php echo $index + 1 ?>" type="text" name="bisbn[]" placeholder="ISBN" class="form-control input-md" value="<?php echo $book_item['bisbn'] ?? ''; ?>">
                       </td>
                       <td class="col-md-2">
                         <button class="btn btn-sm btn-danger" onclick="removeRow(this)">Remove</button>
@@ -603,17 +535,17 @@ var counter_patent=1;
                       <tr height="60px">
                         <td class="col-md-1"></td>
                         <td class="col-md-2">
-                          <input id="bc_author<?= $index + 1 ?>" type="text" name="bc_author[]" placeholder="Author(s)" class="form-control input-md" value="<?php echo $chapter_item['author'] ?? ''; ?>">
+                          <input id="bc_author<?php echo $index + 1 ?>" type="text" name="bc_author[]" placeholder="Author(s)" class="form-control input-md" value="<?php echo $chapter_item['author'] ?? ''; ?>">
                         </td>
                         <!-- Include additional fields if needed for the "Book Chapter" section -->
                         <td class="col-md-2">
-                          <input id="bc_title<?= $index + 1 ?>" type="text" name="bc_title[]" placeholder="Title of the Book Chapter(s)" class="form-control input-md" value="<?php echo $chapter_item['title'] ?? ''; ?>">
+                          <input id="bc_title<?php echo $index + 1 ?>" type="text" name="bc_title[]" placeholder="Title of the Book Chapter(s)" class="form-control input-md" value="<?php echo $chapter_item['title'] ?? ''; ?>">
                         </td>
                         <td class="col-md-2">
-                          <input id="bc_year<?= $index + 1 ?>" type="text" name="bc_year[]" placeholder="Year of Publication" class="form-control input-md" value="<?php echo $chapter_item['year'] ?? ''; ?>">
+                          <input id="bc_year<?php echo $index + 1 ?>" type="text" name="bc_year[]" placeholder="Year of Publication" class="form-control input-md" value="<?php echo $chapter_item['year'] ?? ''; ?>">
                         </td>
                         <td class="col-md-2">
-                          <input id="bc_isbn<?= $index + 1 ?>" type="text" name="bc_isbn[]" placeholder="ISBN" class="form-control input-md" value="<?php echo $chapter_item['isbn'] ?? ''; ?>">
+                          <input id="bc_isbn<?php echo $index + 1 ?>" type="text" name="bc_isbn[]" placeholder="ISBN" class="form-control input-md" value="<?php echo $chapter_item['isbn'] ?? ''; ?>">
                         </td>
                         <td class="col-md-2">
                           <button class="btn btn-sm btn-danger" onclick="removeRow(this)">Remove</button>
