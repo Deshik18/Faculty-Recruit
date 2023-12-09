@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'summary_journal'=> $summary_journal,
         'summary_conf_inter'=> $summary_conf_inter,
         'summary_conf_national'=> $summary_conf_national,
-        'patent_book' => $patent_publish,
+        'patent_publish' => $patent_publish,
         'summary_book'=> $summary_book,
         'summary_book_chapter'=> $summary_book_chapter,
     ));
@@ -71,26 +71,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Handle posted data for patents
-    $patent = array();
+    $patents = array(); // Use a different variable name
+
     if (isset($_POST['pauthor'])) {
-    for ($i = 0; $i < count($_POST['pauthor']); $i++) {
-        $patent = array(
-            'inventor' => $_POST['pauthor'][$i],
-            'title' => $_POST['ptitle'][$i],
-            'country' => $_POST['p_country'][$i],
-            'number' => $_POST['p_number'][$i],
-            'year_filed' => $_POST['pyear_filed'][$i],
-            'year_published' => $_POST['pyear_published'][$i],
-            'year_issued' => $_POST['pyear_issued'][$i],
-        );
-        $patent[] = $patent;
+        for ($i = 0; $i < count($_POST['pauthor']); $i++) {
+            $current_patent = array( // Use a different variable name
+                'inventor' => $_POST['pauthor'][$i],
+                'title' => $_POST['ptitle'][$i],
+                'country' => $_POST['p_country'][$i],
+                'number' => $_POST['p_number'][$i],
+                'year_filed' => $_POST['pyear_filed'][$i],
+                'year_published' => $_POST['pyear_published'][$i],
+                'year_issued' => $_POST['pyear_issued'][$i],
+            );
+            $patents[] = $current_patent; // Use a different variable name
+        }
     }
-    }
+
 
     $best_pub_json = json_encode($best_pub);
     $book_json = json_encode($book);
     $chapter_json = json_encode($chapter);
-    $patent_json = json_encode($patent);
+    $patent_json = json_encode($patents);
     
     $updateQuery = "UPDATE faculty_details SET sum_pub = ?, best_pub = ?, book = ?, chap = ?, patent = ?, scholar_link = ? WHERE email = ?";
     $stmt = $conn->prepare($updateQuery);

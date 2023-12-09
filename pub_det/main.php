@@ -13,11 +13,11 @@ $stmt->bind_result($sum_pub_json, $best_pub_json, $book_json, $chapter_json, $pa
 $stmt->fetch();
 $stmt->close();
 
-$sum_pub = json_decode($sum_pub_json);
-$best_pub = json_decode($best_pub_json);
-$book = json_decode($book_json);
-$chapter = json_decode($chapter_json);
-$patent = json_decode($patent_json);
+$patent = json_decode($patent_json, true);
+$sum_pub = json_decode($sum_pub_json, true);
+$best_pub = json_decode($best_pub_json, true);
+$book = json_decode($book_json, true);
+$chapter = json_decode($chapter_json, true);
 
 ?>
 <!-- saved from url=(0054)https://ofa.iiti.ac.in/facrec_che_2023_july_02/publish -->
@@ -168,9 +168,9 @@ $(document).ready(function () {
         create_input('ptitle[]', 'Title of Patent', 'ptitle' + counter_patent, 'patent', counter_patent, 'patent');
         create_input('p_country[]', 'Country of patent', 'p_country' + counter_patent, 'patent', counter_patent, 'patent');
         create_input('p_number[]', 'Patent Number', 'p_number' + counter_patent, 'patent', counter_patent, 'patent');
-        create_input('pyear_filed[]', 'DD/MM/YYYY', 'pyear_filed' + counter_patent, 'patent', counter_patent, 'patent');
-        create_input('pyear_published[]', 'DD/MM/YYYY', 'pyear_published' + counter_patent, 'patent', counter_patent, 'patent');
-        create_input('pyear_issued[]', 'DD/MM/YYYY', 'pyear_issued' + counter_patent, 'patent', counter_patent, 'patent', true);
+        create_input('pyear_filed[]', 'DD/MM/YYYY', 'pyear_filed' + counter_patent, 'patent', counter_patent, 'patent', false, false, true);
+        create_input('pyear_published[]', 'DD/MM/YYYY', 'pyear_published' + counter_patent, 'patent', counter_patent, 'patent', false, false, true);
+        create_input('pyear_issued[]', 'Status', 'pyear_issued' + counter_patent, 'patent', counter_patent, 'patent', true, true);
         counter_patent++;
         return false;
     });
@@ -187,7 +187,7 @@ function create_serial(tbody_id) {
     tr.appendChild(td);
 }
 
-function create_input(t_name, place_value, id, tbody_id, counter, remove_name, btn = false, select = false) {
+function create_input(t_name, place_value, id, tbody_id, counter, remove_name, btn = false, select = false, datepicker=false) {
     if (select == false) {
         var input = document.createElement("input");
         input.setAttribute("type", "text");
@@ -235,6 +235,26 @@ function remove_row(remove_name, n, tbody_id) {
         rows[i].getElementsByTagName("td")[0].textContent = i + 1;
     }
 }
+
+function removeRow(button) {
+    // Get the row to be removed
+    var row = button.parentNode.parentNode;
+
+    // Remove the row from the table
+    row.parentNode.removeChild(row);
+
+    // Update S. No. after removing the row
+    updateSerialNumbers();
+}
+
+function updateSerialNumbers() {
+    var rows = document.querySelectorAll('#jour tr:not(:first-child)');
+
+    rows.forEach(function (row, index) {
+        row.querySelector('td:first-child').textContent = index + 1;
+    });
+}
+
 </script>
 
         
@@ -276,319 +296,287 @@ function remove_row(remove_name, n, tbody_id) {
             <h4 style="text-align:center; font-weight: bold; color: #6739bb;">5. Summary of Publications *</h4>
             <div class="row">
               <div class="col-md-12">
-              <div class="panel panel-success">
-              <div class="panel-body">
+                <div class="panel panel-success">
+                  <div class="panel-body">
+                    <span class="col-md-5 control-label" for="summary_journal_inter">Number of International Journal Papers</span>
+                    <div class="col-md-1">
+                      <input id="summary_journal_inter" value="<?php echo isset($sum_pub['summary_journal_inter']) ? $sum_pub['summary_journal_inter'] : ''; ?>" name="summary_journal_inter" type="number" placeholder="" class="form-control input-md" required="" maxlength="3">
+                    </div>
 
-                <span class="col-md-5 control-label" for="summary_journal_inter">Number of International Journal Papers</span>  
-                <div class="col-md-1">
-                <input id="summary_journal_inter" value="<?php echo (is_array($sum_pub) && array_key_exists('summary_journal_inter', $sum_pub)) ? $sum_pub['$summary_journal_inter'] : ''; ?>" name="summary_journal_inter" type="number" placeholder="" class="form-control input-md" required="" maxlength="3">
+                    <span class="col-md-5 control-label" for="summary_journal">Number of National Journal Papers</span>
+                    <div class="col-md-1">
+                      <input id="summary_journal" value="<?php echo (is_array($sum_pub) && array_key_exists('summary_journal', $sum_pub)) ? $sum_pub['summary_journal'] : ''; ?>" name="summary_journal" type="number" placeholder="" class="form-control input-md" required="" maxlength="3">
+                    </div>
+
+                    <span class="col-md-5 control-label" for="summary_conf_inter">Number of International Conference Papers</span>
+                    <div class="col-md-1">
+                      <input id="summary_conf_inter" value="<?php echo (is_array($sum_pub) && array_key_exists('summary_conf_inter', $sum_pub)) ? $sum_pub['summary_conf_inter'] : ''; ?>" name="summary_conf_inter" type="number" placeholder="" class="form-control input-md" required="" maxlength="3">
+                    </div>
+
+                    <span class="col-md-5 control-label" for="summary_conf_national">Number of National Conference Papers</span>
+                    <div class="col-md-1">
+                      <input id="summary_conf_national" value="<?php echo (is_array($sum_pub) && array_key_exists('summary_conf_national', $sum_pub)) ? $sum_pub['summary_conf_national'] : ''; ?>" name="summary_conf_national" type="number" placeholder="" class="form-control input-md" required="" maxlength="3">
+                    </div>
+
+                    <span class="col-md-5 control-label" for="patent_publish">Number of Patent(s) [Filed, Published, Granted] </span>
+                    <div class="col-md-1">
+                      <input id="patent_publish" value="<?php echo (is_array($sum_pub) && array_key_exists('patent_publish', $sum_pub)) ? $sum_pub['patent_publish'] : ''; ?>" name="patent_publish" type="number" placeholder="" class="form-control input-md" required="" maxlength="3">
+                    </div>
+
+                    <span class="col-md-5 control-label" for="summary_book">Number of Book(s) </span>
+                    <div class="col-md-1">
+                      <input id="summary_book" value="<?php echo (is_array($sum_pub) && array_key_exists('summary_book', $sum_pub)) ? $sum_pub['summary_book'] : ''; ?>" name="summary_book" type="number" placeholder="" class="form-control input-md" required="" maxlength="3">
+                    </div>
+
+                    <span class="col-md-5 control-label" for="summary_book_chapter">Number of Book Chapter(s)</span>
+                    <div class="col-md-1">
+                      <input id="summary_book_chapter" value="<?php echo (is_array($sum_pub) && array_key_exists('summary_book_chapter', $sum_pub)) ? $sum_pub['summary_book_chapter'] : ''; ?>" name="summary_book_chapter" type="number" placeholder="" class="form-control input-md" required="" maxlength="3">
+                    </div>
+                  </div>
                 </div>
-
-                <span class="col-md-5 control-label" for="summary_journal">Number of National Journal Papers</span>  
-                <div class="col-md-1">
-                <input id="summary_journal" value="<?php echo (is_array($sum_pub) && array_key_exists('summary_journal',$sum_pub)) ? $sum_pub['summary_journal'] : ' '; ?>" name="summary_journal" type="number" placeholder="" class="form-control input-md" required="" maxlength="3">
-                </div>
-
-                <span class="col-md-5 control-label" for="summary_conf_inter">Number of International Conference Papers</span>  
-                <div class="col-md-1">
-                <input id="summary_conf_inter" value="<?php echo (is_array($sum_pub) && array_key_exists('summary_conf_inter',$sum_pub)) ? $sum_pub['summary_conf_inter'] : ' '; ?>" name="summary_conf_inter" type="number" placeholder="" class="form-control input-md" required="" maxlength="3">
-                </div>
-
-                <span class="col-md-5 control-label" for="summary_conf_national">Number of National Conference Papers</span>  
-                <div class="col-md-1">
-                <input id="summary_conf_national" value="<?php echo (is_array($sum_pub) && array_key_exists('summary_conf_national',$sum_pub)) ? $sum_pub['summary_conf_national'] : ' '; ?>" name="summary_conf_national" type="number" placeholder="" class="form-control input-md" required="" maxlength="3">
-                </div>
-
-                <span class="col-md-5 control-label" for="patent_publish">Number of Patent(s) [Filed, Published, Granted] </span>  
-                <div class="col-md-1">
-                <input id="patent_publish" value="<?php echo (is_array($sum_pub) && array_key_exists('patent_book',$sum_pub)) ? $sum_pub['patent_book'] : ' '; ?>" name="patent_publish" type="number" placeholder="" class="form-control input-md" required="" maxlength="3">
-                </div>
-
-                <span class="col-md-5 control-label" for="summary_book">Number of Book(s) </span>  
-                <div class="col-md-1">
-                <input id="summary_book" value="<?php echo (is_array($sum_pub) && array_key_exists('summary_book',$sum_pub)) ? $sum_pub['summary_book'] : ' '; ?>" name="summary_book" type="number" placeholder="" class="form-control input-md" required="" maxlength="3">
-                </div>
-
-                <span class="col-md-5 control-label" for="summary_book_chapter">Number of Book Chapter(s)</span>  
-                <div class="col-md-1">
-                <input id="summary_book_chapter" value="<?php echo (is_array($sum_pub) && array_key_exists('summary_book_chapter',$sum_pub)) ? $sum_pub['summary_book_chapter'] : ' '; ?>" name="summary_book_chapter" type="number" placeholder="" class="form-control input-md" required="" maxlength="3">
-                </div>
-
-
               </div>
-              </div>
-              </div>
-              </div>   
+            </div>
+   
 
            
-           <h4 style="text-align:center; font-weight: bold; color: #6739bb;">6. List of 10 Best Publications (Journal/Conference)</h4>
+            <h4 style="text-align:center; font-weight: bold; color: #6739bb;">6. List of 10 Best Publications (Journal/Conference)</h4>
 
-           <div class="container-fluid table-responsive">
-              <div class="row">
-                
-
-               <div class="panel panel-success">
-               <div class="panel-heading">List of 10 Best Publications (Journal/Conference) &nbsp;&nbsp;&nbsp;
-                  <button class="btn btn-sm btn-danger" id="add_more_jour">Add Details</button>
-              </div>
-              <table class="table table-bordered">
-                  <tbody id="jour">
-                      <tr height="30px">
-                          <th class="col-md-1"> S. No.</th>
-                          <th class="col-md-2"> Author(s)</th>
-                          <th class="col-md-2"> Title</th>
-                          <th class="col-md-2"> Name of Journal/Conference</th>
-                          <th class="col-md-1"> Year, Vol., Page</th>
-                          <th class="col-md-1"> Impact Factor</th>
-                          <th class="col-md-1"> DOI</th>
-                          <th class="col-md-2"> Status</th>
-                      </tr>
-                      <?php
-if (!empty($patent)) {
-    foreach ($patent as $index => $qualification) {
-?>
-        <tr height="60px">
-            <td class="col-md-2">
-                <input id="pauthor_<?= $index + 1 ?>" name="pauthor[]" type="text" placeholder="Author" class="form-control input-md" autofocus="" value="<?= $qualification['inventor'] ?? '' ?>">
-            </td>
-            <td class="col-md-2">
-                <input id="ptitle_<?= $index + 1 ?>" name="ptitle[]" type="text" placeholder="University/Institute" class="form-control input-md" autofocus="" value="<?= $qualification['title'] ?? '' ?>">
-            </td>
-            <td class="col-md-2">
-                <input id="p_country_<?= $index + 1 ?>" name="p_country[]" type="text" placeholder="Branch/Stream" class="form-control input-md" autofocus="" value="<?= $qualification['country'] ?? '' ?>">
-            </td>
-            <td class="col-md-1">
-                <input id="p_number_<?= $index + 1 ?>" name="p_number[]" type="text" placeholder="Year of Joining" class="form-control input-md" autofocus="" value="<?= $qualification['number'] ?? '' ?>">
-            </td>
-            <td class="col-md-1">
-                <input id="p_filed_<?= $index + 1 ?>" name="p_filed[]" type="text" placeholder="Year of Completion" class="form-control input-md" autofocus="" value="<?= $qualification['year_filed'] ?? '' ?>">
-            </td>
-            <td class="col-md-1">
-                <input id="pyear_published_<?= $index + 1 ?>" name="pyear_published[]" type="text" placeholder="Duration (in years)" class="form-control input-md" autofocus="" value="<?= $qualification['year_published'] ?? '' ?>">
-            </td>
-            <td class="col-md-3">
-                <input id="pyear_issued_<?= $index + 1 ?>" name="pyear_issued[]" type="text" placeholder="Percentage/CGPA" class="form-control input-md" autofocus="" value="<?= $qualification['year_issued'] ?? '' ?>">
-            </td>
-        </tr>
-<?php
-    }
-}
-?>
-
-
-                  </tbody>
-              </table>
-
-              
+<div class="container-fluid table-responsive">
+    <div class="row">
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                List of 10 Best Publications (Journal/Conference) &nbsp;&nbsp;&nbsp;
+                <button class="btn btn-sm btn-danger" id="add_more_jour">Add Details</button>
             </div>
-
-              
-            </div> 
+            <table class="table table-bordered">
+                <thead>
+                    <tr height="30px">
+                        <th class="col-md-1">S. No.</th>
+                        <th class="col-md-2">Author(s)</th>
+                        <th class="col-md-2">Title</th>
+                        <th class="col-md-2">Name of Journal/Conference</th>
+                        <th class="col-md-1">Year, Vol., Page</th>
+                        <th class="col-md-1">Impact Factor</th>
+                        <th class="col-md-1">DOI</th>
+                        <th class="col-md-2">Status</th>
+                    </tr>
+                </thead>
+                <tbody id="jour">
+                    <!-- This part is for displaying saved values from the database -->
+                    <?php
+                    if (!empty($best_pub)) {
+                        foreach ($best_pub as $index => $publication) {
+                    ?>
+                            <tr height="60px">
+                                <td class="col-md-1"><?php echo $index + 1; ?></td>
+                                <td class="col-md-2">
+                                    <input name="author[]" type="text" class="form-control input-md" value="<?= $publication['author'] ?? '' ?>">
+                                </td>
+                                <td class="col-md-2">
+                                    <input name="title[]" type="text" class="form-control input-md" value="<?= $publication['title'] ?? '' ?>">
+                                </td>
+                                <td class="col-md-2">
+                                    <input name="journal_conference[]" type="text" class="form-control input-md" value="<?= $publication['journal_conference'] ?? '' ?>">
+                                </td>
+                                <td class="col-md-1">
+                                    <input name="year_vol_page[]" type="text" class="form-control input-md" value="<?= $publication['year_vol_page'] ?? '' ?>">
+                                </td>
+                                <td class="col-md-1">
+                                    <input name="impact_factor[]" type="text" class="form-control input-md" value="<?= $publication['impact_factor'] ?? '' ?>">
+                                </td>
+                                <td class="col-md-1">
+                                    <input name="doi[]" type="text" class="form-control input-md" value="<?= $publication['doi'] ?? '' ?>">
+                                </td>
+                                <td class="col-md-2">
+                                    <input name="status[]" type="text" class="form-control input-md" value="<?= $publication['status'] ?? '' ?>">
+                                    <button type="button" class="btn btn-light btn-sm" style="background-color: white; color: lightgray; font-size: 22px; margin-left: 120px;" onclick="removeRow(this)">x</button>
+                                </td>
+                            </tr>
+                    <?php
+                        }
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+ 
 
            <!-- Patent Text -->
 
-             <div class="container-fluid table-responsive">
-
-             <h4 style="text-align:center; font-weight: bold; color: #6739bb;">7. List of  Patent(s), Book(s), Book Chapter(s)</h4>
-             <div class="row">
-
-           <div class="panel panel-success">
-            <div class="panel-heading">(A) Patent(s)&nbsp;&nbsp;&nbsp;<button class="btn btn-sm btn-danger" id="add_more_patent">Add Details</button>  </div>
+             <!-- Patent's info -->
+<div class="container-fluid table-responsive">
+    <h4 style="text-align:center; font-weight: bold; color: #6739bb;">7. List of Patent(s), Book(s), Book Chapter(s)</h4>
+    <div class="row">
+        <div class="panel panel-success">
+            <div class="panel-heading">(A) Patent(s)&nbsp;&nbsp;&nbsp;<button class="btn btn-sm btn-danger" id="add_more_patent">Add Details</button></div>
             <table class="table table-bordered">
-              <tbody id="patent">
-                
-                <tr height="30px">
-                  <th class="col-md-1"> S. No.</th>
-                  <th class="col-md-1"> Inventor(s) </th>
-                  <!-- <th class="col-md-2"> Year of Patent </th> -->
-                  <th class="col-md-2"> Title of Patent </th>
-                  <th class="col-md-1"> Country of Patent </th>
-                  <th class="col-md-1"> Patent Number</th>
-                  <th class="col-md-1"> Date of Filing</th>
-                  <th class="col-md-1"> Date of Published</th>
-                  <th class="col-md-1"> Status Filed/Published/Granted</th>
-                  <!-- <th class="col-md-1"> Date of Filed/Published (If not granted, mention "Awaited")</th> -->
-                </tr>
-
-                <!-- Printing saved values for the "Patent" section -->
-                <?php if (!empty($patent)) { ?>
-                  <?php foreach ($patent as $index => $patent_item) { ?>
-                    <tr height="60px">
-                      <td class="col-md-1"></td>
-                      <td class="col-md-1">
-                        <input id="pauthor<?php echo $index + 1 ?>" type="text" name="pauthor[]" placeholder="Inventor(s)" class="form-control input-md" value="<?php echo $patent_item['inventor'] ?? ''; ?>">
-                      </td>
-                      <!-- Include additional fields if needed for the "Patent" section -->
-                      <td class="col-md-2">
-                        <input id="ptitle<?php echo $index + 1 ?>" type="text" name="ptitle[]" placeholder="Title of Patent" class="form-control input-md" value="<?php echo $patent_item['title'] ?? ''; ?>">
-                      </td>
-                      <td class="col-md-1">
-                        <input id="p_country<?php echo $index + 1 ?>" type="text" name="p_country[]" placeholder="Country of Patent" class="form-control input-md" value="<?php echo $patent_item['country'] ?? ''; ?>">
-                      </td>
-                      <td class="col-md-1">
-                        <input id="p_number<?php echo $index + 1 ?>" type="text" name="p_number[]" placeholder="Patent Number" class="form-control input-md" value="<?php echo $patent_item['number'] ?? ''; ?>">
-                      </td>
-                      <td class="col-md-1">
-                        <input id="pyear_filed<?php echo $index + 1 ?>" type="text" name="pyear_filed[]" placeholder="Date of Filing" class="form-control input-md" value="<?php echo $patent_item['year_filed'] ?? ''; ?>">
-                      </td>
-                      <td class="col-md-1">
-                        <input id="pyear_published<?php echo $index + 1 ?>" type="text" name="pyear_published[]" placeholder="Date of Published" class="form-control input-md" value="<?php echo $patent_item['year_published'] ?? ''; ?>">
-                      </td>
-                      <td class="col-md-1">
-                        <input id="pyear_issued<?php echo $index + 1 ?>" type="text" name="pyear_issued[]" placeholder="Status Filed/Published/Granted" class="form-control input-md" value="<?php echo $patent_item['year_issued'] ?? ''; ?>">
-                      </td>
-                      <!-- Include additional fields if needed for the "Patent" section -->
-                      <td class="col-md-2">
-                        <button class="btn btn-sm btn-danger" onclick="removeRow(this)">Remove</button>
-                      </td>
+                <tbody id="patent">
+                    <!-- Header row for Patent(s) -->
+                    <tr height="30px">
+                        <th class="col-md-1">S. No.</th>
+                        <th class="col-md-1">Inventor(s)</th>
+                        <th class="col-md-2">Title of Patent</th>
+                        <th class="col-md-1">Country of Patent</th>
+                        <th class="col-md-1">Patent Number</th>
+                        <th class="col-md-1">Date of Filing</th>
+                        <th class="col-md-1">Date of Published</th>
+                        <th class="col-md-1">Status Filed/Published/Granted</th>
+                        <!-- <th class="col-md-1"> Date of Filed/Published (If not granted, mention "Awaited")</th> -->
                     </tr>
-                  <?php } ?>
-                <?php } ?>
-
+                    <?php
+                    if (!empty($patent)) {
+                        foreach ($patent as $index => $qualification) {
+                    ?>
+                            <tr height="60px">
+                            <td class="col-md-1"><?php echo $index; ?></td>
+                                <td class="col-md-1">
+                                    <input id="pauthor<?= $index + 1 ?>" name="pauthor[]" type="text" placeholder="Inventor" class="form-control input-md" autofocus="" value="<?= $qualification['inventor'] ?? '' ?>">
+                                </td>
+                                <!-- Add more fields as needed -->
+                                <td class="col-md-2">
+                                    <input id="ptitle<?= $index + 1 ?>" name="ptitle[]" type="text" placeholder="Title of Patent" class="form-control input-md" autofocus="" value="<?= $qualification['title'] ?? '' ?>">
+                                </td>
+                                <td class="col-md-1">
+                                    <input id="p_country<?= $index + 1 ?>" name="p_country[]" type="text" placeholder="Country of Patent" class="form-control input-md" autofocus="" value="<?= $qualification['country'] ?? '' ?>">
+                                </td>
+                                <td class="col-md-1">
+                                    <input id="p_number<?= $index + 1 ?>" name="p_number[]" type="text" placeholder="Patent Number" class="form-control input-md" autofocus="" value="<?= $qualification['number'] ?? '' ?>">
+                                </td>
+                                <td class="col-md-1">
+                                    <input id="year_filed<?= $index + 1 ?>" name="pyear_filed[]" type="text" placeholder="Date of Filing" class="form-control input-md datepicker" autofocus="" value="<?= $qualification['year_filed'] ?? '' ?>">
+                                </td>
+                                <td class="col-md-1">
+                                    <input id="year_published<?= $index + 1 ?>" name="pyear_published[]" type="text" placeholder="Date of Published" class="form-control input-md datepicker" autofocus="" value="<?= $qualification['year_published'] ?? '' ?>">
+                                </td>
+                                <td class="col-md-1">
+                                    <input id="status<?= $index + 1 ?>" name="pyear_issued[]" type="text" placeholder="Status Filed/Published/Granted" class="form-control input-md" autofocus="" value="<?= $qualification['year_issued'] ?? '' ?>">
+                                    <button type="button" class="btn btn-light btn-sm" style="background-color: white; color: lightgray; font-size: 22px;" onclick="removeRow(this)">x</button>
+                                </td>
+                            </tr>
+                    <?php
+                        }
+                    }
+                    ?>
                 </tbody>
             </table>
-          </div>
-             
-           </div>
+        </div>
+    </div>
+</div>
 
-            
-           </div>
-
-            <!-- Book Text -->
-
-             <div class="container-fluid table-responsive">
-              <div class="row">
-
-             <div class="panel panel-success">
-             <div class="panel-heading">(B) Book(s) &nbsp;&nbsp;&nbsp;<button class="btn btn-sm btn-danger" id="add_more_book">Add Details</button></div>
-
-             <table class="table table-bordered">
-              <tbody id="book">
-                 
-                 <tr height="30px">
-                   <th class="col-md-1"> S. No.</th>
-                   <th class="col-md-2"> Author(s)</th>
-                   <th class="col-md-2"> Title of the Book </th>
-                   <th class="col-md-2"> Year of Publication </th>
-                   <th class="col-md-2"> ISBN</th>
-                   <!-- <th class="col-md-2"> Status</th> -->
-                 </tr>
-
-                <?php if (!empty($book)) { ?>
-                  <?php foreach ($book as $index => $book_item) { ?>
-                    <tr height="60px">
-                      <td class="col-md-1"></td>
-                      <td class="col-md-2">
-                        <input id="bauthor<?php echo $index + 1 ?>" type="text" name="bauthor[]" placeholder="Author(s)" class="form-control input-md" value="<?php echo $book_item['bauthor'] ?? ''; ?>">
-                      </td>
-                      <td class="col-md-2">
-                        <input id="btitle<?php echo $index + 1 ?>" type="text" name="btitle[]" placeholder="Title of the Book" class="form-control input-md" value="<?php echo $book_item['btitle'] ?? ''; ?>">
-                      </td>
-                      <td class="col-md-2">
-                        <input id="byear<?php echo $index + 1 ?>" type="text" name="byear[]" placeholder="Year of Publication" class="form-control input-md" value="<?php echo $book_item['byear'] ?? ''; ?>">
-                      </td>
-                      <td class="col-md-2">
-                        <input id="bisbn<?php echo $index + 1 ?>" type="text" name="bisbn[]" placeholder="ISBN" class="form-control input-md" value="<?php echo $book_item['bisbn'] ?? ''; ?>">
-                      </td>
-                      <td class="col-md-2">
-                        <button class="btn btn-sm btn-danger" onclick="removeRow(this)">Remove</button>
-                      </td>
+<!-- Book's info -->
+<div class="container-fluid table-responsive">
+    <div class="row">
+        <div class="panel panel-success">
+            <div class="panel-heading">(B) Book(s)&nbsp;&nbsp;&nbsp;<button class="btn btn-sm btn-danger" id="add_more_book">Add Details</button></div>
+            <table class="table table-bordered">
+                <tbody id="book">
+                    <!-- Header row for Book(s) -->
+                    <tr height="30px">
+                        <th class="col-md-1">S. No.</th>
+                        <th class="col-md-2">Author(s)</th>
+                        <th class="col-md-2">Title of the Book</th>
+                        <th class="col-md-2">Year of Publication</th>
+                        <th class="col-md-2">ISBN</th>
+                        <!-- Add more book fields as needed -->
                     </tr>
-                  <?php } ?>
-                <?php } ?>
+                    <?php
+                    if (!empty($book)) {
+                        foreach ($book as $index => $qualification) {
+                    ?>
+                            <tr height="60px">
+                                <td class="col-md-1"><?php echo $index + 1; ?></td>
+                                <td class="col-md-2">
+                                    <input id="bauthor<?= $index + 1 ?>" name="bauthor[]" type="text" placeholder="Author(s)" class="form-control input-md" autofocus="" value="<?= $qualification['bauthor'] ?? '' ?>">
+                                </td>
+                                <td class="col-md-2">
+                                    <input id="btitle<?= $index + 1 ?>" name="btitle[]" type="text" placeholder="Title of the Book" class="form-control input-md" autofocus="" value="<?= $qualification['btitle'] ?? '' ?>">
+                                </td>
+                                <td class="col-md-2">
+                                    <input id="byear<?= $index + 1 ?>" name="byear[]" type="text" placeholder="Year of Publication" class="form-control input-md" autofocus="" value="<?= $qualification['byear'] ?? '' ?>">
+                                </td>
+                                <td class="col-md-2">
+                                    <input id="bisbn<?= $index + 1 ?>" name="bisbn[]" type="text" placeholder="ISBN" class="form-control input-md" autofocus="" value="<?= $qualification['bisbn'] ?? '' ?>">
+                                    <button type="button" class="btn btn-light btn-sm" style="background-color: white; color: lightgray; font-size: 22px;" onclick="removeRow(this)">x</button>
+                                </td>
+                            </tr>
+                    <?php
+                        }
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
-              </tbody>
-             </table>
-            </div>
-              
-            
-            </div>
-
-             
-            </div>
-
-
-            <br>
-            <br>
-
-            <!-- Book chapter Text -->
-
-             <div class="container-fluid table-responsive">
-              <div class="row">
-
-             <div class="panel panel-success">
-             <div class="panel-heading">(C) Book Chapter(s)&nbsp;&nbsp;&nbsp;<button class="btn btn-sm btn-danger" id="add_more_book_chapter">Add Details</button></div>
-
-             <table class="table table-bordered">
-              <tbody id="book_chapter">
-                 
-                 <tr height="30px">
-                   <th class="col-md-1"> S. No.</th>
-                   <th class="col-md-2"> Author(s)</th>
-                   <th class="col-md-2"> Title of the Book Chapter(s) </th>
-                   <th class="col-md-2"> Year of Publication </th>
-                   <th class="col-md-2"> ISBN</th>
-                   <!-- <th class="col-md-2"> Status</th> -->
-                 </tr>
-                  <?php if (!empty($chapter)) { ?>
-                    <?php foreach ($chapter as $index => $chapter_item) { ?>
-                      <tr height="60px">
-                        <td class="col-md-1"></td>
-                        <td class="col-md-2">
-                          <input id="bc_author<?php echo $index + 1 ?>" type="text" name="bc_author[]" placeholder="Author(s)" class="form-control input-md" value="<?php echo $chapter_item['author'] ?? ''; ?>">
-                        </td>
-                        <!-- Include additional fields if needed for the "Book Chapter" section -->
-                        <td class="col-md-2">
-                          <input id="bc_title<?php echo $index + 1 ?>" type="text" name="bc_title[]" placeholder="Title of the Book Chapter(s)" class="form-control input-md" value="<?php echo $chapter_item['title'] ?? ''; ?>">
-                        </td>
-                        <td class="col-md-2">
-                          <input id="bc_year<?php echo $index + 1 ?>" type="text" name="bc_year[]" placeholder="Year of Publication" class="form-control input-md" value="<?php echo $chapter_item['year'] ?? ''; ?>">
-                        </td>
-                        <td class="col-md-2">
-                          <input id="bc_isbn<?php echo $index + 1 ?>" type="text" name="bc_isbn[]" placeholder="ISBN" class="form-control input-md" value="<?php echo $chapter_item['isbn'] ?? ''; ?>">
-                        </td>
-                        <td class="col-md-2">
-                          <button class="btn btn-sm btn-danger" onclick="removeRow(this)">Remove</button>
-                        </td>
-                      </tr>
-                    <?php } ?>
-                  <?php } ?>
+<!-- Book Chapter's info -->
+<div class="container-fluid table-responsive">
+    <div class="row">
+        <div class="panel panel-success">
+            <div class="panel-heading">(C) Book Chapter(s)&nbsp;&nbsp;&nbsp;<button class="btn btn-sm btn-danger" id="add_more_book_chapter">Add Details</button></div>
+            <table class="table table-bordered">
+                <tbody id="book_chapter">
+                    <!-- Header row for Book Chapter(s) -->
+                    <tr height="30px">
+                        <th class="col-md-1">S. No.</th>
+                        <th class="col-md-2">Author(s)</th>
+                        <th class="col-md-2">Title of the Book Chapter(s)</th>
+                        <th class="col-md-2">Year of Publication</th>
+                        <th class="col-md-2">ISBN</th>
+                        <!-- Add more book chapter fields as needed -->
+                    </tr>
+                    <?php
+                    if (!empty($chapter)) {
+                        foreach ($chapter as $index => $qualification) {
+                    ?>
+                            <tr height="60px">
+                                <td class="col-md-1"><?php echo $index + 1; ?></td>
+                                <td class="col-md-2">
+                                    <input id="bc_author<?= $index + 1 ?>" name="bc_author[]" type="text" placeholder="Author(s)" class="form-control input-md" autofocus="" value="<?= $qualification['author'] ?? '' ?>">
+                                </td>
+                                <td class="col-md-2">
+                                    <input id="bc_title<?= $index + 1 ?>" name="bc_title[]" type="text" placeholder="Title of the Book Chapter(s)" class="form-control input-md" autofocus="" value="<?= $qualification['title'] ?? '' ?>">
+                                </td>
+                                <td class="col-md-2">
+                                    <input id="bc_year<?= $index + 1 ?>" name="bc_year[]" type="text" placeholder="Year of Publication" class="form-control input-md" autofocus="" value="<?= $qualification['year'] ?? '' ?>">
+                                </td>
+                                <td class="col-md-2">
+                                    <input id="bc_isbn<?= $index + 1 ?>" name="bc_isbn[]" type="text" placeholder="ISBN" class="form-control input-md" autofocus="" value="<?= $qualification['isbn'] ?? '' ?>">
+                                    <button type="button" class="btn btn-light btn-sm" style="background-color: white; color: lightgray; font-size: 22px;" onclick="removeRow(this)">x</button>
+                                </td>
+                            </tr>
+                    <?php
+                        }
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 
-              </tbody>
-             </table>
-            </div>
-              
-            
-            </div>
-
-             
-            </div>
-
-
-            <br>
-            <br>
-            
-
- 
-
-            <h4 style="text-align:center; font-weight: bold; color: #6739bb;">8. Google Scholar Link *</h4>
-            <div class="row">
-            <div class="col-md-12">
-            <div class="panel panel-success">
+<h4 style="text-align:center; font-weight: bold; color: #6739bb;">8. Google Scholar Link *</h4>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-success">
             <div class="panel-heading">URL</div>
             <div class="panel-body">
-              <span class="col-md-2 control-label" for="google_link">Google Scholar Link </span>  
-              <div class="col-md-10">
-              <input id="google_link" value="In quidem distinctio." name="google_link" type="text" placeholder="Google Scholar Link" class="form-control input-md" required="">
-              </div>
+                <span class="col-md-2 control-label" for="google_link">Google Scholar Link </span>  
+                <div class="col-md-10">
+                    <?php if (empty($scholar_link)): ?>
+                        <input id="google_link" value="" name="google_link" type="text" placeholder="Nothing" class="form-control input-md" required="" readonly>
+                    <?php else: ?>
+                        <input id="google_link" value="<?= $scholar_link ?>" name="google_link" type="text" placeholder="Google Scholar Link" class="form-control input-md" required="" readonly>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-              
-
-            </div>
-            </div>
-            </div>
-            </div>
 
 
             <!-- Button -->

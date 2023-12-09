@@ -433,7 +433,7 @@ $("#add_more_ind_exp").click(function(){
                         </td>
                         <td class="col-md-1">
                           <input id="duration<?= $index + 1 ?>" name="duration[]" type="text" placeholder="No. of Students" class="form-control input-md" autofocus="" value="<?= $qualification['duration'] ?? '' ?>">
-                          <button type="button" class="btn btn-light btn-sm" style="background-color: white; color: lightgray; font-size: 14px;" onclick="removeRow(this)">x</button>
+                          <button type="button" class="btn btn-light btn-sm" style="background-color: white; color: lightgray; font-size: 22px; margin-left: 120px;" onclick="removeRow(this)">x</button>
                         </td>
                   </tr>
             <?php
@@ -510,7 +510,7 @@ $("#add_more_ind_exp").click(function(){
                         </td>
                         <td class="col-md-3">
                           <input id="te_duration<?= $index + 1 ?>" name="te_duration[]" type="text" placeholder="Duration(in years & months)" class="form-control input-md" autofocus="" value="<?= $qualification['duration'] ?? '' ?>">
-                          <button type="button" class="btn btn-light btn-sm" style="background-color: white; color: lightgray; font-size: 14px; margin-left: 120px;"  onclick="removeRow(this)">x</button>
+                          <button type="button" class="btn btn-light btn-sm" style="background-color: white; color: lightgray; font-size: 22px; margin-left: 120px;" onclick="removeRow(this)">x</button>
                         </td>
                   </tr>
             <?php
@@ -625,7 +625,7 @@ $("#add_more_ind_exp").click(function(){
                                     </td>
                                     <td class="col-md-2">
                                         <input id="period<?= $index + 1 ?>" name="period[]" type="text" placeholder="Duration (in years & months)" class="form-control input-md" value="<?= $qualification['period'] ?>">
-                                        <button type="button" class="btn btn-light btn-sm" style="background-color: white; color: lightgray; font-size: 14px; margin-left: 120px;" onclick="removeRow(this)">x</button>
+                                        <button type="button" class="btn btn-light btn-sm" style="background-color: white; color: lightgray; font-size: 22px; margin-left: 120px;" onclick="removeRow(this)">x</button>
                                     </td>
                         <?php
                             }
