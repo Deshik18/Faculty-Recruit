@@ -317,9 +317,9 @@ $contact_det = json_decode($contact_det, true);
                 </div>
 
                 <div class="col-md-2 pull-right">
-                  <img src="https://placekitten.com/150/130" class="thumbnail pull-right" height="150" width="130" />
-                  <input id="photo" name="userfile" type="file" class="form-control input-md" required="">
-                  <strong>Please upload your recent photo <font color="red">( <1 MB) in JPG | JPEG format</font> only.</strong>
+                    <img class="thumbnail pull-right" height="150" width="130" />
+                    <input id="photo" name="userfile" type="file" class="form-control input-md" required="">
+                    <strong>Please upload your recent photo <font color="red">( <1 MB) in JPG | JPEG format</font> only.</strong>
                 </div>
             </div>
         </div>

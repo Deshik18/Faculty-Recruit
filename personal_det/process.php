@@ -2,7 +2,13 @@
 // Include your database connection or use any database connection method you prefer.
 include('../config.php'); // Change to your actual database connection file
 session_start();
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $_SESSION['adv_num'] = $_POST['adv_num'];
+    $_SESSION['dept'] = $_POST['dept'];
+    $_SESSION['fname'] = $_POST['$fname'];
+    $_SESSION['lname'] = $_POST['lname'];
+    $_SESSION['cast'] = $_POST['cast'];
     // Retrieve form data
     $adv_num = $_POST['adv_num'];
     $ref_num = $_POST['ref_num'];
@@ -76,6 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'email_2' => $email_2,
         'landline' => $landline
     ]);
+
     // Perform any additional processing or validation as needed
 
     // Perform database insertion
@@ -87,15 +94,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($stmt->execute()) {
         // Data has been successfully inserted into the database
-        $selected_department = $_POST['dept'];
-        $photo_upload_dir = '../Document/' . $selected_department . '/';
+        $selected_department = strtoupper($dept); // Convert department name to uppercase
+        $name_email_cat = strtoupper($fname . '_' . $lname . '_' . $_SESSION['email'] . '_' . $cast);
+
+        $photo_upload_dir = '../' . $adv_num . '/' . $selected_department . '/' . $name_email_cat . '/';
     
         if (!file_exists($photo_upload_dir)) {
             mkdir($photo_upload_dir, 0777, true);
         }
     
         $photo_file_type = strtolower(pathinfo($_FILES['userfile']['name'], PATHINFO_EXTENSION)); // Get the file type from the uploaded file
-        $photo_file = $photo_upload_dir . $_SESSION['email'] . '_photo.' . $photo_file_type; // Define $photo_file here
+        $photo_file = $photo_upload_dir . 'photo.' . $photo_file_type; // Define $photo_file here
     
         if (getimagesize($_FILES['userfile']['tmp_name']) === false) {
             die('Invalid file. Please upload a valid image.');
@@ -108,13 +117,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (move_uploaded_file($_FILES['userfile']['tmp_name'], $photo_file)) {
             // The photo file has been successfully uploaded
     
-            $id_proof_upload_dir = '../Document/' . $selected_department . '/';
+            $id_proof_upload_dir = '../' . $adv_num . '/' . $selected_department . '/' . $name_email_cat . '/';
     
             if (!file_exists($id_proof_upload_dir)) {
                 mkdir($id_proof_upload_dir, 0777, true);
             }
     
-            $id_proof_file = $id_proof_upload_dir . $_SESSION['email'] . '_idproof.' . $photo_file_type;
+            $id_proof_file = $id_proof_upload_dir . 'idproof.' . $photo_file_type;
     
             if (move_uploaded_file($_FILES['userfile2']['tmp_name'], $id_proof_file)) {
                 // Data and files uploaded successfully
