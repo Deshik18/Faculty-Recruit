@@ -3,21 +3,22 @@
 <!-- saved from url=(0063)https://ofa.iiti.ac.in/facrec_che_2023_july_02/payment_complete -->
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>Final Submission</title>
-	<link rel="stylesheet" type="text/css" href="./Final Submission(9)_files/favicon.ico">
-	<link rel="icon" href="./Final Submission(9)_files/favicon.ico" type="image/x-icon">
-	<link rel="stylesheet" type="text/css" href="./Final Submission(9)_files/bootstrap.css">
-	<link rel="stylesheet" type="text/css" href="./Final Submission(9)_files/bootstrap-datepicker.css">
-	<script type="text/javascript" src="./Final Submission(9)_files/jquery.js.download"></script>
-	<script type="text/javascript" src="./Final Submission(9)_files/bootstrap.js.download"></script>
-	<script type="text/javascript" src="./Final Submission(9)_files/bootstrap-datepicker.js.download"></script>
-
-	<link href="./Final Submission(9)_files/css" rel="stylesheet"> 
-	<link href="./Final Submission(9)_files/css(1)" rel="stylesheet"> 
-	<link href="./Final Submission(9)_files/css(2)" rel="stylesheet"> 
-	<link href="./Final Submission(9)_files/css(3)" rel="stylesheet"> 
-	<link href="./Final Submission(9)_files/css(4)" rel="stylesheet"> 
-	<link rel="preconnect" href="https://fonts.gstatic.com/">
-	<link href="./Final Submission(9)_files/css2" rel="stylesheet">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Update your personal details</title>
+    <link rel="stylesheet" type="text/css" href="../favicon.ico" type="image/x-icon">
+    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="../bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../bootstrap-datepicker.css">
+    <script type="text/javascript" src="../jquery.js"></script>
+    <script type="text/javascript" src="../bootstrap.js"></script>
+    <script type="text/javascript" src="../bootstrap-datepicker.js"></script>
+    <link href="../files/css" rel="stylesheet"> 
+    <link href="../files/css(1)" rel="stylesheet"> 
+    <link href="../files/css(2)" rel="stylesheet"> 
+    <link href="../files/css(3)" rel="stylesheet"> 
+    <link href="../files/css(4)" rel="stylesheet"> 
+    <link rel="preconnect" href="https://fonts.gstatic.com/">
+    <link href="../files/css2" rel="stylesheet">
 
 
 	
@@ -31,19 +32,9 @@
 	<div class="container">
         <div class="row" style="margin-bottom:10px; ">
         	<div class="col-md-8 col-md-offset-2">
-
-        		<!--  <img src="https://ofa.iiti.ac.in/facrec_che_2023_july_02/images/IITIndorelogo.png" alt="logo1" class="img-responsive" style="padding-top: 5px; height: 120px; float: left;"> -->
-
-        		<h3 style="text-align:center;color:#414002!important;font-weight: bold;font-size: 2.3em; margin-top: 3px; font-family: &#39;Noto Sans&#39;, sans-serif;">भारतीय प्रौद्योगिकी संस्थान इंदौर</h3>
-    			<h3 style="text-align:center;color: #414002!important;font-weight: bold;font-family: &#39;Oswald&#39;, sans-serif!important;font-size: 2.2em; margin-top: 0px;">Indian Institute of Technology Indore</h3>
-    			
-
-        	</div>
-        	
-
-    	   
+    			<h3 style="text-align:center;color: #414002!important;font-weight: bold;font-family: &#39;Oswald&#39;, sans-serif!important;font-size: 2.2em; margin-top: 0px;">Indian Institute of Technology Patna</h3>
+        	</div>	   
         </div>
-		    <!-- <h3 style="text-align:center; color: #414002; font-weight: bold;  font-family: 'Fjalla One', sans-serif!important; font-size: 2em;">Application for Academic Appointment</h3> -->
     </div>
    </div> 
 			<h3 style="color: rgb(225, 4, 37); margin-bottom: 20px; font-weight: bold; text-align: center; font-family: &quot;Noto Serif&quot;, serif; opacity: 0.248188;" class="blink_me">Application for Faculty Position</h3>
@@ -131,9 +122,6 @@ p
 -->
 
 
-
-<a href="https://ofa.iiti.ac.in/facrec_che_2023_july_02/layout"></a>
-
 <div class="container">
   
  
@@ -149,7 +137,7 @@ p
                         <h4>Welcome : <font color="#025198"><strong>Marisol&nbsp;Mosciski</strong></font></h4>
                     </div>
                     <div class="col-md-2">
-                      <a href="https://ofa.iiti.ac.in/facrec_che_2023_july_02/facultypanel/logout" class="btn btn-sm btn-success  pull-right">Logout</a>
+                      <a href="../fac_login/main.html" class="btn btn-sm btn-success  pull-right">Logout</a>
                     </div>
                   </div>
                 
@@ -159,7 +147,7 @@ p
 
 <!-- publication file upload           -->
 
-<form class="form-horizontal" action="https://ofa.iiti.ac.in/facrec_che_2023_july_02/payment_complete" method="post" enctype="multipart/form-data">
+<form class="form-horizontal" action="../finalpdf.php" method="post" enctype="multipart/form-data">
 
 
 <!-- Payment file upload           -->
@@ -205,19 +193,10 @@ p
 <div class="form-group">
 <div class="col-md-12">
   <!-- <a href="https://ofa.iiti.ac.in/facrec_che_2023_july_02/acde" class="btn btn-primary pull-left">BACK</a> -->
-  <a href="https://ofa.iiti.ac.in/facrec_che_2023_july_02/submission_complete" class="btn btn-primary pull-left"><i class="glyphicon glyphicon-fast-backward"></i></a>
   <button type="submit" name="preview" value="preview" class="btn btn-info pull-right">SAVE &amp; SUBMIT</button>
-  <!-- <button type="submit" name="submit" value="Submit" class="btn btn-success">SAVE</button> -->
 
 
 </div>
-
-<!-- <div class="col-md-2">
-
-  <button id="submit" type="submit" name="submit" value="Submit" onclick="return confirm_box()" class="btn btn-success pull-right">Final Submission</button>
-
-</div>
- -->
 
 </div>
 

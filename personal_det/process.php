@@ -95,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($stmt->execute()) {
         // Data has been successfully inserted into the database
         $selected_department = strtoupper($dept); // Convert department name to uppercase
-        $name_email_cat = strtoupper($fname . '_' . $lname . '_' . $_SESSION['email'] . '_' . $cast);
+        $name_email_cat = strtoupper($fname . '_' . $lname . '_' . $_SESSION['email'] . '_' . $_SESSION['cast']);
 
         $photo_upload_dir = '../' . $adv_num . '/' . $selected_department . '/' . $name_email_cat . '/';
     
@@ -104,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     
         $photo_file_type = strtolower(pathinfo($_FILES['userfile']['name'], PATHINFO_EXTENSION)); // Get the file type from the uploaded file
-        $photo_file = $photo_upload_dir . 'photo.' . $photo_file_type; // Define $photo_file here
+        $photo_file = $photo_upload_dir . 'Photo.jpg'; // Define $photo_file here
     
         if (getimagesize($_FILES['userfile']['tmp_name']) === false) {
             die('Invalid file. Please upload a valid image.');
@@ -123,7 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 mkdir($id_proof_upload_dir, 0777, true);
             }
     
-            $id_proof_file = $id_proof_upload_dir . 'idproof.' . $photo_file_type;
+            $id_proof_file = $id_proof_upload_dir . 'IDproof.' . $photo_file_type;
     
             if (move_uploaded_file($_FILES['userfile2']['tmp_name'], $id_proof_file)) {
                 // Data and files uploaded successfully

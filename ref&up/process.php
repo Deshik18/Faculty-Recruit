@@ -11,17 +11,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         mkdir($uploads_dir, 0777, true);
     }    
     $file_fields = [
-        'userfile7' => 'research_paper.pdf',
-        'userfile'  => 'phd_certificate.pdf',
-        'userfile1' => 'pg_documents.pdf',
-        'userfile2' => 'ug_documents.pdf',
-        'userfile3' => 'hsc_documents.pdf',
-        'userfile4' => 'ssc_documents.pdf',
-        'userfile9' => 'payslip.pdf',
-        'userfile10' => 'noc.pdf',
-        'userfile8' => 'postphd_certificate',
-        'userfile6' => 'misc.pdf',
-        'userfile5' => 'signature.jpg',
+        'userfile7' => 'Research_Paper.pdf',
+        'userfile'  => 'PHD_Certificate.pdf',
+        'userfile1' => 'PG_Certificate.pdf',
+        'userfile2' => 'UG_Certificate.pdf',
+        'userfile3' => '12th_HSC_Diploma.pdf',
+        'userfile4' => '10th_SSC_Certificate.pdf',
+        'userfile9' => 'Payslip.pdf',
+        'userfile10' => 'NOC.pdf',
+        'userfile8' => '10_Years_Post_PHD_Experience_Certificate.pdf',
+        'userfile6' => 'Any_Other_Document.pdf',
+        'userfile5' => 'Signature.jpg',
         // ... add other mappings for the rest of the fields
     ];
 
@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = $conn->prepare($update);
     $stmt->bind_param("ss", $ref_json, $_SESSION['email']);
     if ($stmt->execute()) {
-        header("Location: ../zzz.php");
+        header("Location: ../fin_sub/main.php");
         exit();
     } else {
         echo 'Some Error Occurred: ' . $stmt->error;

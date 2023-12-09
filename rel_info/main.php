@@ -33,20 +33,22 @@ $conn->close();
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Rel Info</title>
-    <link rel="stylesheet" type="text/css" href="./Rel Info(7)_files/favicon.ico">
-    <link rel="icon" href="./Rel Info(7)_files/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" type="text/css" href="./Rel Info(7)_files/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="./Rel Info(7)_files/bootstrap-datepicker.css">
-    <script type="text/javascript" src="./Rel Info(7)_files/jquery.js.download"></script>
-    <script type="text/javascript" src="./Rel Info(7)_files/bootstrap.js.download"></script>
-    <script type="text/javascript" src="./Rel Info(7)_files/bootstrap-datepicker.js.download"></script>
-    <link href="./Rel Info(7)_files/css" rel="stylesheet"> 
-    <link href="./Rel Info(7)_files/css(1)" rel="stylesheet"> 
-    <link href="./Rel Info(7)_files/css(2)" rel="stylesheet"> 
-    <link href="./Rel Info(7)_files/css(3)" rel="stylesheet"> 
-    <link href="./Rel Info(7)_files/css(4)" rel="stylesheet"> 
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Update your personal details</title>
+    <link rel="stylesheet" type="text/css" href="../favicon.ico" type="image/x-icon">
+    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="../bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../bootstrap-datepicker.css">
+    <script type="text/javascript" src="../jquery.js"></script>
+    <script type="text/javascript" src="../bootstrap.js"></script>
+    <script type="text/javascript" src="../bootstrap-datepicker.js"></script>
+    <link href="../files/css" rel="stylesheet"> 
+    <link href="../files/css(1)" rel="stylesheet"> 
+    <link href="../files/css(2)" rel="stylesheet"> 
+    <link href="../files/css(3)" rel="stylesheet"> 
+    <link href="../files/css(4)" rel="stylesheet"> 
     <link rel="preconnect" href="https://fonts.gstatic.com/">
-    <link href="./Rel Info(7)_files/css2" rel="stylesheet">
+    <link href="../files/css2" rel="stylesheet">
     <style type="text/css">
         body { background-color: lightgray; padding-top:0px!important;}
     </style>

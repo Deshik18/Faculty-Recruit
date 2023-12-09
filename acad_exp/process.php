@@ -37,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $mtech_scholar = $_POST['pg_scholar'];
         $mtech_thesis = $_POST['pg_thesis'];
         $mtech_role = $_POST['pg_role'];
-        $mtech_status = $_POST['pg_status'];
+        $mtech_status = $_POST['pg_ths_status'];
         $mtech_ths_year = $_POST['pg_ths_year'];
 
         // Create an array to store MTech theses data
@@ -66,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $btech_scholar = $_POST['ug_scholar'];
         $btech_thesis = $_POST['ug_thesis'];
         $btech_role = $_POST['ug_role'];
-        $btech_status = $_POST['ug_status'];
+        $btech_status = $_POST['ug_ths_status'];
         $btech_ths_year = $_POST['ug_ths_year'];
 
         // Create an array to store BTech theses data
