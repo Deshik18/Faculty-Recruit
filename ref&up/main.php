@@ -1,23 +1,26 @@
 
-
+<?php
+session_start();
+include '../config.php';
+?>
 <!-- saved from url=(0066)https://ofa.iiti.ac.in/facrec_che_2023_july_02/submission_complete -->
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>Referees &amp; Upload</title>
-	<link rel="stylesheet" type="text/css" href="./Referees &amp; Upload(8)_files/favicon.ico">
-	<link rel="icon" href="./Referees &amp; Upload(8)_files/favicon.ico" type="image/x-icon">
-	<link rel="stylesheet" type="text/css" href="./Referees &amp; Upload(8)_files/bootstrap.css">
-	<link rel="stylesheet" type="text/css" href="./Referees &amp; Upload(8)_files/bootstrap-datepicker.css">
-	<script type="text/javascript" src="./Referees &amp; Upload(8)_files/jquery.js.download"></script>
-	<script type="text/javascript" src="./Referees &amp; Upload(8)_files/bootstrap.js.download"></script>
-	<script type="text/javascript" src="./Referees &amp; Upload(8)_files/bootstrap-datepicker.js.download"></script>
+	<link rel="stylesheet" type="text/css" href="../favicon.ico" type="image/x-icon">
+	<link rel="icon" href="../favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="../bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="../bootstrap-datepicker.css">
+	<script type="text/javascript" src="../jquery.js"></script>
+	<script type="text/javascript" src="../bootstrap.js"></script>
+	<script type="text/javascript" src="../bootstrap-datepicker.js"></script>
 
-	<link href="./Referees &amp; Upload(8)_files/css" rel="stylesheet"> 
-	<link href="./Referees &amp; Upload(8)_files/css(1)" rel="stylesheet"> 
-	<link href="./Referees &amp; Upload(8)_files/css(2)" rel="stylesheet"> 
-	<link href="./Referees &amp; Upload(8)_files/css(3)" rel="stylesheet"> 
-	<link href="./Referees &amp; Upload(8)_files/css(4)" rel="stylesheet"> 
+	<link href="../files/css" rel="stylesheet"> 
+	<link href="../files/css(1)" rel="stylesheet"> 
+	<link href="../files/css(2)" rel="stylesheet"> 
+	<link href="../files/css(3)" rel="stylesheet"> 
+	<link href="../files/css(4)" rel="stylesheet"> 
 	<link rel="preconnect" href="https://fonts.gstatic.com/">
-	<link href="./Referees &amp; Upload(8)_files/css2" rel="stylesheet">
+	<link href="../files/css2" rel="stylesheet">
 
 
 	
@@ -32,10 +35,7 @@
         <div class="row" style="margin-bottom:10px; ">
         	<div class="col-md-8 col-md-offset-2">
 
-        		<!--  <img src="https://ofa.iiti.ac.in/facrec_che_2023_july_02/images/IITIndorelogo.png" alt="logo1" class="img-responsive" style="padding-top: 5px; height: 120px; float: left;"> -->
-
-        		<h3 style="text-align:center;color:#414002!important;font-weight: bold;font-size: 2.3em; margin-top: 3px; font-family: &#39;Noto Sans&#39;, sans-serif;">भारतीय प्रौद्योगिकी संस्थान इंदौर</h3>
-    			<h3 style="text-align:center;color: #414002!important;font-weight: bold;font-family: &#39;Oswald&#39;, sans-serif!important;font-size: 2.2em; margin-top: 0px;">Indian Institute of Technology Indore</h3>
+    			<h3 style="text-align:center;color: #414002!important;font-weight: bold;font-family: &#39;Oswald&#39;, sans-serif!important;font-size: 2.2em; margin-top: 0px;">Indian Institute of Technology Patna</h3>
     			
 
         	</div>
@@ -135,8 +135,6 @@ p
 
 
 
-<a href="https://ofa.iiti.ac.in/facrec_che_2023_july_02/layout"></a>
-
 <div class="container">
   
       <div class="row">
@@ -148,10 +146,10 @@ p
                  <legend>
                   <div class="row">
                     <div class="col-md-10">
-                        <h4>Welcome : <font color="#025198"><strong>Marisol&nbsp;Mosciski</strong></font></h4>
+                    <h4>Welcome : <font color="#025198"><strong><?php echo $_SESSION['first_name'] . ' ' . $_SESSION['last_name']; ?></strong></font></h4>
                     </div>
                     <div class="col-md-2">
-                      <a href="https://ofa.iiti.ac.in/facrec_che_2023_july_02/facultypanel/logout" class="btn btn-sm btn-success  pull-right">Logout</a>
+                      <a href="../fac_login/main.html" class="btn btn-sm btn-success  pull-right">Logout</a>
                     </div>
                   </div>
                 
@@ -163,7 +161,7 @@ p
 
 <!-- publication file upload           -->
 
-<form class="form-horizontal" action="https://ofa.iiti.ac.in/facrec_che_2023_july_02/submission_complete" method="post" enctype="multipart/form-data">
+<form class="form-horizontal" action="process.php" method="post" enctype="multipart/form-data">
 
 
    <!-- Reprints of 5 Best Research Papers  -->
@@ -174,7 +172,7 @@ p
                         <div class="col-md-12">
           <div class="panel panel-info">
             <div class="panel-heading">Upload 5 Best Research Papers in a single PDF &lt; 6MB 
-             <a href="https://ofa.iiti.ac.in/facrec_che_2023_july_02/attach/712_Marisol_Mosciski_1698350300/712_best_5_1698405423513775.csv" class="btn-sm btn-info " target="_blank">View Uploaded File </a>
+             <a href="" class="btn-sm btn-info " target="_blank">View Uploaded File </a>
               <br>
               <br>
              
@@ -560,7 +558,7 @@ p
 <div class="form-group">
 <div class="col-md-10">
   <!-- <a href="https://ofa.iiti.ac.in/facrec_che_2023_july_02/acde" class="btn btn-primary pull-left">BACK</a> -->
-  <a href="https://ofa.iiti.ac.in/facrec_che_2023_july_02/rel_info" class="btn btn-primary pull-left"><i class="glyphicon glyphicon-fast-backward"></i></a>
+  <a href="../rel_info/main.php" class="btn btn-primary pull-left"><i class="glyphicon glyphicon-fast-backward"></i></a>
   
   <!-- <button type="submit" name="submit" value="Submit" class="btn btn-success">SAVE</button> -->
 

@@ -1,427 +1,225 @@
+<?php
+// retrieve.php
+include '../config.php';
+session_start(); // Start the session
 
+// Get the email from the session
+$sessionEmail = $_SESSION['email'];
 
-<!-- saved from url=(0060)https://ofa.iiti.ac.in/facrec_che_2023_july_02/thesis_course -->
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>Academic Experience </title>
-	<link rel="stylesheet" type="text/css" href="./Academic Experience(6)_files/favicon.ico">
-	<link rel="icon" href="./Academic Experience(6)_files/favicon.ico" type="image/x-icon">
-	<link rel="stylesheet" type="text/css" href="./Academic Experience(6)_files/bootstrap.css">
-	<link rel="stylesheet" type="text/css" href="./Academic Experience(6)_files/bootstrap-datepicker.css">
-	<script type="text/javascript" src="./Academic Experience(6)_files/jquery.js.download"></script>
-	<script type="text/javascript" src="./Academic Experience(6)_files/bootstrap.js.download"></script>
-	<script type="text/javascript" src="./Academic Experience(6)_files/bootstrap-datepicker.js.download"></script>
+// Example: Retrieve data from the faculty_details table
+$sql = "SELECT research_statement, teaching_statement, rel_info, prof_service, journal_publications, conference_publications
+        FROM faculty_details
+        WHERE email = '$sessionEmail'";
 
-	<link href="./Academic Experience(6)_files/css" rel="stylesheet"> 
-	<link href="./Academic Experience(6)_files/css(1)" rel="stylesheet"> 
-	<link href="./Academic Experience(6)_files/css(2)" rel="stylesheet"> 
-	<link href="./Academic Experience(6)_files/css(3)" rel="stylesheet"> 
-	<link href="./Academic Experience(6)_files/css(4)" rel="stylesheet"> 
-	<link rel="preconnect" href="https://fonts.gstatic.com/">
-	<link href="./Academic Experience(6)_files/css2" rel="stylesheet">
+$result = $conn->query($sql);
 
+if ($result->num_rows > 0) {
+    // Output data of each row
+    $row = $result->fetch_assoc();
+    $researchStatement = $row['research_statement'];
+    $teachingStatement = $row['teaching_statement'];
+    $relInfo = $row['rel_info'];
+    $profService = $row['prof_service'];
+    $journalPublications = $row['journal_publications'];
+    $conferencePublications = $row['conference_publications'];
+} else {
+    echo "No data found";
+}
 
-	
-<style type="text/css">
-	body { background-color: lightgray; padding-top:0px!important;}
+$conn->close();
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Rel Info</title>
+    <link rel="stylesheet" type="text/css" href="./Rel Info(7)_files/favicon.ico">
+    <link rel="icon" href="./Rel Info(7)_files/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="./Rel Info(7)_files/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="./Rel Info(7)_files/bootstrap-datepicker.css">
+    <script type="text/javascript" src="./Rel Info(7)_files/jquery.js.download"></script>
+    <script type="text/javascript" src="./Rel Info(7)_files/bootstrap.js.download"></script>
+    <script type="text/javascript" src="./Rel Info(7)_files/bootstrap-datepicker.js.download"></script>
+    <link href="./Rel Info(7)_files/css" rel="stylesheet"> 
+    <link href="./Rel Info(7)_files/css(1)" rel="stylesheet"> 
+    <link href="./Rel Info(7)_files/css(2)" rel="stylesheet"> 
+    <link href="./Rel Info(7)_files/css(3)" rel="stylesheet"> 
+    <link href="./Rel Info(7)_files/css(4)" rel="stylesheet"> 
+    <link rel="preconnect" href="https://fonts.gstatic.com/">
+    <link href="./Rel Info(7)_files/css2" rel="stylesheet">
+    <style type="text/css">
+        body { background-color: lightgray; padding-top:0px!important;}
+    </style>
+    <style>.cke{visibility:hidden;}</style>
+    <script type="text/javascript" src="./Rel Info(7)_files/config.js.download"></script>
+    <link rel="stylesheet" type="text/css" href="./Rel Info(7)_files/editor.css">
+    <script type="text/javascript" src="./Rel Info(7)_files/en.js.download"></script>
+    <script type="text/javascript" src="./Rel Info(7)_files/styles.js.download"></script>
+    <link rel="stylesheet" type="text/css" href="./Rel Info(7)_files/scayt.css">
+    <link rel="stylesheet" type="text/css" href="./Rel Info(7)_files/dialog.css">
+    <link rel="stylesheet" type="text/css" href="./Rel Info(7)_files/tableselection.css">
+    <link rel="stylesheet" type="text/css" href="./Rel Info(7)_files/dialog(1).css">
 
-</style></head>
+    <script type="text/javascript" src="./Rel Info(7)_files/ckeditor.js.download"></script>
+
+    <style type="text/css">
+        body { padding-top:30px; }
+        .form-control { margin-bottom: 10px; }
+        .floating-box {
+            display: inline-block;
+            width: 150px;
+            height: 75px;
+            margin: 10px;
+            border: 3px solid #73AD21;  
+        }
+    </style>
+</head>
 
 <body>
-<div class="container-fluid" style="background-color: #f7ffff; margin-bottom: 10px;">
-	<div class="container">
-        <div class="row" style="margin-bottom:10px; ">
-        	<div class="col-md-8 col-md-offset-2">
-
-        		<!--  <img src="https://ofa.iiti.ac.in/facrec_che_2023_july_02/images/IITIndorelogo.png" alt="logo1" class="img-responsive" style="padding-top: 5px; height: 120px; float: left;"> -->
-
-        		<h3 style="text-align:center;color:#414002!important;font-weight: bold;font-size: 2.3em; margin-top: 3px; font-family: &#39;Noto Sans&#39;, sans-serif;">भारतीय प्रौद्योगिकी संस्थान इंदौर</h3>
-    			<h3 style="text-align:center;color: #414002!important;font-weight: bold;font-family: &#39;Oswald&#39;, sans-serif!important;font-size: 2.2em; margin-top: 0px;">Indian Institute of Technology Indore</h3>
-    			
-
-        	</div>
-        	
-
-    	   
+    <div class="container-fluid" style="background-color: #f7ffff; margin-bottom: 10px;">
+        <div class="container">
+            <div class="row" style="margin-bottom:10px; ">
+                <div class="col-md-8 col-md-offset-2">
+                    <h3 style="text-align:center;color: #414002!important;font-weight: bold;font-family: 'Oswald', sans-serif!important;font-size: 2.2em; margin-top: 0px;">Indian Institute of Technology Patna</h3>
+                </div>
+            </div>
         </div>
-		    <!-- <h3 style="text-align:center; color: #414002; font-weight: bold;  font-family: 'Fjalla One', sans-serif!important; font-size: 2em;">Application for Academic Appointment</h3> -->
-    </div>
-   </div> 
-			<h3 style="color: rgb(225, 4, 37); margin-bottom: 20px; font-weight: bold; text-align: center; font-family: &quot;Noto Serif&quot;, serif; opacity: 0.988634;" class="blink_me">Application for Faculty Position</h3>
+    </div> 
 
-<style type="text/css">
-body { padding-top:30px; }
-.form-control { margin-bottom: 10px; }
-.floating-box {
-    display: inline-block;
-    width: 150px;
-    height: 75px;
-    margin: 10px;
-    border: 3px solid #73AD21;  
-}
-</style>
-<style type="text/css">
-body { padding-top:30px; }
-.form-control { margin-bottom: 10px; }
-label{
-  padding: 0 !important;
-}
+    <h3 style="color: rgb(225, 4, 37); margin-bottom: 20px; font-weight: bold; text-align: center; font-family: 'Noto Serif', serif; opacity: 0.166994;" class="blink_me">Application for Faculty Position</h3>
 
-span{
-  font-size: 1.2em;
-  font-family: 'Oswald', sans-serif!important;
-  text-align: left!important;
-  padding: 0px 10px 0px 0px!important;
-  /*margin-bottom: 20px!important;*/
+    <script type="text/javascript" src="./Rel Info(7)_files/ckeditor.js.download"></script>
 
-}
-hr{
-  border-top: 1px solid #025198 !important;
-  border-style: dashed!important;
-  border-width: 1.2px;
-}
-.panel-heading{
-  font-size: 1.3em;
-  font-family: 'Oswald', sans-serif!important;
-  letter-spacing: .5px;
-}
-.btn-primary {
-  padding: 9px;
-}
-</style>
-<script type="text/javascript">
-             
-            $(function () {
-                $('.datepicker').datepicker({
-                    format: 'dd/mm/yyyy',
-                    autoclose: true
-                });
-            });
-</script>
+    <style type="text/css">
+        body { padding-top:30px; }
+        .form-control { margin-bottom: 10px; }
+        .floating-box {
+            display: inline-block;
+            width: 150px;
+            height: 75px;
+            margin: 10px;
+            border: 3px solid #73AD21;  
+        }
+    </style>
 
-<script type="text/javascript">
-var tr="";
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 well">
+                <fieldset>
+                    <legend>
+                        <div class="row">
+                            <div class="col-md-10">
+                            <h4>Welcome : <font color="#025198"><strong><?php echo $_SESSION['first_name'] . ' ' . $_SESSION['last_name']; ?></strong></font></h4>
+                            </div>
+                            <div class="col-md-2">
+                                <a href="../fac_login/main.html" class="btn btn-sm btn-success pull-right">Logout</a>
+                            </div>
+                        </div>
+                    </legend>
 
-var counter_thesis=1;
-var counter_course=1;
-var counter_pg_thesis=1;
-var counter_ug_thesis=1;
+                    <form class="form-horizontal" action="process.php" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="ci_csrf_token" value="">
 
-  $(document).ready(function(){
-  
-  $("#add_thesis").click(function(){
-          create_tr();
-          create_serial('thesis_sup');
-          create_input('phd_scholar[]', 'Scholar','phd_scholar'+counter_thesis, 'thesis_sup',counter_thesis, 'thesis_sup');
-          create_input('phd_thesis[]', 'Title of Thesis','phd_thesis'+counter_thesis, 'thesis_sup',counter_thesis, 'thesis_sup');
-          create_input('phd_role[]', 'Role','phd_role'+counter_thesis, 'thesis_sup',counter_thesis, 'thesis_sup', false,true);
-          create_input('phd_ths_status[]', 'Ongoing/Completed', 'phd_ths_status'+counter_thesis,'thesis_sup',counter_thesis, 'thesis_sup');
-          create_input('phd_ths_year[]', 'Ongoing Since/ Year of Completion', 'phd_ths_year'+counter_thesis,'thesis_sup',counter_thesis, 'thesis_sup',true);
-          counter_thesis++;
-          return false;
-    });
+                        <div class="col-md-12">
+                            <div class="panel panel-success">
+                                <div class="panel-heading">14. Significant research contribution and future plans *<small class="pull-right">(not more than 500 words)</small> <br><small>(Please provide a Research Statement describing your research plans and one or two specific research projects to be conducted at IIT Patna in 2-3 years time frame)</small></div>
+                                <div class="panel-body">
+                                    <textarea style="height: 150px;" placeholder="Significant research contribution and future plans" class="form-control input-md" name="research_statement" maxlength="3500"><?php echo empty($researchStatement) ? '' : $researchStatement; ?></textarea>
+                                    <script>
+                                        CKEDITOR.replace('research_statement');
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="panel panel-success ">
+                                <div class="panel-heading">15. Significant teaching contribution and future plans * <small>(Please list UG/PG courses that you would like to develop and/or teach at IIT Patna)</small> <small class="pull-right"> (not more than 500 words)</small></div>
+                                <div class="panel-body">
+                                    <textarea style="height: 150px;" placeholder="Significant teaching contribution and future plans" class="form-control input-md" name="teaching_statement"><?php echo empty($teachingStatement) ? '' : $teachingStatement; ?></textarea>
+                                    <script>
+                                        CKEDITOR.replace('teaching_statement');
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+
+                    <!-- Panel 16 -->
+                    <div class="col-md-12">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">16. Any other relevant information. <small class="pull-right">(not more than 500 words)</small></div>
+                            <div class="panel-body">
+                                <textarea style="height: 150px;" placeholder="Any other relevant information" class="form-control input-md" name="rel_in"><?php echo empty($relInfo) ? '' : $relInfo; ?></textarea>
+                                <script>
+                                    CKEDITOR.replace('rel_in');
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Panel 17 -->
+                    <div class="col-md-12">
+                        <div class="panel panel-success ">
+                            <div class="panel-heading">17. Professional Service : Editorship/Reviewership <small class="pull-right">(not more than 500 words)</small></div>
+                            <div class="panel-body">
+                                <textarea style="height: 150px;" placeholder="Professional Service : Editorship/Reviewership" class="form-control input-md" name="prof_serv"><?php echo empty($profService) ? '' : $profService; ?></textarea>
+                                <script>
+                                    CKEDITOR.replace('prof_serv');
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Panel 18 -->
+                    <div class="col-md-12">
+                        <div class="panel panel-success ">
+                            <div class="panel-heading">18. Detailed List of Journal Publications <br>(Including Sr. No., Author's Names, Paper Title, Volume, Issue, Year, Page Nos., Impact Factor (if any), DOI, Status[Published/Accepted] )</div>
+                            <div class="panel-body">
+                                <textarea style="height: 150px;" placeholder="Detailed List of Journal Publications" class="form-control input-md" name="jour_details"><?php echo empty($journalPublications) ? '' : $journalPublications; ?></textarea>
+                                <script>
+                                    CKEDITOR.replace('jour_details');
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Panel 19 -->
+                    <div class="col-md-12">
+                        <div class="panel panel-success ">
+                            <div class="panel-heading">19. Detailed List of Conference Publications<br>(Including Sr. No., Author's Names, Paper Title, Name of the conference, Year, Page Nos., DOI [If any] )</div>
+                            <div class="panel-body">
+                                <textarea style="height: 150px;" placeholder="Detailed List of Conference Publications" class="form-control input-md" name="conf_details"><?php echo empty($conferencePublications) ? '' : $conferencePublications; ?></textarea>
+                                <script>
+                                    CKEDITOR.replace('conf_details');
+                                </script>
+                            </div>
+                        </div>
+                    </div>
 
 
- 
-  $("#add_pg_thesis").click(function(){
-          create_tr();
-          create_serial('pg_thesis_sup');
-          create_input('pg_scholar[]', 'Scholar','pg_scholar'+counter_pg_thesis, 'pg_thesis_sup',counter_pg_thesis, 'pg_thesis_sup');
-          create_input('pg_thesis[]', 'Title of Thesis','pg_thesis'+counter_pg_thesis, 'pg_thesis_sup',counter_pg_thesis, 'pg_thesis_sup');
-          create_input('pg_role[]', 'Role','pg_role'+counter_pg_thesis, 'pg_thesis_sup',counter_pg_thesis, 'pg_thesis_sup', false,true);
-          create_input('pg_status[]', 'Ongoing/Completed', 'pg_status'+counter_pg_thesis,'pg_thesis_sup',counter_pg_thesis, 'pg_thesis_sup');
-          create_input('pg_ths_year[]', 'Ongoing Since/ Year of Completion', 'pg_ths_year'+counter_pg_thesis,'pg_thesis_sup',counter_pg_thesis, 'pg_thesis_sup',true);
-          counter_pg_thesis++;
-          return false;
-    });
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <a href="../acad_exp/main.php" class="btn btn-primary pull-left"><i class="glyphicon glyphicon-fast-backward"></i></a>
+                            </div>
+                            <div class="col-md-2">
+                                <button id="submit" type="submit" name="submit" value="Submit" class="btn btn-success pull-right">SAVE &amp; NEXT</button>
+                            </div>
+                        </div>
+                    </form>
+                </fieldset>
+            </div>
 
-  $("#add_ug_thesis").click(function(){
-          create_tr();
-          create_serial('ug_thesis_sup');
-          create_input('ug_scholar[]', 'Scholar','ug_scholar'+counter_ug_thesis, 'ug_thesis_sup',counter_ug_thesis, 'ug_thesis_sup');
-          create_input('ug_thesis[]', 'Title of Thesis','ug_thesis'+counter_ug_thesis, 'ug_thesis_sup',counter_ug_thesis, 'ug_thesis_sup');
-          create_input('ug_role[]', 'Role','ug_role'+counter_ug_thesis, 'ug_thesis_sup',counter_ug_thesis, 'ug_thesis_sup', false,true);
-          create_input('ug_status[]', 'Ongoing/Completed', 'ug_status'+counter_ug_thesis,'ug_thesis_sup',counter_ug_thesis, 'ug_thesis_sup');
-          create_input('ug_ths_year[]', 'Ongoing Since/ Year of Completion', 'ug_ths_year'+counter_ug_thesis,'ug_thesis_sup',counter_ug_thesis, 'ug_thesis_sup',true);
-          counter_ug_thesis++;
-          return false;
-    });
+            <div id="footer"></div>
 
-});
-  function create_select()
-  {
-    
-  }
-  function create_tr()
-  {
-    tr=document.createElement("tr");
-  }
-  function create_serial(tbody_id)
-  {
-    //console.log(tbody_id);
-    var td=document.createElement("td");
-    // var x=0;
-     var x = document.getElementById(tbody_id).rows.length;
-    // if(document.getElementById(tbody_id).rows)
-    // {
-    // }
-    td.innerHTML=x;
-     tr.appendChild(td);
-  }
-   function for_date_picker(obj)
-  {
-    obj.setAttribute("data-provide", "datepicker");
-    obj.className += " datepicker";
-    return obj;
-
-  }
-  function deleterow(e){
-    var rowid=$(e).attr("data-id");
-    var textbox=$("#id"+rowid).val();
-    $.ajax({
-            type: "POST",
-            url  : "https://ofa.iiti.ac.in/facrec_che_2023_july_02/Acd_ind/deleterow/",
-            data: {id: textbox},
-                success: function(result) { 
-                if(result.status=="OK"){
-                $('.row_'+rowid).remove();
-                            //remove_row('award',rowid, 'award');
+            <script type="text/javascript">
+                function blinker() {
+                    $('.blink_me').fadeOut(500);
+                    $('.blink_me').fadeIn(500);
                 }
-                   
-                }});
 
-   
-    }
-  function create_input(t_name, place_value, id, tbody_id, counter, remove_name, btn=false, select=false, datepicker_set=false)
-  {
-    //console.log(counter);
-    if(select==false)
-    {
-
-      var input=document.createElement("input");
-      input.setAttribute("type", "text");
-      input.setAttribute("name", t_name);
-      input.setAttribute("id", id);
-      input.setAttribute("placeholder", place_value);
-      input.setAttribute("class", "form-control input-md");
-      input.setAttribute("required", "");
-      var td=document.createElement("td");
-      td.appendChild(input);
-    }
-    if(select==true)
-    {
-
-      var sel=document.createElement("select");
-      sel.setAttribute("name", t_name);
-      sel.setAttribute("id", id);
-      sel.setAttribute("class", "form-control input-md");
-      sel.innerHTML+="<option>Select</option>";
-      sel.innerHTML+="<option value='Supervisor with no Co-supervisor'>Supervisor with no Co-supervisor</option>";
-      sel.innerHTML+="<option value='Supervisor with Co-supervisor'>Supervisor with Co-supervisor</option>";
-      sel.innerHTML+="<option value='Co-Supervisor'>Co-Supervisor</option>";
-      var td=document.createElement("td");
-      td.appendChild(sel);
-    }
-    if(datepicker_set==true)
-    {
-      input=for_date_picker(input);
-    }
-    if(btn==true)
-    {
-      // alert();
-      var but=document.createElement("button");
-      but.setAttribute("class", "close");
-      but.setAttribute("onclick", "remove_row('"+remove_name+"','"+counter+"', '"+tbody_id+"')");
-      but.innerHTML="x";
-      td.appendChild(but);
-    }
-    tr.setAttribute("id", "row"+counter);
-    tr.appendChild(td);
-    document.getElementById(tbody_id).appendChild(tr);
-     $('.datepicker').datepicker({
-                    format: 'dd/mm/yyyy',
-                    autoclose: true
-                });
-    
-  }
-  function remove_row(remove_name, n, tbody_id)
-  {
-    var tab=document.getElementById(remove_name);
-    var tr=document.getElementById("row"+n);
-    tab.removeChild(tr);
-    var x = document.getElementById(tbody_id).rows.length;
-    for(var i=0; i<=x; i++)
-    {
-      $("#"+tbody_id).find("tr:eq("+i+") td:first").text(i);
-      
-    }
-    
-  }
-</script>
-
-
-
-
-<a href="https://ofa.iiti.ac.in/facrec_che_2023_july_02/layout"></a>
-
-<div class="container">
-  
-    <div class="row">
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-8 well">
-            <form class="form-horizontal" action="https://ofa.iiti.ac.in/facrec_che_2023_july_02/thesis_course" method="post" enctype="multipart/form-data">
-            <fieldset>
-              <input type="hidden" name="ci_csrf_token" value="">
-             
-                 <legend>
-                  <div class="row">
-                    <div class="col-md-10">
-                        <h4>Welcome : <font color="#025198"><strong>Marisol&nbsp;Mosciski</strong></font></h4>
-                    </div>
-                    <div class="col-md-2">
-                      <a href="https://ofa.iiti.ac.in/facrec_che_2023_july_02/facultypanel/logout" class="btn btn-sm btn-success  pull-right">Logout</a>
-                    </div>
-                  </div>
-                
-                
-        </legend>
-
-  
-<!-- PHD Theses supervision -->
-
-
-<h4 style="text-align:center; font-weight: bold; color: #6739bb;">13. Research Supervision:</h4>
-<div class="row">
-    <div class="col-md-12">
-      <div class="panel panel-success">
-      <div class="panel-heading">(A) PhD Thesis Supervision  &nbsp;&nbsp;&nbsp;<button class="btn btn-sm btn-danger" id="add_thesis">Add Details</button></div>
-        <div class="panel-body">
-
-              <table class="table table-bordered">
-                  <tbody id="thesis_sup">
-                  
-                  <tr height="30px">
-                    <th class="col-md-1"> S. No.</th>
-                    <th class="col-md-3"> Name of Student/Research Scholar </th>
-                    <th class="col-md-2"> Title of Thesis</th>
-                    <th class="col-md-2"> Role</th>
-                    <th class="col-md-2"> Ongoing/Completed</th>
-                    <th class="col-md-2"> Ongoing Since/ Year of Completion</th>
-                    <!-- <th class="col-md-2"> </th> -->
-                    
-                  </tr>
-
-
-                                  </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-<!-- Master Theses supervision -->
-
-      <div class="row">
-          <div class="col-md-12">
-            <div class="panel panel-success">
-            <div class="panel-heading">(B). M.Tech/M.E./Master's Degree  &nbsp;&nbsp;&nbsp;<button class="btn btn-sm btn-danger" id="add_pg_thesis">Add Details</button></div>
-              <div class="panel-body">
-
-                    <table class="table table-bordered">
-                        <tbody id="pg_thesis_sup">
-                        
-                        <tr height="30px">
-                          <th class="col-md-1"> S. No.</th>
-                          <th class="col-md-3"> Name of Student/Research Scholar </th>
-                          <th class="col-md-2"> Title of Thesis</th>
-                          <th class="col-md-2"> Role</th>
-                          <th class="col-md-2"> Ongoing/Completed</th>
-                          <th class="col-md-2"> Ongoing Since/ Year of Completion</th>
-                          
-                        </tr>
-
-
-                                              </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-
-
-
-<!-- Bachelor Theses supervision -->
-
-      <div class="row">
-          <div class="col-md-12">
-            <div class="panel panel-success">
-            <div class="panel-heading">(C) B.Tech/B.E./Bachelor's Degree &nbsp;&nbsp;&nbsp;<button class="btn btn-sm btn-danger" id="add_ug_thesis">Add Details</button></div>
-              <div class="panel-body">
-
-                    <table class="table table-bordered">
-                        <tbody id="ug_thesis_sup">
-                        
-                        <tr height="30px">
-                          <th class="col-md-1"> S. No.</th>
-                          <th class="col-md-3"> Name of Student </th>
-                          <th class="col-md-2"> Title of Project</th>
-                          <th class="col-md-2"> Role</th>
-                          <th class="col-md-2"> Ongoing/Completed</th>
-                          <th class="col-md-2"> Ongoing Since/ Year of Completion</th>
-                          
-                        </tr>
-
-
-                                              </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-      <!-- Courses Taken -->
-
-            <!-- Button -->
-
-            <div class="form-group">
-              
-              <div class="col-md-1">
-                <a href="../acad_exp/main.php" class="btn btn-primary pull-left"><i class="glyphicon glyphicon-fast-backward"></i></a>
-              </div>
-
-              <div class="col-md-11">
-                <button id="submit" type="submit" name="submit" value="Submit" class="btn btn-success pull-right">SAVE &amp; NEXT</button>
-                
-              </div>
-              
-            </div>
-
-            <!-- <div class="form-group">
-              <label class="col-md-5 control-label" for="submit"></label>
-              <div class="col-md-4">
-                <button id="submit" type="submit" name="submit" value="Submit" class="btn btn-primary">SUBMIT</button>
-
-              </div>
-            </div> -->
-
-            </fieldset>
-            </form>
-            
-            
-
+                setInterval(blinker, 1000);
+            </script>
         </div>
     </div>
-</div>
-
-<div id="footer"></div>
-
-
-
-<script type="text/javascript">
-	
-	function blinker() {
-	    $('.blink_me').fadeOut(500);
-	    $('.blink_me').fadeIn(500);
-	}
-
-	setInterval(blinker, 1000);
-</script></body></html>
+</body>
+</html>
