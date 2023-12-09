@@ -385,7 +385,7 @@ var counter_ug_thesis=1;
             <div class="form-group">
               
               <div class="col-md-1">
-                <a href="https://ofa.iiti.ac.in/facrec_che_2023_july_02/acd_ind" class="btn btn-primary pull-left"><i class="glyphicon glyphicon-fast-backward"></i></a>
+                <a href="../acad_exp/main.php" class="btn btn-primary pull-left"><i class="glyphicon glyphicon-fast-backward"></i></a>
               </div>
 
               <div class="col-md-11">

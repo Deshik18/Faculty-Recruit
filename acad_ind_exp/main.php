@@ -17,7 +17,7 @@ $stmt->close();
   $s_proj = json_decode($s_proj_json, true);
   $awards = json_decode($awards_json, true);
   $prof_trg = json_decode($prof_trg_json, true);
-  $membreship = json_decode($membership_json, true);
+  $membership = json_decode($membership_json, true);
   $consultancy = json_decode($consultancy_json, true);
 ?>
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -265,6 +265,14 @@ function updateRowNumbers(tbody_id) {
 }
 </script>
 
+<script>
+    function removeRow(button) {
+        // Assuming the button is in a td, and the tr is the parent
+        var row = button.closest('tr');
+        row.remove();
+    }
+</script>
+
 
 <div class="container">
   
@@ -296,7 +304,7 @@ function updateRowNumbers(tbody_id) {
         <div class="panel panel-success">
             <div class="panel-heading">Fill the Details &nbsp;&nbsp;&nbsp;<button class="btn btn-sm btn-danger" id="add_membership">Add Details</button></div>
             <div class="panel-body">
-                <table class="table table-bordered">
+            <table class="table table-bordered">
                     <tbody id="membership">
                         <tr height="30px">
                             <th class="col-md-1">S. No.</th>
@@ -306,11 +314,18 @@ function updateRowNumbers(tbody_id) {
                         <?php
                         if (!empty($membership)) {
                             foreach ($membership as $index => $society) {
-                                echo '<tr>';
-                                echo '<td class="col-md-1">' . ($index + 1) . '</td>';
-                                echo '<td class="col-md-3">' . $society['name'] . '</td>';
-                                echo '<td class="col-md-3">' . $society['status'] . '</td>';
-                                echo '</tr>';
+                        ?>
+                                <tr height="60px">
+                                    <td class="col-md-1"><?php echo $index + 1; ?></td>
+                                    <td class="col-md-3">
+                                        <input name="mname[]" type="text" class="form-control input-md" value="<?= $society['name'] ?? '' ?>">
+                                    </td>
+                                    <td class="col-md-3">
+                                        <input name="mstatus[]" type="text" class="form-control input-md" value="<?= $society['status'] ?? '' ?>">
+                                        <button type="button" class="btn btn-light btn-sm" style="background-color: white; color: lightgray; font-size: 22px; margin-left: 120px;" onclick="removeRow(this)">x</button>
+                                    </td>
+                                </tr>
+                        <?php
                             }
                         }
                         ?>
@@ -341,13 +356,24 @@ function updateRowNumbers(tbody_id) {
                         <?php
                         if (!empty($prof_trg)) {
                             foreach ($prof_trg as $index => $training) {
-                                echo '<tr>';
-                                echo '<td class="col-md-1">' . ($index + 1) . '</td>';
-                                echo '<td class="col-md-3">' . $training['name'] . '</td>';
-                                echo '<td class="col-md-3">' . $training['organization'] . '</td>';
-                                echo '<td class="col-md-2">' . $training['year'] . '</td>';
-                                echo '<td class="col-md-2">' . $training['duration'] . '</td>';
-                                echo '</tr>';
+                        ?>
+                                <tr height="60px">
+                                    <td class="col-md-1"><?php echo $index + 1; ?></td>
+                                    <td class="col-md-3">
+                                        <input name="trg[]" type="text" class="form-control input-md" value="<?= $training['name'] ?? '' ?>">
+                                    </td>
+                                    <td class="col-md-3">
+                                        <input name="porg[]" type="text" class="form-control input-md" value="<?= $training['organization'] ?? '' ?>">
+                                    </td>
+                                    <td class="col-md-2">
+                                        <input name="pyear[]" type="text" class="form-control input-md" value="<?= $training['year'] ?? '' ?>">
+                                    </td>
+                                    <td class="col-md-2">
+                                        <input name="pduration[]" type="text" class="form-control input-md" value="<?= $training['duration'] ?? '' ?>">
+                                        <button type="button" class="btn btn-light btn-sm" style="background-color: white; color: lightgray; font-size: 22px; margin-left: 120px;" onclick="removeRow(this)">x</button>
+                                    </td>
+                                </tr>
+                        <?php
                             }
                         }
                         ?>
@@ -377,15 +403,25 @@ function updateRowNumbers(tbody_id) {
                         <?php
                         if (!empty($awards)) {
                             foreach ($awards as $index => $award) {
-                                echo '<tr>';
-                                echo '<td class="col-md-1">' . ($index + 1) . '</td>';
-                                echo '<td class="col-md-3">' . $award['nature'] . '</td>';
-                                echo '<td class="col-md-3">' . $award['organization'] . '</td>';
-                                echo '<td class="col-md-2">' . $award['year'] . '</td>';
-                                echo '</tr>';
+                        ?>
+                                <tr height="60px">
+                                    <td class="col-md-1"><?php echo $index + 1; ?></td>
+                                    <td class="col-md-3">
+                                        <input name="award_nature[]" type="text" class="form-control input-md" value="<?= $award['nature'] ?? '' ?>">
+                                    </td>
+                                    <td class="col-md-3">
+                                        <input name="award_org[]" type="text" class="form-control input-md" value="<?= $award['organization'] ?? '' ?>">
+                                    </td>
+                                    <td class="col-md-2">
+                                        <input name="award_year[]" type="text" class="form-control input-md" value="<?= $award['year'] ?? '' ?>">
+                                        <button type="button" class="btn btn-light btn-sm" style="background-color: white; color: lightgray; font-size: 22px; margin-left: 120px;" onclick="removeRow(this)">x</button>
+                                    </td>
+                                </tr>
+                        <?php
                             }
                         }
                         ?>
+
                     </tbody>
                 </table>
             </div>
@@ -413,23 +449,34 @@ function updateRowNumbers(tbody_id) {
                             <th class="col-md-2">Sanctioned Amount (₹)</th>
                             <th class="col-md-1">Period</th>
                             <th class="col-md-2">Role</th>
-                            <th class="col-md-2">Status (Completed/On-going)</th>
+                            <th class="col-md-2">Status</th>
                         </tr>
-                        <?php
-                        if (!empty($s_proj)) {
-                            foreach ($s_proj as $index => $project) {
-                                echo '<tr>';
-                                echo '<td class="col-md-1">' . ($index + 1) . '</td>';
-                                echo '<td class="col-md-2">' . $project['agency'] . '</td>';
-                                echo '<td class="col-md-2">' . $project['title'] . '</td>';
-                                echo '<td class="col-md-2">' . $project['amount'] . '</td>';
-                                echo '<td class="col-md-1">' . $project['period'] . '</td>';
-                                echo '<td class="col-md-2">' . $project['role'] . '</td>';
-                                echo '<td class="col-md-2">' . $project['status'] . '</td>';
-                                echo '</tr>';
-                            }
-                        }
-                        ?>
+                        <?php if (!empty($s_proj)): ?>
+                            <?php foreach ($s_proj as $index => $project): ?>
+                                <tr height="60px">
+                                    <td class="col-md-1"><?= $index + 1 ?></td>
+                                    <td class="col-md-2">
+                                        <input name="agency[]" type="text" class="form-control input-md" value="<?= $project['agency'] ?? '' ?>">
+                                    </td>
+                                    <td class="col-md-2">
+                                        <input name="stitle[]" type="text" class="form-control input-md" value="<?= $project['title'] ?? '' ?>">
+                                    </td>
+                                    <td class="col-md-2">
+                                        <input name="samount[]" type="text" class="form-control input-md" value="<?= $project['amount'] ?? '' ?>">
+                                    </td>
+                                    <td class="col-md-1">
+                                        <input name="speriod[]" type="text" class="form-control input-md" value="<?= $project['period'] ?? '' ?>">
+                                    </td>
+                                    <td class="col-md-2">
+                                        <input name="s_role[]" type="text" class="form-control input-md" value="<?= $project['role'] ?? '' ?>">
+                                    </td>
+                                    <td class="col-md-2">
+                                        <input name="s_status[]" type="text" class="form-control input-md" value="<?= $project['status'] ?? '' ?>">
+                                        <button type="button" class="btn btn-light btn-sm" style="background-color: white; color: lightgray; font-size: 22px; margin-left: 5px;" onclick="removeRow(this)">x</button>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
@@ -454,21 +501,32 @@ function updateRowNumbers(tbody_id) {
                             <th class="col-md-2">Role</th>
                             <th class="col-md-2">Status</th>
                         </tr>
-                        <?php
-                        if (!empty($consultancy)) {
-                            foreach ($consultancy as $index => $project) {
-                                echo '<tr>';
-                                echo '<td class="col-md-1">' . ($index + 1) . '</td>';
-                                echo '<td class="col-md-3">' . $project['organization'] . '</td>';
-                                echo '<td class="col-md-2">' . $project['title'] . '</td>';
-                                echo '<td class="col-md-2">' . $project['amount'] . '</td>';
-                                echo '<td class="col-md-1">' . $project['period'] . '</td>';
-                                echo '<td class="col-md-2">' . $project['role'] . '</td>';
-                                echo '<td class="col-md-2">' . $project['status'] . '</td>';
-                                echo '</tr>';
-                            }
-                        }
-                        ?>
+                        <?php if (!empty($consultancy)): ?>
+                            <?php foreach ($consultancy as $index => $project): ?>
+                                <tr height="60px">
+                                    <td class="col-md-1"><?= $index + 1 ?></td>
+                                    <td class="col-md-3">
+                                        <input name="c_org[]" type="text" class="form-control input-md" value="<?= $project['organization'] ?? '' ?>">
+                                    </td>
+                                    <td class="col-md-2">
+                                        <input name="ctitle[]" type="text" class="form-control input-md" value="<?= $project['title'] ?? '' ?>">
+                                    </td>
+                                    <td class="col-md-2">
+                                        <input name="camount[]" type="text" class="form-control input-md" value="<?= $project['amount'] ?? '' ?>">
+                                    </td>
+                                    <td class="col-md-1">
+                                        <input name="cperiod[]" type="text" class="form-control input-md" value="<?= $project['period'] ?? '' ?>">
+                                    </td>
+                                    <td class="col-md-2">
+                                        <input name="c_role[]" type="text" class="form-control input-md" value="<?= $project['role'] ?? '' ?>">
+                                    </td>
+                                    <td class="col-md-2">
+                                        <input name="c_status[]" type="text" class="form-control input-md" value="<?= $project['status'] ?? '' ?>">
+                                        <button type="button" class="btn btn-light btn-sm" style="background-color: white; color: lightgray; font-size: 22px; margin-left: 5px;" onclick="removeRow(this)">x</button>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>

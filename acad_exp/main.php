@@ -1,5 +1,32 @@
 
+<?php
+include '../config.php';
+session_start();
 
+// Retrieve PhD Thesis Supervision data
+$phdQuery = "SELECT phd_thesis FROM faculty_details WHERE email = ?";
+$stmt = $conn->prepare($phdQuery);
+$stmt->bind_param("s", $_SESSION['email']);
+$stmt->execute();
+$result = $stmt->get_result();
+$phdTheses = json_decode($result->fetch_assoc()['phd_thesis'], true);
+
+// Retrieve M.Tech Thesis Supervision data
+$mtechQuery = "SELECT mtech_thesis FROM faculty_details WHERE email = ?";
+$stmt = $conn->prepare($mtechQuery);
+$stmt->bind_param("s", $_SESSION['email']);
+$stmt->execute();
+$result = $stmt->get_result();
+$mtechTheses = json_decode($result->fetch_assoc()['mtech_thesis'], true);
+
+// Retrieve B.Tech Thesis Supervision data
+$btechQuery = "SELECT btech_thesis FROM faculty_details WHERE email = ?";
+$stmt = $conn->prepare($btechQuery);
+$stmt->bind_param("s", $_SESSION['email']);
+$stmt->execute();
+$result = $stmt->get_result();
+$btechTheses = json_decode($result->fetch_assoc()['btech_thesis'], true);
+?>
 <!-- saved from url=(0060)https://ofa.iiti.ac.in/facrec_che_2023_july_02/thesis_course -->
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>Academic Experience </title>
@@ -31,11 +58,7 @@
 	<div class="container">
         <div class="row" style="margin-bottom:10px; ">
         	<div class="col-md-8 col-md-offset-2">
-
-        		<!--  <img src="https://ofa.iiti.ac.in/facrec_che_2023_july_02/images/IITIndorelogo.png" alt="logo1" class="img-responsive" style="padding-top: 5px; height: 120px; float: left;"> 
-
-        		<h3 style="text-align:center;color:#414002!important;font-weight: bold;font-size: 2.3em; margin-top: 3px; font-family: &#39;Noto Sans&#39;, sans-serif;">भारतीय प्रौद्योगिकी संस्थान इंदौर</h3> -->
-    			<h3 style="text-align:center;color: #414002!important;font-weight: bold;font-family: &#39;Oswald&#39;, sans-serif!important;font-size: 2.2em; margin-top: 0px;">Indian Institute of Technology Indore</h3>
+    			<h3 style="text-align:center;color: #414002!important;font-weight: bold;font-family: &#39;Oswald&#39;, sans-serif!important;font-size: 2.2em; margin-top: 0px;">Indian Institute of Technology Patna</h3>
     			
 
         	</div>
@@ -96,31 +119,20 @@ hr{
                     autoclose: true
                 });
             });
+
+
 </script>
+
+
 
 <script type="text/javascript">
 var tr="";
 
 var counter_thesis=1;
-var counter_course=1;
 var counter_pg_thesis=1;
 var counter_ug_thesis=1;
 
   $(document).ready(function(){
-  
-  $("#add_thesis").click(function(){
-          create_tr();
-          create_serial('thesis_sup');
-          create_input('phd_scholar[]', 'Scholar','phd_scholar'+counter_thesis, 'thesis_sup',counter_thesis, 'thesis_sup');
-          create_input('phd_thesis[]', 'Title of Thesis','phd_thesis'+counter_thesis, 'thesis_sup',counter_thesis, 'thesis_sup');
-          create_input('phd_role[]', 'Role','phd_role'+counter_thesis, 'thesis_sup',counter_thesis, 'thesis_sup', false,true);
-          create_input('phd_ths_status[]', 'Ongoing/Completed', 'phd_ths_status'+counter_thesis,'thesis_sup',counter_thesis, 'thesis_sup');
-          create_input('phd_ths_year[]', 'Ongoing Since/ Year of Completion', 'phd_ths_year'+counter_thesis,'thesis_sup',counter_thesis, 'thesis_sup',true);
-          counter_thesis++;
-          return false;
-    });
-
-
  
   $("#add_pg_thesis").click(function(){
           create_tr();
@@ -146,51 +158,39 @@ var counter_ug_thesis=1;
           return false;
     });
 
+    $("#add_thesis").click(function(){
+          create_tr();
+          create_serial('thesis_sup');
+          create_input('phd_scholar[]', 'Scholar','phd_scholar'+counter_thesis, 'thesis_sup',counter_thesis, 'thesis_sup');
+          create_input('phd_thesis[]', 'Title of Thesis','phd_thesis'+counter_thesis, 'thesis_sup',counter_thesis, 'thesis_sup');
+          create_input('phd_role[]', 'Role','phd_role'+counter_thesis, 'thesis_sup',counter_thesis, 'thesis_sup', false,true);
+          create_input('phd_ths_status[]', 'Ongoing/Completed', 'phd_ths_status'+counter_thesis,'thesis_sup',counter_thesis, 'thesis_sup');
+          create_input('phd_ths_year[]', 'Ongoing Since/ Year of Completion', 'phd_ths_year'+counter_thesis,'thesis_sup',counter_thesis, 'thesis_sup',true);
+          counter_thesis++;
+          return false;
+    });
+
 });
-  function create_select()
-  {
-    
-  }
-  function create_tr()
-  {
-    tr=document.createElement("tr");
-  }
-  function create_serial(tbody_id)
-  {
-    //console.log(tbody_id);
-    var td=document.createElement("td");
-    // var x=0;
-     var x = document.getElementById(tbody_id).rows.length;
-    // if(document.getElementById(tbody_id).rows)
-    // {
-    // }
-    td.innerHTML=x;
-     tr.appendChild(td);
-  }
-   function for_date_picker(obj)
-  {
+function create_select() {
+
+}
+
+function create_tr() {
+    tr = document.createElement("tr");
+}
+
+function create_serial(tbody_id) {
+    var td = document.createElement("td");
+    var x = document.getElementById(tbody_id).rows.length;
+    td.innerHTML = x;
+    tr.appendChild(td);
+}
+
+function for_date_picker(obj) {
     obj.setAttribute("data-provide", "datepicker");
     obj.className += " datepicker";
     return obj;
-
-  }
-  function deleterow(e){
-    var rowid=$(e).attr("data-id");
-    var textbox=$("#id"+rowid).val();
-    $.ajax({
-            type: "POST",
-            url  : "https://ofa.iiti.ac.in/facrec_che_2023_july_02/Acd_ind/deleterow/",
-            data: {id: textbox},
-                success: function(result) { 
-                if(result.status=="OK"){
-                $('.row_'+rowid).remove();
-                            //remove_row('award',rowid, 'award');
-                }
-                   
-                }});
-
-   
-    }
+}
   function create_input(t_name, place_value, id, tbody_id, counter, remove_name, btn=false, select=false, datepicker_set=false)
   {
     //console.log(counter);
@@ -234,13 +234,13 @@ var counter_ug_thesis=1;
       but.innerHTML="x";
       td.appendChild(but);
     }
-    tr.setAttribute("id", "row"+counter);
-    tr.appendChild(td);
-    document.getElementById(tbody_id).appendChild(tr);
-     $('.datepicker').datepicker({
-                    format: 'dd/mm/yyyy',
-                    autoclose: true
-                });
+    tr.setAttribute("id", "row" + tbody_id + counter);
+        tr.appendChild(td);
+        document.getElementById(tbody_id).appendChild(tr);
+        $('.datepicker').datepicker({
+            format: 'dd/mm/yyyy',
+            autoclose: true
+        });
     
   }
   function remove_row(remove_name, n, tbody_id)
@@ -256,18 +256,31 @@ var counter_ug_thesis=1;
     }
     
   }
+  function updateRowNumbers(tbody_id) {
+    var rows = document.getElementById(tbody_id).rows;
+    for (var i = 0; i < rows.length; i++) {
+        rows[i].cells[0].innerHTML = i + 1;
+    }
+}
+</script>
+
+<script>
+    function removeRow(button) {
+        // Assuming the button is in a td, and the tr is the parent
+        var row = button.closest('tr');
+        row.remove();
+    }
 </script>
 
 
 
 
-<a href="https://ofa.iiti.ac.in/facrec_che_2023_july_02/layout"></a>
 
 <div class="container">
   
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-8 well">
-            <form class="form-horizontal" action="https://ofa.iiti.ac.in/facrec_che_2023_july_02/thesis_course" method="post" enctype="multipart/form-data">
+            <form class="form-horizontal" action="process.php" method="post" enctype="multipart/form-data">
             <fieldset>
               <input type="hidden" name="ci_csrf_token" value="">
              
@@ -277,7 +290,7 @@ var counter_ug_thesis=1;
                         <h4>Welcome : <font color="#025198"><strong>Marisol&nbsp;Mosciski</strong></font></h4>
                     </div>
                     <div class="col-md-2">
-                      <a href="https://ofa.iiti.ac.in/facrec_che_2023_july_02/facultypanel/logout" class="btn btn-sm btn-success  pull-right">Logout</a>
+                      <a href="../fac_login/main.html" class="btn btn-sm btn-success  pull-right">Logout</a>
                     </div>
                   </div>
                 
@@ -287,43 +300,60 @@ var counter_ug_thesis=1;
   
 <!-- PHD Theses supervision -->
 
-
 <h4 style="text-align:center; font-weight: bold; color: #6739bb;">13. Research Supervision:</h4>
 <div class="row">
     <div class="col-md-12">
-      <div class="panel panel-success">
-      <div class="panel-heading">(A) PhD Thesis Supervision  &nbsp;&nbsp;&nbsp;<button class="btn btn-sm btn-danger" id="add_thesis">Add Details</button></div>
-        <div class="panel-body">
+        <div class="panel panel-success">
+            <div class="panel-heading">(phd_thesis) PhD Thesis Supervision  &nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-sm btn-danger" id="add_thesis">Add Details</button></div>
+            <div class="panel-body">
+                <table class="table table-bordered">
+                    <tbody id="thesis_sup">
 
-              <table class="table table-bordered">
-                  <tbody id="thesis_sup">
-                  
-                  <tr height="30px">
-                    <th class="col-md-1"> S. No.</th>
-                    <th class="col-md-3"> Name of Student/Research Scholar </th>
-                    <th class="col-md-2"> Title of Thesis</th>
-                    <th class="col-md-2"> Role</th>
-                    <th class="col-md-2"> Ongoing/Completed</th>
-                    <th class="col-md-2"> Ongoing Since/ Year of Completion</th>
-                    <!-- <th class="col-md-2"> </th> -->
-                    
-                  </tr>
+                        <tr height="30px">
+                            <th class="col-md-1">S. No.</th>
+                            <th class="col-md-3">Name of Student/Research Scholar</th>
+                            <th class="col-md-2">Title of Thesis</th>
+                            <th class="col-md-2">Role</th>
+                            <th class="col-md-2">Ongoing/Completed</th>
+                            <th class="col-md-2">Ongoing Since/Year of Completion</th>
+                        </tr>
 
-
-                                  </tbody>
-              </table>
+                        <?php if (!empty($phdTheses)) : ?>
+                          <?php foreach ($phdTheses as $index => $record) : ?>
+                              <tr height="60px">
+                                  <td class="col-md-1"><?= $index + 1 ?></td>
+                                  <td class="col-md-3">
+                                      <input name="phd_scholar[]" type="text" class="form-control input-md" value="<?= $record['scholar'] ?? '' ?>">
+                                  </td>
+                                  <td class="col-md-2">
+                                      <input name="phd_thesis[]" type="text" class="form-control input-md" value="<?= $record['thesis'] ?? '' ?>">
+                                  </td>
+                                  <td class="col-md-2">
+                                      <input name="phd_role[]" type="text" class="form-control input-md" value="<?= $record['role'] ?? '' ?>">
+                                  </td>
+                                  <td class="col-md-2">
+                                      <input name="phd_ths_status[]" type="text" class="form-control input-md" value="<?= $record['status'] ?? '' ?>">
+                                  </td>
+                                  <td class="col-md-2">
+                                      <input name="phd_ths_year[]" type="text" class="form-control input-md" value="<?= $record['year'] ?? '' ?>">
+                                      <button type="button" class="btn btn-light btn-sm" style="background-color: white; color: lightgray; font-size: 22px; margin-left: 5px;" onclick="removeRow(this)">x</button>
+                                  </td>
+                              </tr>
+                          <?php endforeach; ?>
+                      <?php endif; ?>
+                    </tbody>
+                </table>
             </div>
-          </div>
         </div>
-      </div>
-
+    </div>
+</div>
 
 <!-- Master Theses supervision -->
 
       <div class="row">
           <div class="col-md-12">
             <div class="panel panel-success">
-            <div class="panel-heading">(B). M.Tech/M.E./Master's Degree  &nbsp;&nbsp;&nbsp;<button class="btn btn-sm btn-danger" id="add_pg_thesis">Add Details</button></div>
+            <div class="panel-heading">(B). M.Tech/M.E./Master's Degree  &nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-sm btn-danger" id="add_pg_thesis">Add Details</button></div>
               <div class="panel-body">
 
                     <table class="table table-bordered">
@@ -338,8 +368,31 @@ var counter_ug_thesis=1;
                           <th class="col-md-2"> Ongoing Since/ Year of Completion</th>
                           
                         </tr>
+                        <?php if (!empty($mtechTheses)) : ?>
+                          <?php foreach ($mtechTheses as $index => $record) : ?>
+                              <tr height="60px">
+                                  <td class="col-md-1"><?= $index + 1 ?></td>
+                                  <td class="col-md-3">
+                                      <input name="pg_scholar[]" type="text" class="form-control input-md" value="<?= $record['scholar'] ?? '' ?>">
+                                  </td>
+                                  <td class="col-md-2">
+                                      <input name="pg_thesis[]" type="text" class="form-control input-md" value="<?= $record['thesis'] ?? '' ?>">
+                                  </td>
+                                  <td class="col-md-2">
+                                      <input name="pg_role[]" type="text" class="form-control input-md" value="<?= $record['role'] ?? '' ?>">
+                                  </td>
+                                  <td class="col-md-2">
+                                      <input name="pg_ths_status[]" type="text" class="form-control input-md" value="<?= $record['status'] ?? '' ?>">
+                                  </td>
+                                  <td class="col-md-2">
+                                      <input name="pg_ths_year[]" type="text" class="form-control input-md" value="<?= $record['year'] ?? '' ?>">
+                                      <button type="button" class="btn btn-light btn-sm" style="background-color: white; color: lightgray; font-size: 22px; margin-left: 5px;" onclick="removeRow(this)">x</button>
+                                  </td>
+                              </tr>
+                          <?php endforeach; ?>
+                      <?php endif; ?>
 
-
+                          
                                               </tbody>
                     </table>
                   </div>
@@ -355,7 +408,7 @@ var counter_ug_thesis=1;
       <div class="row">
           <div class="col-md-12">
             <div class="panel panel-success">
-            <div class="panel-heading">(C) B.Tech/B.E./Bachelor's Degree &nbsp;&nbsp;&nbsp;<button class="btn btn-sm btn-danger" id="add_ug_thesis">Add Details</button></div>
+            <div class="panel-heading">(C) B.Tech/B.E./Bachelor's Degree &nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-sm btn-danger" id="add_ug_thesis">Add Details</button></div>
               <div class="panel-body">
 
                     <table class="table table-bordered">
@@ -370,9 +423,31 @@ var counter_ug_thesis=1;
                           <th class="col-md-2"> Ongoing Since/ Year of Completion</th>
                           
                         </tr>
+                        <?php if (!empty($btechTheses)) : ?>
+                          <?php foreach ($btechTheses as $index => $record) : ?>
+                              <tr height="60px">
+                                  <td class="col-md-1"><?= $index + 1 ?></td>
+                                  <td class="col-md-3">
+                                      <input name="ug_scholar[]" type="text" class="form-control input-md" value="<?= $record['scholar'] ?? '' ?>">
+                                  </td>
+                                  <td class="col-md-2">
+                                      <input name="ug_thesis[]" type="text" class="form-control input-md" value="<?= $record['thesis'] ?? '' ?>">
+                                  </td>
+                                  <td class="col-md-2">
+                                      <input name="ug_role[]" type="text" class="form-control input-md" value="<?= $record['role'] ?? '' ?>">
+                                  </td>
+                                  <td class="col-md-2">
+                                      <input name="ug_ths_status[]" type="text" class="form-control input-md" value="<?= $record['status'] ?? '' ?>">
+                                  </td>
+                                  <td class="col-md-2">
+                                      <input name="ug_ths_year[]" type="text" class="form-control input-md" value="<?= $record['year'] ?? '' ?>">
+                                      <button type="button" class="btn btn-light btn-sm" style="background-color: white; color: lightgray; font-size: 22px; margin-left: 5px;" onclick="removeRow(this)">x</button>
+                                  </td>
+                              </tr>
+                          <?php endforeach; ?>
+                      <?php endif; ?>
 
-
-                                              </tbody>
+                        </tbody>
                     </table>
                   </div>
                 </div>
@@ -385,7 +460,7 @@ var counter_ug_thesis=1;
             <div class="form-group">
               
               <div class="col-md-1">
-                <a href="https://ofa.iiti.ac.in/facrec_che_2023_july_02/acd_ind" class="btn btn-primary pull-left"><i class="glyphicon glyphicon-fast-backward"></i></a>
+                <a href="../acad_ind_exp/main.php" class="btn btn-primary pull-left"><i class="glyphicon glyphicon-fast-backward"></i></a>
               </div>
 
               <div class="col-md-11">
