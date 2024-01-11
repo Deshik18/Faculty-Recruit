@@ -567,9 +567,9 @@ function updateSerialNumbers() {
                 <span class="col-md-2 control-label" for="google_link">Google Scholar Link </span>  
                 <div class="col-md-10">
                     <?php if (empty($scholar_link)): ?>
-                        <input id="google_link" value="" name="google_link" type="text" placeholder="Nothing" class="form-control input-md" required="" readonly>
+                        <input id="google_link" value="" name="google_link" type="text" placeholder="Google Scholar Link" class="form-control input-md" required="">
                     <?php else: ?>
-                        <input id="google_link" value="<?= $scholar_link ?>" name="google_link" type="text" placeholder="Google Scholar Link" class="form-control input-md" required="" readonly>
+                        <input id="google_link" value="<?= $scholar_link ?>" name="google_link" type="text" placeholder="Google Scholar Link" class="form-control input-md" required="">
                     <?php endif; ?>
                 </div>
             </div>
