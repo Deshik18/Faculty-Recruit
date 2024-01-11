@@ -314,7 +314,6 @@ $contact_det = json_decode($contact_det, true);
                               $fname = $personal_details['fname'];
                               $lname = $personal_details['lname']; // Corrected typo in variable name
                               $name_email_cat = strtoupper($fname . '_' . $lname . '_' . $_SESSION['email'] . '_' . $_SESSION['cast']);
-                             }
                               $photo_upload_dir = '../' . $adv_num . '/' . $selected_department . '/' . $name_email_cat . '/';
                               $id_proof_file_path = $photo_upload_dir . 'IDproof.*';
 
@@ -332,7 +331,7 @@ $contact_det = json_decode($contact_det, true);
 
                                 <!-- Set the value of the input field to the existing ID proof name -->
                                 <input id="id_card_file" name="userfile2" type="file" class="form-control input-md" value="<?php echo pathinfo($id_proof_file)['basename']; ?>" required="" readonly="readonly">
-                            <?php } else { ?>
+                            <?php } }else { ?>
                                 <!-- Allow the user to upload a new ID proof if not already uploaded -->
                                 <input id="id_card_file" name="userfile2" type="file" class="form-control input-md" required="">
                             <?php } ?>
@@ -358,6 +357,7 @@ $contact_det = json_decode($contact_det, true);
               <div class="col-md-2 pull-right">
                   <?php
                   // Path to the uploaded profile photo
+                  if (isset($application_details['adv_num']) && isset($application_details['dept']) && isset($personal_details['fname']) && isset($personal_details['lname'])) {
                   $photo_upload_dir = '../' . $adv_num . '/' . $selected_department . '/' . $name_email_cat . '/';
                   $profile_photo_path = $photo_upload_dir . 'Photo.jpg';
 
@@ -372,7 +372,7 @@ $contact_det = json_decode($contact_det, true);
 
                       <!-- Set the value of the input field to the existing photo name -->
                       <input id="photo" name="userfile" type="file" class="form-control input-md" value="<?php echo 'Photo.jpg'; ?>" required="" readonly="readonly">
-                  <?php } else { ?>
+                  <?php }} else { ?>
                       <!-- Allow the user to upload a new profile photo -->
                       <img class="thumbnail pull-right" height="150" width="130" />
                       <input id="photo" name="userfile" type="file" class="form-control input-md" required="">
