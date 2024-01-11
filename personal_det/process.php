@@ -6,7 +6,7 @@ session_start();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $_SESSION['adv_num'] = $_POST['adv_num'];
     $_SESSION['dept'] = $_POST['dept'];
-    $_SESSION['fname'] = $_POST['$fname'];
+    $_SESSION['fname'] = $_POST['fname'];
     $_SESSION['lname'] = $_POST['lname'];
     $_SESSION['cast'] = $_POST['cast'];
     // Retrieve form data
@@ -88,24 +88,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Perform database insertion
     $query = "UPDATE faculty_details SET application_details = ?, per_det = ?, cadd_det = ?, padd_det = ?, contact_det = ? WHERE email = ?";
 
-    $stmt = $conn->prepare($query);
+$stmt = $conn->prepare($query);
 
-    $stmt->bind_param("ssssss", $application_details, $per_det, $cadd_det, $padd_det, $contact_det, $_SESSION['email']);
+$stmt->bind_param("ssssss", $application_details, $per_det, $cadd_det, $padd_det, $contact_det, $_SESSION['email']);
 
-    if ($stmt->execute()) {
-        // Data has been successfully inserted into the database
-        $selected_department = strtoupper($dept); // Convert department name to uppercase
-        $name_email_cat = strtoupper($fname . '_' . $lname . '_' . $_SESSION['email'] . '_' . $_SESSION['cast']);
+if ($stmt->execute()) {
+    // Data has been successfully inserted into the database
+    $selected_department = strtoupper($dept); // Convert department name to uppercase
+    $name_email_cat = strtoupper($fname . '_' . $lname . '_' . $_SESSION['email'] . '_' . $_SESSION['cast']);
 
-        $photo_upload_dir = '../' . $adv_num . '/' . $selected_department . '/' . $name_email_cat . '/';
-    
-        if (!file_exists($photo_upload_dir)) {
-            mkdir($photo_upload_dir, 0777, true);
-        }
-    
-        $photo_file_type = strtolower(pathinfo($_FILES['userfile']['name'], PATHINFO_EXTENSION)); // Get the file type from the uploaded file
-        $photo_file = $photo_upload_dir . 'Photo.jpg'; // Define $photo_file here
-    
+    $photo_upload_dir = '../' . $adv_num . '/' . $selected_department . '/' . $name_email_cat . '/';
+
+    if (!file_exists($photo_upload_dir)) {
+        mkdir($photo_upload_dir, 0777, true);
+    }
+
+    $photo_file_type = strtolower(pathinfo($_FILES['userfile']['name'], PATHINFO_EXTENSION)); // Get the file type from the uploaded file
+    $photo_file = $photo_upload_dir . 'Photo.jpg'; // Define $photo_file here
+
+    if (!empty($_FILES['userfile']['name'])) {
         if (getimagesize($_FILES['userfile']['tmp_name']) === false) {
             die('Invalid file. Please upload a valid image.');
         } elseif ($_FILES['userfile']['size'] > 1000000) {
@@ -113,31 +114,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($photo_file_type !== 'jpg' && $photo_file_type !== 'jpeg') {
             die('Only JPG and JPEG images are allowed.');
         }
-    
+
         if (move_uploaded_file($_FILES['userfile']['tmp_name'], $photo_file)) {
             // The photo file has been successfully uploaded
-    
-            $id_proof_upload_dir = '../' . $adv_num . '/' . $selected_department . '/' . $name_email_cat . '/';
-    
-            if (!file_exists($id_proof_upload_dir)) {
-                mkdir($id_proof_upload_dir, 0777, true);
-            }
-    
-            $id_proof_file = $id_proof_upload_dir . 'IDproof.' . $photo_file_type;
-    
-            if (move_uploaded_file($_FILES['userfile2']['tmp_name'], $id_proof_file)) {
-                // Data and files uploaded successfully
-                header('Location: ../acad_det/main.php');
-                exit();
-            } else {
-                die('Error uploading the ID proof file.');
-            }
         } else {
             die('Error uploading the image. Data entered successfully.');
         }
+    }
+
+    $id_proof_upload_dir = '../' . $adv_num . '/' . $selected_department . '/' . $name_email_cat . '/';
+
+    if (!file_exists($id_proof_upload_dir)) {
+        mkdir($id_proof_upload_dir, 0777, true);
+    }
+
+    $id_proof_file = $id_proof_upload_dir . 'IDproof.' . $photo_file_type;
+
+    if (!empty($_FILES['userfile2']['name'])) {
+        if (move_uploaded_file($_FILES['userfile2']['tmp_name'], $id_proof_file)) {
+            // Data and files uploaded successfully
+            header('Location: ../acad_det/main.php');
+            exit();
+        } else {
+            die('Error uploading the ID proof file.');
+        }
     } else {
-        die('Error inserting data into the database.');
-    }    
+        // No ID proof file uploaded, proceed to the next page
+        header('Location: ../acad_det/main.php');
+        exit();
+    }
+} else {
+    die('Error inserting data into the database.');
+}
+    
 } else {
     die('Invalid request.');
 }

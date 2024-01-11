@@ -24,13 +24,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     ));
 
     // Get the current date in the desired format (e.g., DD/MM/YYYY)
-    $currentDate = date('d/m/Y');
+    $currentDate = date("Y-m-d"); // Format: 'YYYY-MM-DD'
 
     // Generate a unique activation token (you can use any method to create this token)
     $activationToken = bin2hex(random_bytes(16)); // This is just an example; you can choose your own method.
 
     // Prepare and execute the SQL query to insert data into the database
-    $sql = "INSERT INTO faculty_details (fn_ln_cast, email, password, activate, doa) VALUES ('" . mysqli_real_escape_string($conn, $fn_ln_cast) . "', '" . mysqli_real_escape_string($conn, $email) . "', '" . mysqli_real_escape_string($conn, $password) . "', '{\"activation_token\":\"$activationToken\", \"activated\":false}', '" . mysqli_real_escape_string($conn, $currentDate) . "')";
+    $sql = "INSERT INTO faculty_details (fn_ln_cast, email, password, activate, doa) VALUES ('" . mysqli_real_escape_string($conn, $fn_ln_cast) . "', '" . mysqli_real_escape_string($conn, $email) . "', '" . mysqli_real_escape_string($conn, $password) . "', '{\"activation_token\":\"$activationToken\", \"activated\":false}', '$currentDate')";
 
     if (mysqli_query($conn, $sql)) {
             Header("Location: ../fac_login/main.html");

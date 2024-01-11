@@ -165,7 +165,7 @@ $contact_det = json_decode($contact_det, true);
     <div class="col-md-4">
       <select id="adv_num" name="adv_num" class="form-control input-md" required="">
         <option value="">Select</option>
-        <option <?php echo ($application_details['adv_num'] === 'IITP/FACREC/2023/NOV/02') ? 'selected="selected"' : ''; ?> value="IITP/FACREC/2023/NOV/02">IITP/FACREC/2023/NOV/02</option>
+        <option <?php echo (isset($application_details['adv_num']) && $application_details['adv_num'] === 'IITP/FACREC/2023/NOV/02') ? 'selected="selected"' : ''; ?> value="IITP/FACREC/2023/NOV/02">IITP/FACREC/2023/NOV/02</option>
       </select>
     </div>
 
@@ -184,32 +184,29 @@ $contact_det = json_decode($contact_det, true);
     <!-- Post Applied for field -->
     <label class="col-md-2 control-label" for="post">Post Applied for *</label>
     <div class="col-md-4">
-      <select id="post" name="post" class="form-control input-md" required="">
-        <option value="">Select</option>
-        <option <?php echo ($application_details['post'] === 'Professor') ? 'selected="selected"' : ''; ?> value="Professor">Professor</option>
-        <option <?php echo ($application_details['post'] === 'Associate Professor') ? 'selected="selected"' : ''; ?> value="Associate Professor">Associate Professor</option>
-        <option <?php echo ($application_details['post'] === 'Assistant Professor Grade I') ? 'selected="selected"' : ''; ?> value="Assistant Professor Grade I">Assistant Professor Grade I</option>
-        <option <?php echo ($application_details['post'] === 'Assistant Professor Grade II') ? 'selected="selected"' : ''; ?> value="Assistant Professor Grade II">Assistant Professor Grade II</option>
-      </select>
+        <select id="post" name="post" class="form-control input-md" required="">
+            <option value="">Select</option>
+            <option <?php echo (isset($application_details['post']) && $application_details['post'] === 'Professor') ? 'selected="selected"' : ''; ?> value="Professor">Professor</option>
+            <option <?php echo (isset($application_details['post']) && $application_details['post'] === 'Associate Professor') ? 'selected="selected"' : ''; ?> value="Associate Professor">Associate Professor</option>
+            <option <?php echo (isset($application_details['post']) && $application_details['post'] === 'Assistant Professor Grade I') ? 'selected="selected"' : ''; ?> value="Assistant Professor Grade I">Assistant Professor Grade I</option>
+            <option <?php echo (isset($application_details['post']) && $application_details['post'] === 'Assistant Professor Grade II') ? 'selected="selected"' : ''; ?> value="Assistant Professor Grade II">Assistant Professor Grade II</option>
+        </select>
     </div>
 
     <!-- Department/School field -->
     <label class="col-md-2 control-label" for="dept">Department/School *</label>
     <div class="col-md-4">
-      <select id="dept" name="dept" class="form-control input-md" required="">
-        <option value="">Select</option>
-        <option <?php echo ($application_details['dept'] === 'Chemical Engineering') ? 'selected="selected"' : ''; ?> value="Chemical Engineering">Chemical Engineering</option>
-        <option <?php echo ($application_details['dept'] === 'Computer Science and Engineering') ? 'selected="selected"' : ''; ?> value="Computer Science and Engineering">Computer Science and Engineering</option>
-        <option <?php echo ($application_details['dept'] === 'Electrical Engineering') ? 'selected="selected"' : ''; ?> value="Electrical Engineering">Electrical Engineering</option>
-        <option <?php echo ($application_details['dept'] === 'Mechanical Engineering') ? 'selected="selected"' : ''; ?> value="Mechanical Engineering">Mechanical Engineering</option>
-        <option <?php echo ($application_details['dept'] === 'Civil Engineering') ? 'selected="selected"' : ''; ?> value="Civil Engineering">Civil Engineering</option>
-        <option <?php echo ($application_details['dept'] === 'Mettallurgical and Materials Engineering') ? 'selected="selected"' : ''; ?> value="Mettallurgical and Materials Engineering">Mettallurgical and Materials Engineering</option>
-      </select>
+        <select id="dept" name="dept" class="form-control input-md" required="">
+            <option value="">Select</option>
+            <option <?php echo (isset($application_details['dept']) && $application_details['dept'] === 'Chemical Engineering') ? 'selected="selected"' : ''; ?> value="Chemical Engineering">Chemical Engineering</option>
+            <option <?php echo (isset($application_details['dept']) && $application_details['dept'] === 'Computer Science and Engineering') ? 'selected="selected"' : ''; ?> value="Computer Science and Engineering">Computer Science and Engineering</option>
+            <option <?php echo (isset($application_details['dept']) && $application_details['dept'] === 'Electrical Engineering') ? 'selected="selected"' : ''; ?> value="Electrical Engineering">Electrical Engineering</option>
+            <option <?php echo (isset($application_details['dept']) && $application_details['dept'] === 'Mechanical Engineering') ? 'selected="selected"' : ''; ?> value="Mechanical Engineering">Mechanical Engineering</option>
+            <option <?php echo (isset($application_details['dept']) && $application_details['dept'] === 'Civil Engineering') ? 'selected="selected"' : ''; ?> value="Civil Engineering">Civil Engineering</option>
+            <option <?php echo (isset($application_details['dept']) && $application_details['dept'] === 'Metallurgical and Materials Engineering') ? 'selected="selected"' : ''; ?> value="Metallurgical and Materials Engineering">Metallurgical and Materials Engineering</option>
+            <!-- Add similar lines for other options -->
+        </select>
     </div>
-
-  </div>
-</div>
-<hr>
 
 
     <!-- Form Name -->
@@ -247,8 +244,8 @@ $contact_det = json_decode($contact_det, true);
                         <div class="col-md-4">
                             <select id="nationality" name="nationality" class="form-control input-md" required="">
                                 <option value="">Select</option>
-                                <option <?php echo ($personal_details['nationality'] === 'Indian') ? 'selected="selected"' : ''; ?> value="Indian">Indian</option>
-                                <option <?php echo ($personal_details['nationality'] === 'OCI') ? 'selected="selected"' : ''; ?> value="OCI">OCI</option>
+                                <option <?php echo (isset($personal_details['nationality']) && $personal_details['nationality'] === 'Indian') ? 'selected="selected"' : ''; ?> value="Indian">Indian</option>
+                                <option <?php echo (isset($personal_details['nationality']) && $personal_details['nationality'] === 'OCI') ? 'selected="selected"' : ''; ?> value="OCI">OCI</option>
                             </select>
                         </div>
 
@@ -264,9 +261,9 @@ $contact_det = json_decode($contact_det, true);
                         <div class="col-md-4">
                             <select id="gender" name="gender" class="form-control input-md" required="">
                                 <option value="">Select</option>
-                                <option <?php echo ($personal_details['gender'] === 'Male') ? 'selected="selected"' : ''; ?> value="Male">Male</option>
-                                <option <?php echo ($personal_details['gender'] === 'Female') ? 'selected="selected"' : ''; ?> value="Female">Female</option>
-                                <option <?php echo ($personal_details['gender'] === 'Other') ? 'selected="selected"' : ''; ?> value="Other">Other</option>
+                                <option <?php echo (isset($personal_details['gender']) && $personal_details['gender'] === 'Male') ? 'selected="selected"' : ''; ?> value="Male">Male</option>
+                                <option <?php echo (isset($personal_details['gender']) && $personal_details['gender'] === 'Female') ? 'selected="selected"' : ''; ?> value="Female">Female</option>
+                                <option <?php echo (isset($personal_details['gender']) && $personal_details['gender'] === 'Other') ? 'selected="selected"' : ''; ?> value="Other">Other</option>
                             </select>
                         </div>
 
@@ -275,16 +272,16 @@ $contact_det = json_decode($contact_det, true);
                         <div class="col-md-4">
                             <select id="mstatus" name="mstatus" class="form-control input-md" required="">
                                 <option value="">Select</option>
-                                <option <?php echo ($personal_details['mstatus'] === 'Married') ? 'selected="selected"' : ''; ?> value="Married">Married</option>
-                                <option <?php echo ($personal_details['mstatus'] === 'Unmarried') ? 'selected="selected"' : ''; ?> value="Unmarried">Unmarried</option>
-                                <option <?php echo ($personal_details['mstatus'] === 'Other') ? 'selected="selected"' : ''; ?> value="Other">Other</option>
+                                <option <?php echo (isset($personal_details['mstatus']) && $personal_details['mstatus'] === 'Married') ? 'selected="selected"' : ''; ?> value="Married">Married</option>
+                                <option <?php echo (isset($personal_details['mstatus']) && $personal_details['mstatus'] === 'Unmarried') ? 'selected="selected"' : ''; ?> value="Unmarried">Unmarried</option>
+                                <option <?php echo (isset($personal_details['mstatus']) && $personal_details['mstatus'] === 'Other') ? 'selected="selected"' : ''; ?> value="Other">Other</option>
                             </select>
                         </div>
 
                         <!-- Category field -->
                         <span class="col-md-2 control-label" for="cast">Category</span>
                         <div class="col-md-4">
-                            <input id="cast" name="cast" type="text" placeholder="cast" readonly='readonly' value="<?php echo $_SESSION['cast']; ?>" class="form-control input-md" required="">
+                            <input id="cast" name="cast" type="text" placeholder="cast" readonly='readonly' value="<?php echo isset($_SESSION['cast']) ? $_SESSION['cast'] : ''; ?>" class="form-control input-md" required="">
                         </div>
 
                         <!-- ID Proof field -->
@@ -292,21 +289,58 @@ $contact_det = json_decode($contact_det, true);
                         <div class="col-md-4">
                             <select id="id_proof" name="id_proof" class="form-control input-md" required="">
                                 <option value="">Select</option>
-                                <option <?php echo ($personal_details['id_proof'] === 'AADHAR') ? 'selected="selected"' : ''; ?> value="AADHAR">AADHAR</option>
-                                <option <?php echo ($personal_details['id_proof'] === 'PAN-CARD') ? 'selected="selected"' : ''; ?> value="PAN-CARD">PAN-CARD</option>
-                                <option <?php echo ($personal_details['id_proof'] === 'DRIVING-LICENSE') ? 'selected="selected"' : ''; ?> value="DRIVING-LICENSE">DRIVING-LICENSE</option>
-                                <option <?php echo ($personal_details['id_proof'] === 'VOTER ID') ? 'selected="selected"' : ''; ?> value="VOTER ID">VOTER ID</option>
-                                <option <?php echo ($personal_details['id_proof'] === 'PASSPORT') ? 'selected="selected"' : ''; ?> value="PASSPORT">PASSPORT</option>
-                                <option <?php echo ($personal_details['id_proof'] === 'RATION CARD') ? 'selected="selected"' : ''; ?> value="RATION CARD">RATION CARD</option>
-                                <option <?php echo ($personal_details['id_proof'] === 'OTHERS') ? 'selected="selected"' : ''; ?> value="OTHERS">OTHERS</option>
+                                <option <?php echo (isset($personal_details['id_proof']) && $personal_details['id_proof'] === 'AADHAR') ? 'selected="selected"' : ''; ?> value="AADHAR">AADHAR</option>
+                                <option <?php echo (isset($personal_details['id_proof']) && $personal_details['id_proof'] === 'PAN-CARD') ? 'selected="selected"' : ''; ?> value="PAN-CARD">PAN-CARD</option>
+                                <option <?php echo (isset($personal_details['id_proof']) && $personal_details['id_proof'] === 'DRIVING-LICENSE') ? 'selected="selected"' : ''; ?> value="DRIVING-LICENSE">DRIVING-LICENSE</option>
+                                <option <?php echo (isset($personal_details['id_proof']) && $personal_details['id_proof'] === 'VOTER ID') ? 'selected="selected"' : ''; ?> value="VOTER ID">VOTER ID</option>
+                                <option <?php echo (isset($personal_details['id_proof']) && $personal_details['id_proof'] === 'PASSPORT') ? 'selected="selected"' : ''; ?> value="PASSPORT">PASSPORT</option>
+                                <option <?php echo (isset($personal_details['id_proof']) && $personal_details['id_proof'] === 'RATION CARD') ? 'selected="selected"' : ''; ?> value="RATION CARD">RATION CARD</option>
+                                <option <?php echo (isset($personal_details['id_proof']) && $personal_details['id_proof'] === 'OTHERS') ? 'selected="selected"' : ''; ?> value="OTHERS">OTHERS</option>
                             </select>
                         </div>
 
-                        <!-- Upload ID Proof field -->
+                        <!-- Upload ID Proof field 
                         <span class="col-md-2 control-label" for="id_card_file">Upload ID Proof *</span>
                         <div class="col-md-4">
                             <input id="id_card_file" name="userfile2" type="file" class="form-control input-md" required="">
+                        </div> -->
+                        <!-- Upload ID Proof field -->
+                        <span class="col-md-2 control-label" for="id_card_file">Upload ID Proof</span>
+                        <div class="col-md-4">
+                            <?php
+                             if (isset($application_details['adv_num']) && isset($application_details['dept']) && isset($personal_details['fname']) && isset($personal_details['lname'])) {
+                              $adv_num = $application_details['adv_num'];
+                              $selected_department = $application_details['dept']; // Corrected department access
+                              $fname = $personal_details['fname'];
+                              $lname = $personal_details['lname']; // Corrected typo in variable name
+                              $name_email_cat = strtoupper($fname . '_' . $lname . '_' . $_SESSION['email'] . '_' . $_SESSION['cast']);
+                             }
+                              $photo_upload_dir = '../' . $adv_num . '/' . $selected_department . '/' . $name_email_cat . '/';
+                              $id_proof_file_path = $photo_upload_dir . 'IDproof.*';
+
+                            // Check if the ID proof file exists
+                            $id_proof_files = glob($id_proof_file_path);
+                            if (!empty($id_proof_files)) {
+                                $id_proof_file = $id_proof_files[0]; // Assuming there is only one ID proof file
+                                ?>
+
+                                <!-- Display existing ID proof with a link to view it -->
+                                <a href="<?php echo $id_proof_file; ?>" target="_blank">View ID Proof</a>
+
+                                <!-- Display the file name (optional) -->
+                                <?php echo pathinfo($id_proof_file)['basename']; ?>
+
+                                <!-- Set the value of the input field to the existing ID proof name -->
+                                <input id="id_card_file" name="userfile2" type="file" class="form-control input-md" value="<?php echo pathinfo($id_proof_file)['basename']; ?>" required="" readonly="readonly">
+                            <?php } else { ?>
+                                <!-- Allow the user to upload a new ID proof if not already uploaded -->
+                                <input id="id_card_file" name="userfile2" type="file" class="form-control input-md" required="">
+                            <?php } ?>
                         </div>
+
+                                </div>
+
+
 
                         <!-- Father's Name field -->
                         <span class="col-md-2 control-label" for="father_name">Father's Name *</span>
@@ -314,17 +348,43 @@ $contact_det = json_decode($contact_det, true);
                             <input id="father_name" value="<?php echo isset($personal_details['father_name']) ? $personal_details['father_name'] : ''; ?>" name="father_name" type="text" placeholder="Father's Name" class="form-control input-md" maxlength="30" required="">
                         </div>
                     </div>
-                </div>
-
+                <!--
                 <div class="col-md-2 pull-right">
                     <img class="thumbnail pull-right" height="150" width="130" />
                     <input id="photo" name="userfile" type="file" class="form-control input-md" required="">
                     <strong>Please upload your recent photo <font color="red">( <1 MB) in JPG | JPEG format</font> only.</strong>
-                </div>
+                </div> -->
+                <!-- Upload Profile Photo field -->
+              <div class="col-md-2 pull-right">
+                  <?php
+                  // Path to the uploaded profile photo
+                  $photo_upload_dir = '../' . $adv_num . '/' . $selected_department . '/' . $name_email_cat . '/';
+                  $profile_photo_path = $photo_upload_dir . 'Photo.jpg';
+
+                  // Check if the profile photo file exists
+                  if (file_exists($profile_photo_path)) {
+                      ?>
+                      <!-- Display existing profile photo with a link to view it -->
+                      <a href="<?php echo $profile_photo_path; ?>" target="_blank">View Profile Photo</a>
+
+                      <!-- Display the file name (optional) -->
+                      <?php echo pathinfo($profile_photo_path)['basename']; ?>
+
+                      <!-- Set the value of the input field to the existing photo name -->
+                      <input id="photo" name="userfile" type="file" class="form-control input-md" value="<?php echo 'Photo.jpg'; ?>" required="" readonly="readonly">
+                  <?php } else { ?>
+                      <!-- Allow the user to upload a new profile photo -->
+                      <img class="thumbnail pull-right" height="150" width="130" />
+                      <input id="photo" name="userfile" type="file" class="form-control input-md" required="">
+                      <strong>Please upload your recent photo <font color="red">( <1 MB) in JPG | JPEG format</font> only.</strong>
+                  <?php } ?>
+              </div>
+
             </div>
         </div>
     </div>
 </div>
+
 <div class="row">
   <div class="col-md-12">
     <div class="panel panel-success">

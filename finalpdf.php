@@ -1132,38 +1132,6 @@ $consultancyProjects = json_decode($facultyDetails['consultancy'], true) ?? [];
 
     </tbody>
 </table>
-<table class="tab">
-    <tbody>
-        <tr style="background-color:#f1f1f1;">
-            <td colspan="6"><strong class="tr_title">Details of Referees</strong></td>
-        </tr>
-        
-        <tr>
-            <!-- <td><strong>S. No.</strong></td> -->
-            <td width="20%"><strong>Name</strong></td>
-            <td width="20%"><strong>Position</strong></td>
-            <td width="15%"><strong>Association with Referee</strong></td>
-            <td width="15%"><strong>Institution/Organization</strong></td>
-            <td width="15%"><strong>E-mail</strong></td>
-            <td width="15%"><strong>Contact No.</strong></td>
-        </tr>
-
-        <?php if (!empty($referees)) {
-            foreach ($referees as $index => $referee) : ?>
-                <tr>
-                    <!-- You can add a serial number if needed -->
-                    <!-- <td><?php echo $index + 1; ?></td> -->
-                    <td><?php echo $referee['name']; ?></td>
-                    <td><?php echo $referee['position']; ?></td>
-                    <td><?php echo $referee['association']; ?></td>
-                    <td><?php echo $referee['organization']; ?></td>
-                    <td><?php echo $referee['email']; ?></td>
-                    <td><?php echo $referee['contact_no']; ?></td>
-                </tr>
-            <?php endforeach;
-        } ?>
-    </tbody>
-</table>
 <br>
 
 	
