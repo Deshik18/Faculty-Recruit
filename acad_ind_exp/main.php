@@ -1,6 +1,7 @@
 
 <?php
 include '../config.php';
+include '../check_session.php';
 session_start();
 
 $s_proj = $awards = $prof_trg = $membership = $consultancy = array(); // Initialize as empty arrays

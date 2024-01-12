@@ -4,6 +4,7 @@
 // Start the session (if you haven't already)
 session_start();
 include '../config.php';
+include '../check_session.php';
 
 $pres_emp_det = $emp_hist = $te_exp = $r_exp = $ind_exp = $area_det = array(); // Initialize as empty arrays
 $additional_qualifications = array();

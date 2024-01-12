@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             'doi'=> $_POST['doi'][$i],
             'status'=> $_POST['status'][$i],
         );
-        $emp_hist[] = $qemp;
+        $best_pub[] = $qemp;
     }
     }
 

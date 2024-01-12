@@ -2,6 +2,7 @@
 <?php
 session_start(); // Start the session (make sure this is at the top of your PHP file)
 include '../config.php';
+include '../check_session.php';
 $application_details = $personal_details = $cadd_det = $contact_det = array();
 $sql = "SELECT application_details, per_det, cadd_det, padd_det, contact_det FROM faculty_details WHERE email = ?";
 $stmt = $conn->prepare($sql);
@@ -308,11 +309,11 @@ $contact_det = json_decode($contact_det, true);
                         <span class="col-md-2 control-label" for="id_card_file">Upload ID Proof</span>
                         <div class="col-md-4">
                             <?php
-                             if (isset($application_details['adv_num']) && isset($application_details['dept']) && isset($personal_details['fname']) && isset($personal_details['lname'])) {
-                              $adv_num = $application_details['adv_num'];
-                              $selected_department = $application_details['dept']; // Corrected department access
-                              $fname = $personal_details['fname'];
-                              $lname = $personal_details['lname']; // Corrected typo in variable name
+                             if (isset($_SESSION['adv_num']) && isset($_SESSION['dept']) && isset($_SESSION['fname']) && isset($_SESSION['lname'])) {
+                              $adv_num = $_SESSION['adv_num'];
+                              $selected_department = $_SESSION['dept']; // Corrected department access
+                              $fname = $_SESSION['fname'];
+                              $lname = $_SESSION['lname']; // Corrected typo in variable name
                               $name_email_cat = strtoupper($fname . '_' . $lname . '_' . $_SESSION['email'] . '_' . $_SESSION['cast']);
                               $photo_upload_dir = '../' . $adv_num . '/' . $selected_department . '/' . $name_email_cat . '/';
                               $id_proof_file_path = $photo_upload_dir . 'IDproof.*';

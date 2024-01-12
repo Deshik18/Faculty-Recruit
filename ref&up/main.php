@@ -2,6 +2,7 @@
 <?php
 session_start();
 include '../config.php';
+include '../check_session.php';
 ?>
 <!-- saved from url=(0066)https://ofa.iiti.ac.in/facrec_che_2023_july_02/submission_complete -->
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -158,12 +159,45 @@ p
                 
         </legend>
        </fieldset>
+       <?php
+      function renderFileInputField($fieldName, $displayName, $uploadsDir, $fileFieldsMapping)
+      {
+          $filePath = $uploadsDir . $fileFieldsMapping[$fieldName];
+          // Check if the file already exists
+          if (file_exists($filePath)) {
+              // File exists, display the filename and a link to view it
+              echo "<p>Existing File: " . basename($filePath) . ' <a href="' . $filePath . '" target="_blank">View File</a></p>';
+              echo "<input id=\"$fieldName\" name=\"$fieldName\" type=\"file\" class=\"form-control input-md\">";
+          } else {
+              // File doesn't exist, allow the user to upload
+              echo "<input id=\"$fieldName\" name=\"$fieldName\" type=\"file\" class=\"form-control input-md\">";
+          }
+      }
 
+      $selected_department = $_SESSION['dept'];
+      $fname = $_SESSION['fname'];
+      $lname = $_SESSION['lname'];
+      $name_email_cat = strtoupper($fname . '_' . $lname . '_' . $_SESSION['email'] . '_' . $_SESSION['cast']);
+      $uploadsDir = '../' . $_SESSION['adv_num'] . '/' . $selected_department . '/' . $name_email_cat . '/';
+      $fileFieldsMapping = [
+          'userfile7' => 'Research_Paper.pdf',
+          'userfile'  => 'PHD_Certificate.pdf',
+          'userfile1' => 'PG_Certificate.pdf',
+          'userfile2' => 'UG_Certificate.pdf',
+          'userfile3' => '12th_HSC_Diploma.pdf',
+          'userfile4' => '10th_SSC_Certificate.pdf',
+          'userfile9' => 'Payslip.pdf',
+          'userfile10' => 'NOC.pdf',
+          'userfile8' => '10_Years_Post_PHD_Experience_Certificate.pdf',
+          'userfile6' => 'Any_Other_Document.pdf',
+          'userfile5' => 'Signature.jpg',
+          // ... add other mappings for the rest of the fields
+      ];
+      ?>
 
 
 <!-- publication file upload           -->
-
-<form class="form-horizontal" action="process.php" method="post" enctype="multipart/form-data">
+<form class="form-horizontal" action="process.php" method="post" enctype="multipart/form-data" onsubmit="return confirm_box();" id="upload_frm">
 <!-- Reprints of 5 Best Research Papers Section -->
 <h4 style="text-align:center; font-weight: bold; color: #6739bb;">20. Reprints of 5 Best Research Papers *</h4>
    <div class="row">
@@ -178,7 +212,8 @@ p
                   <p class="update_crerti">Update 5 best papers</p>
                </div>
                <div class="col-md-7">
-                  <input id="full_5_paper" name="userfile7" type="file" class="form-control input-md">
+                  <!-- <input id="full_5_paper" name="userfile7" type="file" class="form-control input-md"> -->
+                  <?php renderFileInputField('userfile7', 'Research_Paper.pdf', $uploadsDir, $fileFieldsMapping); ?>
                </div>
             </div>
          </div>
@@ -194,7 +229,8 @@ p
             <div class="panel-heading">PHD Certificate <a href="#" class="btn-sm btn-info" onclick="viewUploadedFile('phd')">View Uploaded File </a></div>
             <div class="panel-body">
                <p class="update_crerti">Update PHD Certificate</p>
-               <input id="phd" name="userfile" type="file" class="form-control input-md">
+               <!-- <input id="phd" name="userfile" type="file" class="form-control input-md"> -->
+               <?php renderFileInputField('userfile', 'PHD_Certificate.pdf', $uploadsDir, $fileFieldsMapping); ?>
             </div>
          </div>
       </div>
@@ -205,7 +241,8 @@ p
         <div class="panel-heading">PG Documents <a href="javascript:void(0);" class="btn-sm btn-info" onclick="viewUploadedFile('post_gr', 'post_gr-preview')">View Uploaded File</a></div>
         <div class="panel-body">
             <p class="update_crerti">Update All semester/year-Marksheets and degree certificate</p>
-            <input id="post_gr" name="userfile1" type="file" class="form-control input-md">
+            <!-- <input id="post_gr" name="userfile1" type="file" class="form-control input-md"> -->
+            <?php renderFileInputField('userfile1', 'PG_Certificate.pdf', $uploadsDir, $fileFieldsMapping); ?>
         </div>
     </div>
 </div>
@@ -216,7 +253,8 @@ p
         <div class="panel-heading">UG Documents <a href="#" class="btn-sm btn-info" onclick="viewUploadedFile('under_gr')">View Uploaded File</a></div>
         <div class="panel-body">
             <p class="update_crerti">Update All semester/year-Marksheets and degree certificate</p>
-            <input id="under_gr" name="userfile2" type="file" class="form-control input-md">
+            <!-- <input id="under_gr" name="userfile2" type="file" class="form-control input-md"> -->
+            <?php renderFileInputField('userfile2', 'UG_Certificate.pdf', $uploadsDir, $fileFieldsMapping); ?>
         </div>
     </div>
 </div>
@@ -227,7 +265,8 @@ p
         <div class="panel-heading">12th/HSC/Diploma Documents <a href="#" class="btn-sm btn-info" onclick="viewUploadedFile('higher_sec')">View Uploaded File</a></div>
         <div class="panel-body">
             <p class="update_crerti">Update 12th/HSC/Diploma/Marksheet(s) and passing certificate</p>
-            <input id="higher_sec" name="userfile3" type="file" class="form-control input-md">
+            <!-- <input id="higher_sec" name="userfile3" type="file" class="form-control input-md"> -->
+            <?php renderFileInputField('userfile3', '12th_HSC_Diploma.pdf', $uploadsDir, $fileFieldsMapping); ?>
         </div>
     </div>
 </div>
@@ -237,8 +276,9 @@ p
     <div class="panel panel-info">
         <div class="panel-heading">10th/SSC Documents <a href="#" class="btn-sm btn-info" onclick="viewUploadedFile('high_school')">View Uploaded File</a></div>
         <div class="panel-body">
-            <p class="update_crerti">Update 12th/HSC/Diploma/Marksheet(s) and passing certificate</p>
-            <input id="high_school" name="userfile4" type="file" class="form-control input-md">
+            <p class="update_crerti">Update 10th/SSC/Marksheet(s) and passing certificate</p>
+            <!-- <input id="high_school" name="userfile4" type="file" class="form-control input-md"> -->
+            <?php renderFileInputField('userfile4', '10th_SSC_Certificate.pdf', $uploadsDir, $fileFieldsMapping); ?>
         </div>
     </div>
 </div>
@@ -249,7 +289,8 @@ p
         <div class="panel-heading">Pay Slip <a href="#" class="btn-sm btn-info" onclick="viewUploadedFile('pay_slip')">View Uploaded File</a></div>
         <div class="panel-body">
             <p class="update_crerti">Update Pay Slip</p>
-            <input id="pay_slip" name="userfile9" type="file" class="form-control input-md">
+            <!-- <input id="pay_slip" name="userfile9" type="file" class="form-control input-md"> -->
+            <?php renderFileInputField('userfile9', 'Payslip.pdf', $uploadsDir, $fileFieldsMapping); ?>
         </div>
     </div>
 </div>
@@ -260,7 +301,8 @@ p
         <div class="panel-heading">NOC or Undertaking <a href="#" class="btn-sm btn-info" onclick="viewUploadedFile('noc_under')">View Uploaded File</a></div>
         <div class="panel-body">
             <p class="update_crerti">Undertaking-in case, NOC is not available at the time of application but will be provided at the time of the interview</p>
-            <input id="noc_under" name="userfile10" type="file" class="form-control input-md">
+            <!-- <input id="noc_under" name="userfile10" type="file" class="form-control input-md"> -->
+            <?php renderFileInputField('userfile10', 'NOC.pdf', $uploadsDir, $fileFieldsMapping); ?>
         </div>
     </div>
 </div>
@@ -271,7 +313,8 @@ p
         <div class="panel-heading">Post phd Experience Certificate/All Experience Certificates/ Last Pay slip/ <a href="#" class="btn-sm btn-info" onclick="viewUploadedFile('post_phd_10')">View Uploaded File</a></div>
         <div class="panel-body">
             <p class="update_crerti">Update Certificate</p>
-            <input id="post_phd_10" name="userfile8" type="file" class="form-control input-md">
+            <!-- <input id="post_phd_10" name="userfile8" type="file" class="form-control input-md"> -->
+            <?php renderFileInputField('userfile8', '10_Year_Post_PHD_Experience_Certificate.pdf', $uploadsDir, $fileFieldsMapping); ?>
         </div>
     </div>
 </div>
@@ -285,7 +328,8 @@ p
                 <p class="update_crerti">Upload any other document</p>
             </div>
             <div class="col-md-7">
-                <input id="misc_certi" name="userfile6" type="file" class="form-control input-md">
+                <!-- <input id="misc_certi" name="userfile6" type="file" class="form-control input-md"> -->
+                <?php renderFileInputField('userfile6', 'Any_Other_Document.pdf', $uploadsDir, $fileFieldsMapping); ?>
             </div>
         </div>
     </div>
@@ -297,7 +341,8 @@ p
         <div class="panel panel-danger">
             <div class="panel-heading">Upload your Signature in JPG only<a href="#" class="btn-sm btn-info" onclick="viewUploadedFile('signature')">View Uploaded File</a></div>
             <div class="panel-body">
-                <input id="signature" name="userfile5" type="file" class="form-control input-md">
+                <!-- <input id="signature" name="userfile5" type="file" class="form-control input-md"> -->
+                <?php renderFileInputField('userfile5', 'Signature.*', $uploadsDir, $fileFieldsMapping); ?>
             </div>
             <p class="upload_crerti"></p>
         </div>
@@ -327,6 +372,46 @@ p
                    <th class="col-md-2"> E-mail </th>
                    <th class="col-md-2"> Contact No.</th>
                  </tr>
+                 <?php
+                 $referees = array(); // Initialize as empty arrays
+                 $sql = "SELECT refrees FROM faculty_details WHERE email = ?";
+                 $stmt = $conn->prepare($sql);
+                 $stmt->bind_param("s", $_SESSION['email']);
+                 $stmt->execute();
+                 $stmt->bind_result($referees_json);
+                 $stmt->fetch();
+                 $stmt->close();
+                 
+                 $referees = json_decode($referees_json, true);
+                        // Assuming $referees is an array containing referee details retrieved from the database
+                        if (!empty($referees)) {
+                            foreach ($referees as $index => $referee) {
+                        ?>
+                                <tr height="60px">
+                                    <td class="col-md-2">
+                                        <input id="name<?= $index + 1 ?>" name="name[]" type="text" placeholder="Name" class="form-control input-md" autofocus="" value="<?= $referee['name'] ?? '' ?>">
+                                    </td>
+                                    <td class="col-md-3">
+                                        <input id="position<?= $index + 1 ?>" name="position[]" type="text" placeholder="Position" class="form-control input-md" autofocus="" value="<?= $referee['position'] ?? '' ?>">
+                                    </td>
+                                    <td class="col-md-3">
+                                        <input id="association<?= $index + 1 ?>" name="association[]" type="text" placeholder="Association with Referee" class="form-control input-md" autofocus="" value="<?= $referee['association'] ?? '' ?>">
+                                    </td>
+                                    <td class="col-md-3">
+                                        <input id="institution<?= $index + 1 ?>" name="institution[]" type="text" placeholder="Institution/Organization" class="form-control input-md" autofocus="" value="<?= $referee['institution'] ?? '' ?>">
+                                    </td>
+                                    <td class="col-md-2">
+                                        <input id="email<?= $index + 1 ?>" name="email[]" type="text" placeholder="E-mail" class="form-control input-md" autofocus="" value="<?= $referee['email'] ?? '' ?>">
+                                    </td>
+                                    <td class="col-md-2">
+                                        <input id="contact<?= $index + 1 ?>" name="contact[]" type="text" placeholder="Contact No." class="form-control input-md" autofocus="" value="<?= $referee['contact'] ?? '' ?>">
+                                        <button type="button" class="btn btn-light btn-sm" style="background-color: white; color: lightgray; font-size: 22px;" onclick="removeRow(this)">x</button>
+                                    </td>
+                                </tr>
+                        <?php
+                            }
+                        }
+                        ?>
                </tbody>
              </table>
 

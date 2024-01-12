@@ -1,6 +1,7 @@
 <?php
 // retrieve.php
 include '../config.php';
+include '../check_session.php';
 session_start(); // Start the session
 
 // Get the email from the session

@@ -4,30 +4,48 @@ session_start();
 
 // Assuming $_SESSION['email'] contains the email of the faculty member
 $email = $_SESSION['email'];
+
 // Use a prepared statement to avoid SQL injection
-$query = "SELECT * FROM faculty_details WHERE email = ?";
-$stmt = $conn->prepare($query);
+$updateQuery = "UPDATE faculty_details SET submitted = '2' WHERE email = ?";
+$stmtUpdate = $conn->prepare($updateQuery);
+$stmtUpdate->bind_param("s", $email);
 
-if ($stmt) {
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    
-    // Get the result
-    $result = $stmt->get_result();
+if ($stmtUpdate->execute()) {
+    // Query executed successfully
 
-    // Fetch data as an associative array
-    $facultyDetails = $result->fetch_assoc();
+    // Now, let's fetch the faculty details
+    $selectQuery = "SELECT * FROM faculty_details WHERE email = ?";
+    $stmtSelect = $conn->prepare($selectQuery);
 
-    // Close the statement
-    $stmt->close();
+    if ($stmtSelect) {
+        $stmtSelect->bind_param("s", $email);
+        $stmtSelect->execute();
+
+        // Get the result
+        $result = $stmtSelect->get_result();
+
+        // Fetch data as an associative array
+        $facultyDetails = $result->fetch_assoc();
+
+        // Close the statement
+        $stmtSelect->close();
+        
+        // Now you can use $facultyDetails as needed
+        header('Location: ../finalpdf.php');
+        exit();
+    } else {
+        // Handle the case where the statement preparation failed
+        echo "Error in prepared statement: " . $conn->error;
+    }
 } else {
-    // Handle the case where the statement preparation failed
-    echo "Error in prepared statement: " . $conn->error;
+    // Query failed
+    echo 'Error updating submitted status: ' . $stmtUpdate->error;
 }
 
-// Close the database connection
+$stmtUpdate->close();
 $conn->close();
 ?>
+
 <!-- saved from url=(0076)https://ofa.iiti.ac.in/facrec_che_2023_july_02/finalpage/preview_application -->
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title></title>
@@ -180,7 +198,7 @@ $conn->close();
 	
 	<div class="receipt">
 		<div class="receipt_center">
-		<img src="IITIndorelogo.png" style="height: 85px; float: left;">
+		<img src="IITIndorelogo.jpg" style="height: 85px; float: left;">
 		<p style="text-align: center; font-size: 1.7em;">Indian Institute of Technology Patna</p>
 		<p style="text-align: center; margin-top: 10px; background-color: #175395; line-height: 25px; color: #FFF; font-weight: bold;">Application for the Faculty Position</p>
 		</div>

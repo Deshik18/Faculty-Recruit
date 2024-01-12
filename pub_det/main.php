@@ -2,6 +2,7 @@
 <?php
 session_start();
 include '../config.php';
+include '../check_session.php';
 
 $sum_pub = $best_pub = $book = $chapter = $patent = array(); // Initialize as empty arrays
 $scholar_link;
@@ -376,13 +377,13 @@ function updateSerialNumbers() {
                                     <input name="title[]" type="text" class="form-control input-md" value="<?= $publication['title'] ?? '' ?>">
                                 </td>
                                 <td class="col-md-2">
-                                    <input name="journal_conference[]" type="text" class="form-control input-md" value="<?= $publication['journal_conference'] ?? '' ?>">
+                                    <input name="journal[]" type="text" class="form-control input-md" value="<?= $publication['journal'] ?? '' ?>">
                                 </td>
                                 <td class="col-md-1">
-                                    <input name="year_vol_page[]" type="text" class="form-control input-md" value="<?= $publication['year_vol_page'] ?? '' ?>">
+                                    <input name="year[]" type="text" class="form-control input-md" value="<?= $publication['year'] ?? '' ?>">
                                 </td>
                                 <td class="col-md-1">
-                                    <input name="impact_factor[]" type="text" class="form-control input-md" value="<?= $publication['impact_factor'] ?? '' ?>">
+                                    <input name="impact[]" type="text" class="form-control input-md" value="<?= $publication['impact'] ?? '' ?>">
                                 </td>
                                 <td class="col-md-1">
                                     <input name="doi[]" type="text" class="form-control input-md" value="<?= $publication['doi'] ?? '' ?>">
@@ -430,7 +431,7 @@ function updateSerialNumbers() {
                         foreach ($patent as $index => $qualification) {
                     ?>
                             <tr height="60px">
-                            <td class="col-md-1"><?php echo $index; ?></td>
+                            <td class="col-md-1"><?php echo $index + 1; ?></td>
                                 <td class="col-md-1">
                                     <input id="pauthor<?= $index + 1 ?>" name="pauthor[]" type="text" placeholder="Inventor" class="form-control input-md" autofocus="" value="<?= $qualification['inventor'] ?? '' ?>">
                                 </td>

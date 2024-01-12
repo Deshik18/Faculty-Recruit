@@ -9,7 +9,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $uploads_dir = '../' . $_SESSION['adv_num'] . '/' . $selected_department . '/' . $name_email_cat . '/';
     if (!is_dir($uploads_dir)) {
         mkdir($uploads_dir, 0777, true);
-    }    
+    }
+
     $file_fields = [
         'userfile7' => 'Research_Paper.pdf',
         'userfile'  => 'PHD_Certificate.pdf',
@@ -26,42 +27,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ];
 
     foreach ($file_fields as $field => $newFileName) {
+        $file_type = strtolower(pathinfo($_FILES[$field]['name'], PATHINFO_EXTENSION));
+        $file_path = $uploads_dir . $newFileName; // Use the mapped file name
+
         if ($_FILES[$field]['error'] == 0) {
-            $file_type = strtolower(pathinfo($_FILES[$field]['name'], PATHINFO_EXTENSION));
-            $file_path = $uploads_dir . $newFileName; // Use the mapped file name
-            $sql = "UPDATE faculty_details SET refrees = ? WHERE email = ?";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ss", $jsonFileInfo, $email);
             if (move_uploaded_file($_FILES[$field]['tmp_name'], $file_path)) {
-                
-            }else {
-            die('Error uploading ' . $field . ' file.');
+                // File uploaded successfully
+            } else {
+                die('Error uploading ' . $field . ' file.');
             }
         }
     }
+
+    // Rest of your code for processing other form fields
+    // ...
+
     $ref = array();
-    if(isset($_POST['referee_name'])){
+    if (isset($_POST['referee_name'])) {
         for ($i = 0; $i < count($_POST['referee_name']); $i++) {
             $qemp = array(
-            'name' => $_POST['referee_name'][$i],
-            'position' => $_POST['referee_position'][$i],
-            'association' => $_POST['referee_association'][$i],
-            'institution' => $_POST['referee_institution'][$i],
-            'email' => $_POST['referee_email'][$i],
-            'contact'=> $_POST['referee_contact'][$i],
+                'name' => $_POST['referee_name'][$i],
+                'position' => $_POST['referee_position'][$i],
+                'association' => $_POST['referee_association'][$i],
+                'institution' => $_POST['referee_institution'][$i],
+                'email' => $_POST['referee_email'][$i],
+                'contact' => $_POST['referee_contact'][$i],
             );
             $ref[] = $qemp;
         }
     }
     $ref_json = json_encode($ref);
-    $update = "UPDATE faculty_details set refrees = ? WHERE email = ? ";
+    $v1 = 1;
+    $update = "UPDATE faculty_details set refrees = ?, submitted=? WHERE email = ? ";
     $stmt = $conn->prepare($update);
-    $stmt->bind_param("ss", $ref_json, $_SESSION['email']);
+    $stmt->bind_param("ssi", $ref_json, $v1, $_SESSION['email']);
     if ($stmt->execute()) {
         header("Location: ../fin_sub/main.php");
         exit();
     } else {
         echo 'Some Error Occurred: ' . $stmt->error;
     }
-}   
+}
 ?>

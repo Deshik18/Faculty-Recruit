@@ -1,6 +1,7 @@
 
 <?php
 include '../config.php';
+include '../check_session.php';
 session_start();
 
 // Retrieve PhD Thesis Supervision data

@@ -2,6 +2,7 @@
 <?php
 session_start(); // Start the session (make sure this is at the top of your PHP file)
 include '../config.php';
+include '../check_session.php';
 
 $phd_details = $pg_det = $ug_det = $sch_details = array(); // Initialize as empty arrays
 $additional_qualifications = array();
