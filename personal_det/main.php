@@ -308,34 +308,39 @@ $contact_det = json_decode($contact_det, true);
                         <span class="col-md-2 control-label" for="id_card_file">Upload ID Proof</span>
                         <div class="col-md-4">
                             <?php
-                             if (isset($_SESSION['adv_num']) && isset($_SESSION['dept']) && isset($_SESSION['fname']) && isset($_SESSION['lname'])) {
-                              $adv_num = $_SESSION['adv_num'];
-                              $selected_department = $_SESSION['dept']; // Corrected department access
-                              $fname = $_SESSION['fname'];
-                              $lname = $_SESSION['lname']; // Corrected typo in variable name
-                              $name_email_cat = strtoupper($fname . '_' . $lname . '_' . $_SESSION['email'] . '_' . $_SESSION['cast']);
-                              $photo_upload_dir = '../' . $adv_num . '/' . $selected_department . '/' . $name_email_cat . '/';
-                              $id_proof_file_path = $photo_upload_dir . 'IDproof.*';
+                            if (isset($_SESSION['adv_num']) && isset($_SESSION['dept']) && isset($_SESSION['fname']) && isset($_SESSION['lname'])) {
+                                $adv_num = $_SESSION['adv_num'];
+                                $selected_department = $_SESSION['dept'];
+                                $fname = $_SESSION['fname'];
+                                $lname = $_SESSION['lname'];
+                                $name_email_cat = strtoupper($fname . '_' . $lname . '_' . $_SESSION['email'] . '_' . $_SESSION['cast']);
+                                $photo_upload_dir = '../' . $adv_num . '/' . $selected_department . '/' . $name_email_cat . '/';
+                                $id_proof_file_path = $photo_upload_dir . 'IDproof.*';
 
-                            // Check if the ID proof file exists
-                            $id_proof_files = glob($id_proof_file_path);
-                            if (!empty($id_proof_files)) {
-                                $id_proof_file = $id_proof_files[0]; // Assuming there is only one ID proof file
-                                ?>
+                                // Check if the ID proof file exists
+                                $id_proof_files = glob($id_proof_file_path);
+                                if (!empty($id_proof_files)) {
+                                    $id_proof_file = $id_proof_files[0]; // Assuming there is only one ID proof file
+                                    ?>
 
-                                <!-- Display existing ID proof with a link to view it -->
-                                <a href="<?php echo $id_proof_file; ?>" target="_blank">View ID Proof</a>
+                                    <!-- Display existing ID proof with a link to view it -->
+                                    <a href="<?php echo $id_proof_file; ?>" target="_blank">View ID Proof</a>
 
-                                <!-- Display the file name (optional) -->
-                                <?php echo pathinfo($id_proof_file)['basename']; ?>
+                                    <!-- Display the file name -->
+                                    <?php echo pathinfo($id_proof_file)['basename']; ?>
 
-                                <!-- Set the value of the input field to the existing ID proof name -->
-                                <input id="id_card_file" name="userfile2" type="file" class="form-control input-md" value="<?php echo pathinfo($id_proof_file)['basename']; ?>" required="" readonly="readonly">
-                            <?php } }else { ?>
-                                <!-- Allow the user to upload a new ID proof if not already uploaded -->
+                                    <!-- Set the value of the input field to the existing ID proof name -->
+                                    <input id="id_card_file" name="userfile2" type="file" class="form-control input-md" value="<?php echo pathinfo($id_proof_file)['basename']; ?>" required="">
+                                <?php } else { ?>
+                                    <!-- Allow the user to upload a new ID proof if not already uploaded -->
+                                    <input id="id_card_file" name="userfile2" type="file" class="form-control input-md" required="">
+                                <?php }
+                            } else{ ?>
                                 <input id="id_card_file" name="userfile2" type="file" class="form-control input-md" required="">
                             <?php } ?>
                         </div>
+
+
 
                                 </div>
 
