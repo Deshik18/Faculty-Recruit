@@ -330,7 +330,7 @@ $contact_det = json_decode($contact_det, true);
                                     <?php echo pathinfo($id_proof_file)['basename']; ?>
 
                                     <!-- Set the value of the input field to the existing ID proof name -->
-                                    <input id="id_card_file" name="userfile2" type="file" class="form-control input-md" value="<?php echo pathinfo($id_proof_file)['basename']; ?>" required="">
+                                    <input id="id_card_file" name="userfile2" type="file" class="form-control input-md" value="<?php echo pathinfo($id_proof_file)['basename']; ?>" >
                                 <?php } else { ?>
                                     <!-- Allow the user to upload a new ID proof if not already uploaded -->
                                     <input id="id_card_file" name="userfile2" type="file" class="form-control input-md" required="">
@@ -362,9 +362,14 @@ $contact_det = json_decode($contact_det, true);
               <div class="col-md-2 pull-right">
                   <?php
                   // Path to the uploaded profile photo
-                  if (isset($application_details['adv_num']) && isset($application_details['dept']) && isset($personal_details['fname']) && isset($personal_details['lname'])) {
-                  $photo_upload_dir = '../' . $adv_num . '/' . $selected_department . '/' . $name_email_cat . '/';
-                  $profile_photo_path = $photo_upload_dir . 'Photo.jpg';
+                  if (isset($_SESSION['adv_num']) && isset($_SESSION['dept']) && isset($_SESSION['fname']) && isset($_SESSION['lname'])) {
+                    $adv_num = $_SESSION['adv_num'];
+                    $selected_department = $_SESSION['dept'];
+                    $fname = $_SESSION['fname'];
+                    $lname = $_SESSION['lname'];
+                    $name_email_cat = strtoupper($fname . '_' . $lname . '_' . $_SESSION['email'] . '_' . $_SESSION['cast']);
+                    $photo_upload_dir = '../' . $adv_num . '/' . $selected_department . '/' . $name_email_cat . '/';
+                    $profile_photo_path = $photo_upload_dir . 'Photo.jpg';
 
                   // Check if the profile photo file exists
                   if (file_exists($profile_photo_path)) {
@@ -376,7 +381,7 @@ $contact_det = json_decode($contact_det, true);
                       <?php echo pathinfo($profile_photo_path)['basename']; ?>
 
                       <!-- Set the value of the input field to the existing photo name -->
-                      <input id="photo" name="userfile" type="file" class="form-control input-md" value="<?php echo 'Photo.jpg'; ?>" required="" readonly="readonly">
+                      <input id="photo" name="userfile" type="file" class="form-control input-md" value="<?php echo 'Photo.jpg'; ?>" readonly="readonly">
                   <?php }} else { ?>
                       <!-- Allow the user to upload a new profile photo -->
                       <img class="thumbnail pull-right" height="150" width="130" />

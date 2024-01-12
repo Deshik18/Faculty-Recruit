@@ -2,7 +2,6 @@
 // retrieve.php
 include '../config.php';
 include '../check_session.php';
-session_start(); // Start the session
 
 // Get the email from the session
 $sessionEmail = $_SESSION['email'];
@@ -76,6 +75,68 @@ $conn->close();
             border: 3px solid #73AD21;  
         }
     </style>
+    <script src="https://cdn.tiny.cloud/1/sff91z3m43jbjf600o1wyrzz0utxilczyt6pjpnlzolmh5ae/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
+    <!-- Place the following <script> and <textarea> tags your HTML's <body> -->
+    <script>
+    tinymce.init({
+        selector: 'textarea',
+        plugins: 'ai tinycomments mentions anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker autocorrect a11ychecker typography inlinecss',
+        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | align lineheight | tinycomments | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+        tinycomments_mode: 'embedded',
+        tinycomments_author: 'Author name',
+        mergetags_list: [
+        { value: 'First.Name', title: 'First Name' },
+        { value: 'Email', title: 'Email' },
+        ],
+        ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
+    });
+    </script>
+
+
+    <script>
+        tinymce.init({
+            selector: 'textarea[name=research_statement]',
+            plugins: 'advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount',
+            toolbar: 'undo redo | formatselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | link image | charmap | print preview | media | code',
+            menubar: true
+        });
+
+        tinymce.init({
+            selector: 'textarea[name=teaching_statement]',
+            plugins: 'advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount',
+            toolbar: 'undo redo | formatselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | link image | charmap | print preview | media | code',
+            menubar: true
+        });
+
+        tinymce.init({
+            selector: 'textarea[name=rel_in]',
+            plugins: 'advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount',
+            toolbar: 'undo redo | formatselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | link image | charmap | print preview | media | code',
+            menubar: true
+        });
+
+        tinymce.init({
+            selector: 'textarea[name=prof_serv]',
+            plugins: 'advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount',
+            toolbar: 'undo redo | formatselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | link image | charmap | print preview | media | code',
+            menubar: true
+        });
+
+        tinymce.init({
+            selector: 'textarea[name=jour_details]',
+            plugins: 'advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount',
+            toolbar: 'undo redo | formatselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | link image | charmap | print preview | media | code',
+            menubar: true
+        });
+
+        tinymce.init({
+            selector: 'textarea[name=conf_details]',
+            plugins: 'advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount',
+            toolbar: 'undo redo | formatselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | link image | charmap | print preview | media | code',
+            menubar: true
+        });
+    </script>
 </head>
 
 <body>
@@ -125,12 +186,9 @@ $conn->close();
 
                         <div class="col-md-12">
                             <div class="panel panel-success">
-                                <div class="panel-heading">14. Significant research contribution and future plans *<small class="pull-right">(not more than 500 words)</small> <br><small>(Please provide a Research Statement describing your research plans and one or two specific research projects to be conducted at IIT Patna in 2-3 years time frame)</small></div>
+                                <div class="panel-heading">14. Significant research contribution and future plans *<small class="pull-right">(not more than 500 words)</small> <br><small>(Please provide a Research Statement describing your research plans and one or two specific research projects to be conducted at IIT Patna in a 2-3 years time frame)</small></div>
                                 <div class="panel-body">
                                     <textarea style="height: 150px;" placeholder="Significant research contribution and future plans" class="form-control input-md" name="research_statement" maxlength="3500"><?php echo empty($researchStatement) ? '' : $researchStatement; ?></textarea>
-                                    <script>
-                                        CKEDITOR.replace('research_statement');
-                                    </script>
                                 </div>
                             </div>
                         </div>
@@ -140,9 +198,6 @@ $conn->close();
                                 <div class="panel-heading">15. Significant teaching contribution and future plans * <small>(Please list UG/PG courses that you would like to develop and/or teach at IIT Patna)</small> <small class="pull-right"> (not more than 500 words)</small></div>
                                 <div class="panel-body">
                                     <textarea style="height: 150px;" placeholder="Significant teaching contribution and future plans" class="form-control input-md" name="teaching_statement"><?php echo empty($teachingStatement) ? '' : $teachingStatement; ?></textarea>
-                                    <script>
-                                        CKEDITOR.replace('teaching_statement');
-                                    </script>
                                 </div>
                             </div>
                         </div>
@@ -153,9 +208,6 @@ $conn->close();
                             <div class="panel-heading">16. Any other relevant information. <small class="pull-right">(not more than 500 words)</small></div>
                             <div class="panel-body">
                                 <textarea style="height: 150px;" placeholder="Any other relevant information" class="form-control input-md" name="rel_in"><?php echo empty($relInfo) ? '' : $relInfo; ?></textarea>
-                                <script>
-                                    CKEDITOR.replace('rel_in');
-                                </script>
                             </div>
                         </div>
                     </div>
@@ -166,9 +218,6 @@ $conn->close();
                             <div class="panel-heading">17. Professional Service : Editorship/Reviewership <small class="pull-right">(not more than 500 words)</small></div>
                             <div class="panel-body">
                                 <textarea style="height: 150px;" placeholder="Professional Service : Editorship/Reviewership" class="form-control input-md" name="prof_serv"><?php echo empty($profService) ? '' : $profService; ?></textarea>
-                                <script>
-                                    CKEDITOR.replace('prof_serv');
-                                </script>
                             </div>
                         </div>
                     </div>
@@ -179,9 +228,6 @@ $conn->close();
                             <div class="panel-heading">18. Detailed List of Journal Publications <br>(Including Sr. No., Author's Names, Paper Title, Volume, Issue, Year, Page Nos., Impact Factor (if any), DOI, Status[Published/Accepted] )</div>
                             <div class="panel-body">
                                 <textarea style="height: 150px;" placeholder="Detailed List of Journal Publications" class="form-control input-md" name="jour_details"><?php echo empty($journalPublications) ? '' : $journalPublications; ?></textarea>
-                                <script>
-                                    CKEDITOR.replace('jour_details');
-                                </script>
                             </div>
                         </div>
                     </div>
@@ -192,9 +238,6 @@ $conn->close();
                             <div class="panel-heading">19. Detailed List of Conference Publications<br>(Including Sr. No., Author's Names, Paper Title, Name of the conference, Year, Page Nos., DOI [If any] )</div>
                             <div class="panel-body">
                                 <textarea style="height: 150px;" placeholder="Detailed List of Conference Publications" class="form-control input-md" name="conf_details"><?php echo empty($conferencePublications) ? '' : $conferencePublications; ?></textarea>
-                                <script>
-                                    CKEDITOR.replace('conf_details');
-                                </script>
                             </div>
                         </div>
                     </div>
