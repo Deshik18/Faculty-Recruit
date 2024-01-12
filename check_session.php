@@ -43,5 +43,4 @@ if ($stmt) {
     echo "Error in prepared statement: " . $conn->error;
 }
 
-$conn->close();
 ?>

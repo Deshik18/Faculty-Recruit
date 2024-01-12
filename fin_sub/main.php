@@ -1,5 +1,8 @@
 
-
+<?php
+include '../config.php';
+include '../check_session.php';
+?>
 <!-- saved from url=(0063)https://ofa.iiti.ac.in/facrec_che_2023_july_02/payment_complete -->
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>Final Submission</title>
@@ -134,7 +137,7 @@ p
                  <legend>
                   <div class="row">
                     <div class="col-md-10">
-                        <h4>Welcome : <font color="#025198"><strong>Marisol&nbsp;Mosciski</strong></font></h4>
+                    <h4>Welcome: <font color="#025198"><strong><?php echo $_SESSION['first_name'] . ' ' . $_SESSION['last_name']; ?></strong></font></h4>
                     </div>
                     <div class="col-md-2">
                       <a href="../fac_login/main.html" class="btn btn-sm btn-success  pull-right">Logout</a>
@@ -147,7 +150,7 @@ p
 
 <!-- publication file upload           -->
 
-<form class="form-horizontal" action="../finalpdf.php" method="post" enctype="multipart/form-data">
+<form class="form-horizontal" action="../fac_recruit/finalpdf.php" method="post" enctype="multipart/form-data">
 
 
 <!-- Payment file upload           -->

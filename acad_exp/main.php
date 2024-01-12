@@ -2,7 +2,6 @@
 <?php
 include '../config.php';
 include '../check_session.php';
-session_start();
 
 // Retrieve PhD Thesis Supervision data
 $phdQuery = "SELECT phd_thesis FROM faculty_details WHERE email = ?";

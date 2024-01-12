@@ -1,4 +1,5 @@
 <?php
+ob_start(); // Start output buffering
 // Include your database connection or use any database connection method you prefer.
 include('../config.php'); // Change to your actual database connection file
 
@@ -39,7 +40,7 @@ if (isset($_SESSION['email'])) {
                 header('Location: ../fin_sub/main.php');
                 exit();
             } else if($submitted == 2){
-                header('Location: ../finapdf.php');
+                header('Location: ../finalpdf.php');
             }else {
                 // If not submitted, redirect to personal_det/main.php
                 header('Location: ../personal_det/main.php');
@@ -54,4 +55,5 @@ if (isset($_SESSION['email'])) {
 } else {
     echo 'Error 3';
 }
+ob_end_flush(); 
 ?>

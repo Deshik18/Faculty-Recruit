@@ -29,10 +29,6 @@ if ($stmtUpdate->execute()) {
 
         // Close the statement
         $stmtSelect->close();
-        
-        // Now you can use $facultyDetails as needed
-        header('Location: ../finalpdf.php');
-        exit();
     } else {
         // Handle the case where the statement preparation failed
         echo "Error in prepared statement: " . $conn->error;
@@ -756,7 +752,7 @@ $additional_qualifications = json_decode($facultyDetails['additional_qualificati
 		<br>
 
 
-		<<span class="label">6. List of 10 Best Research Publications (Journal/Conference)</span>
+		<span class="label">6. List of 10 Best Research Publications (Journal/Conference)</span>
 <table class="tab">
     <tbody>
         <tr style="background-color:#f1f1f1;">

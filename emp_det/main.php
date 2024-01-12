@@ -2,7 +2,6 @@
 
 <?php
 // Start the session (if you haven't already)
-session_start();
 include '../config.php';
 include '../check_session.php';
 

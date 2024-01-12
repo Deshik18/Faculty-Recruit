@@ -1,6 +1,5 @@
 <!-- Add this PHP code at the top of your HTML page -->
-<?php
-session_start(); // Start the session (make sure this is at the top of your PHP file)
+<?php // Start the session (make sure this is at the top of your PHP file)
 include '../config.php';
 include '../check_session.php';
 $application_details = $personal_details = $cadd_det = $contact_det = array();
