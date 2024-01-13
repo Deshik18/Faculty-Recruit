@@ -2,6 +2,41 @@
 include 'config.php';
 session_start();
 
+if (!isset($_SESSION['adv_num']) || !isset($_SESSION['dept']) || !isset($_SESSION['fname']) || !isset($_SESSION['lname'])) {
+
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    // Get the email from the session
+    $sessionEmail = $_SESSION['email'];
+
+    // Fetch values from the database
+    $sql = "SELECT application_details, per_det FROM faculty_details WHERE email = ?";
+    $stmt = $conn->prepare($sql);
+
+    if ($stmt) {
+        $stmt->bind_param("s", $sessionEmail);
+        $stmt->execute();
+        $stmt->bind_result($applicationDetails, $perDetails);
+
+        if ($stmt->fetch()) {
+            $detailsArray = json_decode($applicationDetails, true);
+
+            // Update session variables
+            $_SESSION['adv_num'] = $detailsArray['adv_num'];
+            $_SESSION['dept'] = $detailsArray['dept'];
+
+            $perDetailsArray = json_decode($perDetails, true);
+
+            $_SESSION['fname'] = $perDetailsArray['fname'];
+            $_SESSION['lname'] = $perDetailsArray['lname'];
+        }
+
+        $stmt->close();
+    }
+}
+
 // Assuming $_SESSION['email'] contains the email of the faculty member
 $email = $_SESSION['email'];
 

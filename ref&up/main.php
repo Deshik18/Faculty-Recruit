@@ -211,8 +211,8 @@ p
                   <p class="update_crerti">Update 5 best papers</p>
                </div>
                <div class="col-md-7">
-                  <!-- <input id="full_5_paper" name="userfile7" type="file" class="form-control input-md"> -->
-                  <?php renderFileInputField('userfile7', 'Research_Paper.pdf', $uploadsDir, $fileFieldsMapping); ?>
+                  <input id="full_5_paper" name="userfile7" type="file" class="form-control input-md">
+                  <?php // renderFileInputField('userfile7', 'Research_Paper.pdf', $uploadsDir, $fileFieldsMapping); ?>
                </div>
             </div>
          </div>
@@ -228,8 +228,8 @@ p
             <div class="panel-heading">PHD Certificate <a href="#" class="btn-sm btn-info" onclick="viewUploadedFile('phd')">View Uploaded File </a></div>
             <div class="panel-body">
                <p class="update_crerti">Update PHD Certificate</p>
-               <!-- <input id="phd" name="userfile" type="file" class="form-control input-md"> -->
-               <?php renderFileInputField('userfile', 'PHD_Certificate.pdf', $uploadsDir, $fileFieldsMapping); ?>
+               <input id="phd" name="userfile" type="file" class="form-control input-md">
+               <?php //renderFileInputField('userfile', 'PHD_Certificate.pdf', $uploadsDir, $fileFieldsMapping); ?>
             </div>
          </div>
       </div>
@@ -240,8 +240,8 @@ p
         <div class="panel-heading">PG Documents <a href="javascript:void(0);" class="btn-sm btn-info" onclick="viewUploadedFile('post_gr', 'post_gr-preview')">View Uploaded File</a></div>
         <div class="panel-body">
             <p class="update_crerti">Update All semester/year-Marksheets and degree certificate</p>
-            <!-- <input id="post_gr" name="userfile1" type="file" class="form-control input-md"> -->
-            <?php renderFileInputField('userfile1', 'PG_Certificate.pdf', $uploadsDir, $fileFieldsMapping); ?>
+            <input id="post_gr" name="userfile1" type="file" class="form-control input-md">
+            <?php //renderFileInputField('userfile1', 'PG_Certificate.pdf', $uploadsDir, $fileFieldsMapping); ?>
         </div>
     </div>
 </div>
@@ -252,8 +252,8 @@ p
         <div class="panel-heading">UG Documents <a href="#" class="btn-sm btn-info" onclick="viewUploadedFile('under_gr')">View Uploaded File</a></div>
         <div class="panel-body">
             <p class="update_crerti">Update All semester/year-Marksheets and degree certificate</p>
-            <!-- <input id="under_gr" name="userfile2" type="file" class="form-control input-md"> -->
-            <?php renderFileInputField('userfile2', 'UG_Certificate.pdf', $uploadsDir, $fileFieldsMapping); ?>
+            <input id="under_gr" name="userfile2" type="file" class="form-control input-md">
+            <?php // renderFileInputField('userfile2', 'UG_Certificate.pdf', $uploadsDir, $fileFieldsMapping); ?>
         </div>
     </div>
 </div>
@@ -264,8 +264,8 @@ p
         <div class="panel-heading">12th/HSC/Diploma Documents <a href="#" class="btn-sm btn-info" onclick="viewUploadedFile('higher_sec')">View Uploaded File</a></div>
         <div class="panel-body">
             <p class="update_crerti">Update 12th/HSC/Diploma/Marksheet(s) and passing certificate</p>
-            <!-- <input id="higher_sec" name="userfile3" type="file" class="form-control input-md"> -->
-            <?php renderFileInputField('userfile3', '12th_HSC_Diploma.pdf', $uploadsDir, $fileFieldsMapping); ?>
+            <input id="higher_sec" name="userfile3" type="file" class="form-control input-md">
+            <?php // renderFileInputField('userfile3', '12th_HSC_Diploma.pdf', $uploadsDir, $fileFieldsMapping); ?>
         </div>
     </div>
 </div>
@@ -276,8 +276,8 @@ p
         <div class="panel-heading">10th/SSC Documents <a href="#" class="btn-sm btn-info" onclick="viewUploadedFile('high_school')">View Uploaded File</a></div>
         <div class="panel-body">
             <p class="update_crerti">Update 10th/SSC/Marksheet(s) and passing certificate</p>
-            <!-- <input id="high_school" name="userfile4" type="file" class="form-control input-md"> -->
-            <?php renderFileInputField('userfile4', '10th_SSC_Certificate.pdf', $uploadsDir, $fileFieldsMapping); ?>
+            <input id="high_school" name="userfile4" type="file" class="form-control input-md">
+            <?php //renderFileInputField('userfile4', '10th_SSC_Certificate.pdf', $uploadsDir, $fileFieldsMapping); ?>
         </div>
     </div>
 </div>
@@ -288,8 +288,8 @@ p
         <div class="panel-heading">Pay Slip <a href="#" class="btn-sm btn-info" onclick="viewUploadedFile('pay_slip')">View Uploaded File</a></div>
         <div class="panel-body">
             <p class="update_crerti">Update Pay Slip</p>
-            <!-- <input id="pay_slip" name="userfile9" type="file" class="form-control input-md"> -->
-            <?php renderFileInputField('userfile9', 'Payslip.pdf', $uploadsDir, $fileFieldsMapping); ?>
+            <input id="pay_slip" name="userfile9" type="file" class="form-control input-md">
+            <?php //renderFileInputField('userfile9', 'Payslip.pdf', $uploadsDir, $fileFieldsMapping); ?>
         </div>
     </div>
 </div>
@@ -300,8 +300,8 @@ p
         <div class="panel-heading">NOC or Undertaking <a href="#" class="btn-sm btn-info" onclick="viewUploadedFile('noc_under')">View Uploaded File</a></div>
         <div class="panel-body">
             <p class="update_crerti">Undertaking-in case, NOC is not available at the time of application but will be provided at the time of the interview</p>
-            <!-- <input id="noc_under" name="userfile10" type="file" class="form-control input-md"> -->
-            <?php renderFileInputField('userfile10', 'NOC.pdf', $uploadsDir, $fileFieldsMapping); ?>
+            <input id="noc_under" name="userfile10" type="file" class="form-control input-md">
+            <?php //renderFileInputField('userfile10', 'NOC.pdf', $uploadsDir, $fileFieldsMapping); ?>
         </div>
     </div>
 </div>
@@ -312,8 +312,8 @@ p
         <div class="panel-heading">Post phd Experience Certificate/All Experience Certificates/ Last Pay slip/ <a href="#" class="btn-sm btn-info" onclick="viewUploadedFile('post_phd_10')">View Uploaded File</a></div>
         <div class="panel-body">
             <p class="update_crerti">Update Certificate</p>
-            <!-- <input id="post_phd_10" name="userfile8" type="file" class="form-control input-md"> -->
-            <?php renderFileInputField('userfile8', '10_Year_Post_PHD_Experience_Certificate.pdf', $uploadsDir, $fileFieldsMapping); ?>
+            <input id="post_phd_10" name="userfile8" type="file" class="form-control input-md">
+            <?php //renderFileInputField('userfile8', '10_Year_Post_PHD_Experience_Certificate.pdf', $uploadsDir, $fileFieldsMapping); ?>
         </div>
     </div>
 </div>
@@ -327,8 +327,8 @@ p
                 <p class="update_crerti">Upload any other document</p>
             </div>
             <div class="col-md-7">
-                <!-- <input id="misc_certi" name="userfile6" type="file" class="form-control input-md"> -->
-                <?php renderFileInputField('userfile6', 'Any_Other_Document.pdf', $uploadsDir, $fileFieldsMapping); ?>
+                <input id="misc_certi" name="userfile6" type="file" class="form-control input-md">
+                <?php //renderFileInputField('userfile6', 'Any_Other_Document.pdf', $uploadsDir, $fileFieldsMapping); ?>
             </div>
         </div>
     </div>
@@ -340,8 +340,8 @@ p
         <div class="panel panel-danger">
             <div class="panel-heading">Upload your Signature in JPG only<a href="#" class="btn-sm btn-info" onclick="viewUploadedFile('signature')">View Uploaded File</a></div>
             <div class="panel-body">
-                <!-- <input id="signature" name="userfile5" type="file" class="form-control input-md"> -->
-                <?php renderFileInputField('userfile5', 'Signature.*', $uploadsDir, $fileFieldsMapping); ?>
+                <input id="signature" name="userfile5" type="file" class="form-control input-md">
+                <?php //renderFileInputField('userfile5', 'Signature.*', $uploadsDir, $fileFieldsMapping); ?>
             </div>
             <p class="upload_crerti"></p>
         </div>

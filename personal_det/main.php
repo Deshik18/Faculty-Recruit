@@ -2,21 +2,21 @@
 <?php // Start the session (make sure this is at the top of your PHP file)
 include '../config.php';
 include '../check_session.php';
-$application_details = $personal_details = $cadd_det = $contact_det = array();
+$application_details = $personal_details = $cadd_det = $padd_det = $contact_det = array();
 $sql = "SELECT application_details, per_det, cadd_det, padd_det, contact_det FROM faculty_details WHERE email = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $_SESSION['email']);
 $stmt->execute();
-$stmt->bind_result($app_details, $per_det, $cadd_det, $padd_det, $contact_det);
+$stmt->bind_result($app_details, $per_det, $c_det, $p_det, $cont_det);
 $stmt->fetch();
 $stmt->close();
 
 // Decode JSON data
 $application_details = json_decode($app_details, true);
 $personal_details = json_decode($per_det, true);
-$cadd_det = json_decode($cadd_det, true);
-$padd_det = json_decode($padd_det, true);
-$contact_det = json_decode($contact_det, true);
+$cadd_det = json_decode($c_det, true);
+$padd_det = json_decode($p_det, true);
+$contact_det = json_decode($cont_det, true);
 ?>
 <!-- saved from url=(0059)https://ofa.iiti.ac.in/facrec_che_2023_july_02/facultypanel -->
 <!DOCTYPE html>
@@ -308,11 +308,11 @@ $contact_det = json_decode($contact_det, true);
                         <span class="col-md-2 control-label" for="id_card_file">Upload ID Proof</span>
                         <div class="col-md-4">
                             <?php
-                            if (isset($_SESSION['adv_num']) && isset($_SESSION['dept']) && isset($_SESSION['fname']) && isset($_SESSION['lname'])) {
-                                $adv_num = $_SESSION['adv_num'];
-                                $selected_department = $_SESSION['dept'];
-                                $fname = $_SESSION['fname'];
-                                $lname = $_SESSION['lname'];
+                            if (isset($application_details['adv_num']) && isset($application_details['dept']) && isset($personal_details['fname']) && isset($personal_details['lname'])) {
+                                $adv_num = $application_details['adv_num'];
+                                $selected_department = $application_details['dept'];
+                                $fname = $personal_details['fname'];
+                                $lname = $personal_details['lname'];
                                 $name_email_cat = strtoupper($fname . '_' . $lname . '_' . $_SESSION['email'] . '_' . $_SESSION['cast']);
                                 $photo_upload_dir = '../' . $adv_num . '/' . $selected_department . '/' . $name_email_cat . '/';
                                 $id_proof_file_path = $photo_upload_dir . 'IDproof.*';
@@ -362,26 +362,31 @@ $contact_det = json_decode($contact_det, true);
               <div class="col-md-2 pull-right">
                   <?php
                   // Path to the uploaded profile photo
-                  if (isset($_SESSION['adv_num']) && isset($_SESSION['dept']) && isset($_SESSION['fname']) && isset($_SESSION['lname'])) {
-                    $adv_num = $_SESSION['adv_num'];
-                    $selected_department = $_SESSION['dept'];
-                    $fname = $_SESSION['fname'];
-                    $lname = $_SESSION['lname'];
+                  if (isset($application_details['adv_num']) && isset($application_details['dept']) && isset($personal_details['fname']) && isset($personal_details['lname'])) {
+                    $adv_num = $application_details['adv_num'];
+                    $selected_department = $application_details['dept'];
+                    $fname = $personal_details['fname'];
+                    $lname = $personal_details['lname'];
                     $name_email_cat = strtoupper($fname . '_' . $lname . '_' . $_SESSION['email'] . '_' . $_SESSION['cast']);
                     $photo_upload_dir = '../' . $adv_num . '/' . $selected_department . '/' . $name_email_cat . '/';
                     $profile_photo_path = $photo_upload_dir . 'Photo.jpg';
 
-                  // Check if the profile photo file exists
-                  if (file_exists($profile_photo_path)) {
+                    // Check if the profile photo file exists
+                    if (file_exists($profile_photo_path)) {
                       ?>
-                      <!-- Display existing profile photo with a link to view it -->
-                      <a href="<?php echo $profile_photo_path; ?>" target="_blank">View Profile Photo</a>
+                      <!-- Display the profile photo with height, width, and class -->
+                      <img src="<?php echo $profile_photo_path; ?>" alt="Profile Photo" height="150" width="130" class="thumbnail pull-right">
 
                       <!-- Display the file name (optional) -->
-                      <?php echo pathinfo($profile_photo_path)['basename']; ?>
+                      <?php // echo pathinfo($profile_photo_path)['basename']; ?>
 
                       <!-- Set the value of the input field to the existing photo name -->
                       <input id="photo" name="userfile" type="file" class="form-control input-md" value="<?php echo 'Photo.jpg'; ?>" readonly="readonly">
+
+                  <?php }else{ ?>
+                      <img class="thumbnail pull-right" height="150" width="130" />
+                      <input id="photo" name="userfile" type="file" class="form-control input-md" required="">
+                      <strong>Please upload your recent photo <font color="red">( <1 MB) in JPG | JPEG format</font> only.</strong>
                   <?php }} else { ?>
                       <!-- Allow the user to upload a new profile photo -->
                       <img class="thumbnail pull-right" height="150" width="130" />

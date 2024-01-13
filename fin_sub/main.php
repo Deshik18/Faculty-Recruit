@@ -1,8 +1,45 @@
 
 <?php
-include '../config.php';
-include '../check_session.php';
+session_start(); // Start the session
+
+if (!isset($_SESSION['adv_num']) || !isset($_SESSION['dept']) || !isset($_SESSION['fname']) || !isset($_SESSION['lname'])) {
+    // Check if the database connection is successful
+    include '../config.php';
+
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    // Get the email from the session
+    $sessionEmail = $_SESSION['email'];
+
+    // Fetch values from the database
+    $sql = "SELECT application_details, per_det FROM faculty_details WHERE email = ?";
+    $stmt = $conn->prepare($sql);
+
+    if ($stmt) {
+        $stmt->bind_param("s", $sessionEmail);
+        $stmt->execute();
+        $stmt->bind_result($applicationDetails, $perDetails);
+
+        if ($stmt->fetch()) {
+            $detailsArray = json_decode($applicationDetails, true);
+
+            // Update session variables
+            $_SESSION['adv_num'] = $detailsArray['adv_num'];
+            $_SESSION['dept'] = $detailsArray['dept'];
+
+            $perDetailsArray = json_decode($perDetails, true);
+
+            $_SESSION['fname'] = $perDetailsArray['fname'];
+            $_SESSION['lname'] = $perDetailsArray['lname'];
+        }
+
+        $stmt->close();
+    }
+}
 ?>
+
 <!-- saved from url=(0063)https://ofa.iiti.ac.in/facrec_che_2023_july_02/payment_complete -->
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>Final Submission</title>
@@ -150,7 +187,7 @@ p
 
 <!-- publication file upload           -->
 
-<form class="form-horizontal" action="../fac_recruit/finalpdf.php" method="post" enctype="multipart/form-data">
+<form class="form-horizontal" action="../finalpdf.php" method="post" enctype="multipart/form-data">
 
 
 <!-- Payment file upload           -->

@@ -5,13 +5,21 @@ session_start(); // Start the session
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Validate and sanitize the input data
-    $researchStatement = filter_input(INPUT_POST, 'research_statement', FILTER_SANITIZE_STRING);
-    $teachingStatement = filter_input(INPUT_POST, 'teaching_statement', FILTER_SANITIZE_STRING);
-    $relInfo = filter_input(INPUT_POST, 'rel_in', FILTER_SANITIZE_STRING);
-    $profService = filter_input(INPUT_POST, 'prof_serv', FILTER_SANITIZE_STRING);
-    $journalPublications = filter_input(INPUT_POST, 'jour_details', FILTER_SANITIZE_STRING);
-    $conferencePublications = filter_input(INPUT_POST, 'conf_details', FILTER_SANITIZE_STRING);
-    
+    $researchStatement = $_POST['research_statement']; // No need to filter as we want to store HTML content
+    $teachingStatement = $_POST['teaching_statement']; // No need to filter as we want to store HTML content
+    $relInfo = $_POST['rel_in']; // No need to filter as we want to store HTML content
+    $profService = $_POST['prof_serv']; // No need to filter as we want to store HTML content
+    $journalPublications = $_POST['jour_details']; // No need to filter as we want to store HTML content
+    $conferencePublications = $_POST['conf_details']; // No need to filter as we want to store HTML content
+
+    // Escape and sanitize the HTML content
+    $escapedResearchStatement = mysqli_real_escape_string($conn, $researchStatement);
+    $escapedTeachingStatement = mysqli_real_escape_string($conn, $teachingStatement);
+    $escapedRelInfo = mysqli_real_escape_string($conn, $relInfo);
+    $escapedProfService = mysqli_real_escape_string($conn, $profService);
+    $escapedJournalPublications = mysqli_real_escape_string($conn, $journalPublications);
+    $escapedConferencePublications = mysqli_real_escape_string($conn, $conferencePublications);
+
     // Get the email from the session
     $sessionEmail = $_SESSION['email'];
 
@@ -36,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Bind parameters and execute the statement
-    $stmt->bind_param("sssssss", $researchStatement, $teachingStatement, $relInfo, $profService, $journalPublications, $conferencePublications, $sessionEmail);
+    $stmt->bind_param("sssssss", $escapedResearchStatement, $escapedTeachingStatement, $escapedRelInfo, $escapedProfService, $escapedJournalPublications, $escapedConferencePublications, $sessionEmail);
 
     if ($stmt->execute()) {
         header("Location: ../ref&up/main.php");

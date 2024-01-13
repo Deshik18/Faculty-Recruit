@@ -106,6 +106,10 @@ if ($stmt->execute()) {
     $photo_file_type = strtolower(pathinfo($_FILES['userfile']['name'], PATHINFO_EXTENSION)); // Get the file type from the uploaded file
     $photo_file = $photo_upload_dir . 'Photo.jpg'; // Define $photo_file here
 
+    if (!empty($_FILES['userfile']['name']) && file_exists($photo_file)) {
+        unlink($photo_file);
+    }
+
     if (!empty($_FILES['userfile']['name'])) {
         if (getimagesize($_FILES['userfile']['tmp_name']) === false) {
             die('Invalid file. Please upload a valid image.');
@@ -129,6 +133,10 @@ if ($stmt->execute()) {
     }
 
     $id_proof_file = $id_proof_upload_dir . 'IDproof.' . $photo_file_type;
+
+    if (!empty($_FILES['userfile2']['name']) && file_exists($id_proof_file)) {
+        unlink($id_proof_file);
+    }
 
     if (!empty($_FILES['userfile2']['name'])) {
         if (move_uploaded_file($_FILES['userfile2']['tmp_name'], $id_proof_file)) {
