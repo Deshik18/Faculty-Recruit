@@ -146,7 +146,8 @@ $contact_det = json_decode($cont_det, true);
               <h4>Welcome: <font color="#025198"><strong><?php echo $_SESSION['first_name'] . ' ' . $_SESSION['last_name']; ?></strong></font></h4>
                 </div>
                 <div class="col-md-3">
-                    <a href="localhost/fac_recruit/personal_det/main.html#" class="btn btn-sm btn-info pull-right" onclick="get_username_from_session()" data-target="#passModal" data-toggle="modal">Change Password</a>
+                    <!-- <a href="localhost/fac_recruit/personal_det/main.php#" class="btn btn-sm btn-info pull-right" onclick="get_username_from_session()" data-target="#passModal" data-toggle="modal">Change Password</a> -->
+                    <a href="../fac_forgotpwd/main2.html" class="btn btn-sm btn-info pull-right">Change Password</a>
                 </div>
             
                 <div class="col-md-1">
