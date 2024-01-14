@@ -39,10 +39,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <title>Error</title>
+    <title>Faculty Login | IIT Patna</title>
+	<link rel="stylesheet" type="text/css" href="../favicon.ico" type="image/x-icon">
+	<link rel="icon" href="../favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="../bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="../bootstrap-datepicker.css">
+	<script type="text/javascript" src="../jquery.js"></script>
+	<script type="text/javascript" src="../bootstrap.js"></script>
+	<script type="text/javascript" src="../bootstrap-datepicker.js"></script>
+
+	<link href="../files/css" rel="stylesheet"> 
+	<link href="../files/css(1)" rel="stylesheet"> 
+	<link href="../files/css(2)" rel="stylesheet"> 
+	<link href="../files/css(3)" rel="stylesheet"> 
+	<link href="../files/css(4)" rel="stylesheet"> 
+	<link rel="preconnect" href="https://fonts.gstatic.com/">
+	<link href="../files/css2" rel="stylesheet">
     <style type="text/css">
         body {
             background-color: lightgray;

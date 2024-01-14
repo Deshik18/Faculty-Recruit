@@ -87,25 +87,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration</title>
-    <!-- Add your CSS styles or include Bootstrap here -->
-    <link rel="stylesheet" href="path/to/bootstrap.css">
+    <title>Faculty Register | IIT Patna</title>
+	<link rel="stylesheet" type="text/css" href="../favicon.ico" type="image/x-icon">
+	<link rel="icon" href="../favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="../bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="../bootstrap-datepicker.css">
+	<script type="text/javascript" src="../jquery.js"></script>
+	<script type="text/javascript" src="../bootstrap.js"></script>
+	<script type="text/javascript" src="../bootstrap-datepicker.js"></script>
+
+	<link href="../files/css" rel="stylesheet"> 
+	<link href="../files/css(1)" rel="stylesheet"> 
+	<link href="../files/css(2)" rel="stylesheet"> 
+	<link href="../files/css(3)" rel="stylesheet"> 
+	<link href="../files/css(4)" rel="stylesheet"> 
+	<link rel="preconnect" href="https://fonts.gstatic.com/">
+	<link href="../files/css2" rel="stylesheet">
     <style>
-        body {
-            background-color: lightgray;
-            padding-top: 0px !important;
-        }
-
-        .container {
-            margin-top: 20px;
-            max-width: 500px;
-        }
-
-        .alert {
-            margin-bottom: 15px;
-        }
 
         .alert-success {
             color: #155724;
