@@ -548,7 +548,7 @@ $additional_qualifications = json_decode($facultyDetails['additional_qualificati
 
 	<span class="label">3. Employment Details </span>
     <?php
-    $pres_emp_det = json_decode($facultyDetails['pres_emp_det'], true) ?? [];
+    $pres_emp_det = json_decode($facultyDetails['pre_emp_det'], true) ?? [];
     $emp_hist = json_decode($facultyDetails['his_det'], true) ?? [];
     $te_exp = json_decode($facultyDetails['teach_exp'], true) ?? [];
     $r_exp = json_decode($facultyDetails['r_det'], true) ?? [];

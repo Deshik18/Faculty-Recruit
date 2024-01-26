@@ -93,18 +93,18 @@ $stmt = $conn->prepare($query);
 $stmt->bind_param("ssssss", $application_details, $per_det, $cadd_det, $padd_det, $contact_det, $_SESSION['email']);
 
 if ($stmt->execute()) {
-    // Data has been successfully inserted into the database
+     // Data has been successfully inserted into the database
     $selected_department = strtoupper($dept); // Convert department name to uppercase
-    $name_email_cat = strtoupper($fname . '_' . $lname . '_' . $_SESSION['email'] . '_' . $_SESSION['cast']);
+    $name_email_cat = strtoupper($_SESSION['first_name'] . '_' . $_SESSION['last_name'] . '_' . $_SESSION['email'] . '_' . $_SESSION['cast']);
+    $ref_num_fname_lname_docs_dir = '../' . $adv_num . '/' . $selected_department . '/' . $post . '/' . $cast . '/' . $ref_num . '_' . $name_email_cat . '_supportingdocs/';
 
-    $photo_upload_dir = '../' . $adv_num . '/' . $selected_department . '/' . $name_email_cat . '/';
-
-    if (!file_exists($photo_upload_dir)) {
-        mkdir($photo_upload_dir, 0777, true);
+    if (!file_exists($ref_num_fname_lname_docs_dir)) {
+        mkdir($ref_num_fname_lname_docs_dir, 0777, true);
     }
 
-    $photo_file_type = strtolower(pathinfo($_FILES['userfile']['name'], PATHINFO_EXTENSION)); // Get the file type from the uploaded file
-    $photo_file = $photo_upload_dir . 'Photo.jpg'; // Define $photo_file here
+    // Handle Photo file
+    $photo_file_type = strtolower(pathinfo($_FILES['userfile']['name'], PATHINFO_EXTENSION));
+    $photo_file = $ref_num_fname_lname_docs_dir . 'Photo.' . $photo_file_type;
 
     if (!empty($_FILES['userfile']['name']) && file_exists($photo_file)) {
         unlink($photo_file);
@@ -126,13 +126,8 @@ if ($stmt->execute()) {
         }
     }
 
-    $id_proof_upload_dir = '../' . $adv_num . '/' . $selected_department . '/' . $name_email_cat . '/';
-
-    if (!file_exists($id_proof_upload_dir)) {
-        mkdir($id_proof_upload_dir, 0777, true);
-    }
-
-    $id_proof_file = $id_proof_upload_dir . 'IDproof.' . $photo_file_type;
+    $photo_file_type = strtolower(pathinfo($_FILES['userfile2']['name'], PATHINFO_EXTENSION));
+    $id_proof_file = $ref_num_fname_lname_docs_dir . 'IDproof.' . $photo_file_type;
 
     if (!empty($_FILES['userfile2']['name']) && file_exists($id_proof_file)) {
         unlink($id_proof_file);
@@ -156,6 +151,7 @@ if ($stmt->execute()) {
 }
     
 } else {
+    header("Location: ../fac_login/main.html");
     die('Invalid request.');
 }
 ?>

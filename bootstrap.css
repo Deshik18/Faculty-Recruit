@@ -598,10 +598,10 @@ th {
   content: "\e104";
 }
 .glyphicon-eye-open:before {
-  content: "\e105";
+  content: "\1F441";
 }
 .glyphicon-eye-close:before {
-  content: "\e106";
+  content: "\1F440";
 }
 .glyphicon-warning-sign:before {
   content: "\e107";

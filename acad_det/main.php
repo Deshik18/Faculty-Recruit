@@ -55,10 +55,6 @@ $additional_qualifications = json_decode($additional_qualifications_json, true);
 	<div class="container">
         <div class="row" style="margin-bottom:10px; ">
         	<div class="col-md-8 col-md-offset-2">
-
-        		<!--  <img src="https://ofa.iiti.ac.in/facrec_che_2023_july_02/images/IITIndorelogo.png" alt="logo1" class="img-responsive" style="padding-top: 5px; height: 120px; float: left;">
-
-        		<h3 style="text-align:center;color:#414002!important;font-weight: bold;font-size: 2.3em; margin-top: 3px; font-family: 'Noto Sans', sans-serif;">भारतीय प्रौद्योगिकी संस्थान इंदौर</h3> -->
     			<h3 style="text-align:center;color: #414002!important;font-weight: bold;font-family: 'Oswald', sans-serif!important;font-size: 2.2em; margin-top: 0px;">Indian Institute of Technology Patna</h3>
     			
 
@@ -75,73 +71,103 @@ $additional_qualifications = json_decode($additional_qualifications_json, true);
 
 <script type="text/javascript">
 var tr="";
-var counter_acde=4;
-  $(document).ready(function(){
-    $("#add_more_acde").click(function(){
+var counter_acde = 4;
+
+$(document).ready(function () {
+    $("#add_more_acde").click(function () {
         create_tr();
-        create_input('add_degree[]', 'Degree','add_degree'+counter_acde, 'acde', counter_acde, 'acde');
-        create_input('add_college[]', 'College', 'add_college'+counter_acde,'acde', counter_acde, 'acde');
-        create_input('add_stream[]', 'Subjects', 'add_stream'+counter_acde,'acde', counter_acde, 'acde');
-        create_input('add_yoj[]', 'Year Of Joining', 'add_yoj'+counter_acde,'acde', counter_acde, 'acde');
-        create_input('add_yog[]', 'Year Of Graduation','add_yog'+counter_acde, 'acde', counter_acde, 'acde');
-        create_input('add_duration[]', 'Duration','add_duration'+counter_acde, 'acde', counter_acde, 'acde');
-        create_input('add_percentage[]', 'Percentage','add_percentage'+counter_acde, 'acde', counter_acde, 'acde');
-        create_input('add_division[]', 'Rank', 'add_division'+counter_acde,'acde', counter_acde,'acde',true);
+        create_input('add_degree[]', 'Degree', 'add_degree' + counter_acde, 'acde', counter_acde, 'acde');
+        create_input('add_college[]', 'College', 'add_college' + counter_acde, 'acde', counter_acde, 'acde');
+        create_input('add_stream[]', 'Subjects', 'add_stream' + counter_acde, 'acde', counter_acde, 'acde');
+        create_input('add_yoj[]', 'Year Of Joining', 'add_yoj' + counter_acde, 'acde', counter_acde, 'acde', false, true, 80, true);
+        create_input('add_yog[]', 'Year Of Graduation', 'add_yog' + counter_acde, 'acde', counter_acde, 'acde', false, true, 80, true);
+        create_input('add_duration[]', 'Duration', 'add_duration' + counter_acde, 'acde', counter_acde, 'acde', false, false, 80, true);
+        create_input('add_percentage[]', 'Percentage', 'add_percentage' + counter_acde, 'acde', counter_acde, 'acde');
+        create_input('add_division[]', 'Rank', 'add_division' + counter_acde, 'acde', counter_acde, 'acde', true);
         counter_acde++;
         return false;
     });
-    
-  });
 
-  function create_tr()
-  {
-    tr=document.createElement("tr");
-  }
-  function for_date_picker(obj)
-  {
+});
+
+function create_tr() {
+    tr = document.createElement("tr");
+}
+
+function for_date_picker(obj) {
     obj.setAttribute("data-provide", "datepicker");
     obj.className += " datepicker";
     return obj;
+}
 
-  }
-  function create_input(t_name, place_value, id, tbody_id, counter, remove_name, btn=false, datepicker_set=false, length=80)
-  {
-    var input=document.createElement("input");
-    input.setAttribute("type", "text");
+function calculateDur(rowNumber) {
+    var yoj = document.getElementById('add_yoj' + rowNumber).value;
+    var yog = document.getElementById('add_yog' + rowNumber).value;
+    if (yoj && yog) {
+        var diff_years = parseInt(yog) - parseInt(yoj);
+        document.getElementById('add_duration' + rowNumber).value = diff_years + " Years";
+    } else {
+        document.getElementById('add_duration' + rowNumber).value = "";
+    }
+}
+
+function create_input(t_name, place_value, id, tbody_id, counter, remove_name, btn = false, dropdown = false, length = 80, calculate_duration = false) {
+  var input;
+    if (dropdown) {
+        input = document.createElement("select");
+        var currentYear = new Date().getFullYear();
+        for (var i = currentYear; i >= 1950; i--) {
+            var option = document.createElement("option");
+            option.value = i;
+            option.text = i;
+            input.appendChild(option);
+        }
+    } else {
+        input = document.createElement("input");
+        input.setAttribute("type", "text");
+    }
+
     input.setAttribute("name", t_name);
     input.setAttribute("id", id);
     input.setAttribute("placeholder", place_value);
     input.setAttribute("class", "form-control input-md");
     input.setAttribute("required", "");
-    if(datepicker_set==true)
-    {
-      input=for_date_picker(input);
+    if (calculate_duration) {
+        input.addEventListener("change", function () {
+            calculateDur(counter);
+        });
     }
-    var td=document.createElement("td");
+    var td = document.createElement("td");
     td.appendChild(input);
-    if(btn==true)
-    {
-      // alert();
-      var but=document.createElement("button");
-      but.setAttribute("class", "close");
-      but.setAttribute("onclick", "remove_row('"+remove_name+"','"+counter+"')");
-      but.innerHTML="<span style='color:red; font-weight:bold;'>x</span>";
-      td.appendChild(but);
+    if (btn == true) {
+        var but = document.createElement("button");
+        but.setAttribute("class", "close");
+        but.setAttribute("onclick", "remove_row('" + remove_name + "','" + counter + "')");
+        but.innerHTML = "<span style='color:red; font-weight:bold;'>x</span>";
+        td.appendChild(but);
     }
-    tr.setAttribute("id", "row"+counter);
+    tr.setAttribute("id", "row" + counter);
     tr.appendChild(td);
     document.getElementById(tbody_id).appendChild(tr);
-    $('.datepicker').datepicker({
-        format: 'dd/mm/yyyy',
-        autoclose: true
-    });
-  } 
-  function remove_row(remove_name, n)
-  {
-    var tab=document.getElementById(remove_name);
-    var tr=document.getElementById("row"+n);
+}
+
+function remove_row(remove_name, n) {
+    var tab = document.getElementById(remove_name);
+    var tr = document.getElementById("row" + n);
     tab.removeChild(tr);
-  }
+}
+
+    function calculateDuration(type) {
+        var yoj = document.getElementById(type + "_yoj").value;
+        var yog = document.getElementById(type + "_yog").value;
+
+        if (yoj && yog) {
+            var diff_years = parseInt(yog) - parseInt(yoj);
+            document.getElementById(type + "_duration").value = diff_years + " Years";
+        } else {
+            document.getElementById(type + "_duration").value = "";
+        }
+    }
 </script>
 
 <script type="text/javascript">
@@ -272,7 +298,7 @@ hr{
     <div class="col-md-12">
         <div class="panel panel-success">
             <div class="panel-heading">(B) Academic Details - M. Tech./ M.E./ PG Details</div>
-            <div class="panel-body">
+              <div class="panel-body">
                 <span class="col-md-2 control-label" for="pg_degree">Degree/Certificate</span>
                 <div class="col-md-4">
                     <input id="pg_degree" value="<?php echo (is_array($pg_det) && array_key_exists('degree', $pg_det)) ? $pg_det['degree'] : ''; ?>" name="pg_degree" type="text" placeholder="Degree/Certificate" class="form-control input-md" autofocus="">
@@ -290,36 +316,36 @@ hr{
 
                 <span class="col-md-2 control-label" for="pg_yoj">Year of Joining</span>
                 <div class="col-md-4">
-                    <input id="pg_yoj" value="<?php echo (is_array($pg_det) && array_key_exists('yoj', $pg_det)) ? $pg_det['yoj'] : ''; ?>" name="pg_yoj" type="text" placeholder="Year of Joining" class="form-control input-md">
+                    <input id="pg_yoj" onchange="calculateDuration('pg')" value="<?php echo (is_array($pg_det) && array_key_exists('yoj', $pg_det)) ? $pg_det['yoj'] : ''; ?>" name="pg_yoj" type="text" placeholder="Year of Joining" class="form-control input-md">
                 </div>
 
                 <div class="row">
                     <div class="col-md-12">
                         <span class="col-md-2 control-label" for="pg_yog">Year of Completion</span>
                         <div class="col-md-4">
-                            <input id="pg_yog" value="<?php echo (is_array($pg_det) && array_key_exists('yog', $pg_det)) ? $pg_det['yog'] : ''; ?>" name="pg_yog" type="text" placeholder="Year of Completion" class="form-control input-md">
+                            <input id="pg_yog" onchange="calculateDuration('pg')" value="<?php echo (is_array($pg_det) && array_key_exists('yog', $pg_det)) ? $pg_det['yog'] : ''; ?>" name="pg_yog" type="text" placeholder="Year of Completion" class="form-control input-md">
                         </div>
 
                         <span class="col-md-2 control-label" for="pg_duration">Duration (in years)</span>
                         <div class="col-md-4">
-                            <input id="pg_duration" value="<?php echo (is_array($pg_det) && array_key_exists('duration', $pg_det)) ? $pg_det['duration'] : ''; ?>" name="pg_duration" type="text" placeholder="Duration" class="form-control input-md">
-                        </div>
-
-                        <span class="col-md-2 control-label" for="pg_perce">Percentage/ CGPA</span>
-                        <div class="col-md-4">
-                            <input id="pg_perce" value="<?php echo (is_array($pg_det) && array_key_exists('percentage', $pg_det)) ? $pg_det['percentage'] : ''; ?>" name="pg_perce" type="text" placeholder="Percentage/ CGPA" class="form-control input-md">
-                        </div>
-
-                        <span class="col-md-2 control-label" for="pg_rank">Division/Class</span>
-                        <div class="col-md-4">
-                            <input id="pg_rank" value="<?php echo (is_array($pg_det) && array_key_exists('rank', $pg_det)) ? $pg_det['rank'] : ''; ?>" name="pg_rank" type="text" placeholder="Division/Class" class="form-control input-md">
+                            <input id="pg_duration" name="pg_duration" type="text" placeholder="Duration" class="form-control input-md" value="<?php echo (is_array($pg_det) && array_key_exists('duration', $pg_det)) ? $pg_det['duration'] : ''; ?>" readonly>
                         </div>
                     </div>
                 </div>
-                <br />
+
+                <span class="col-md-2 control-label" for="pg_perce">Percentage/ CGPA</span>
+                <div class="col-md-4">
+                  <input id="pg_perce" value="<?php echo (is_array($pg_det) && array_key_exists('percentage', $pg_det)) ? $pg_det['percentage'] : ''; ?>" name="pg_perce" type="text" placeholder="Percentage/ CGPA" class="form-control input-md">
+                </div>
+
+                <span class="col-md-2 control-label" for="pg_rank">Division/Class</span>
+                <div class="col-md-4">
+                  <input id="pg_rank" value="<?php echo (is_array($pg_det) && array_key_exists('rank', $pg_det)) ? $pg_det['rank'] : ''; ?>" name="pg_rank" type="text" placeholder="Division/Class" class="form-control input-md">
+                </div>
             </div>
-        </div>
-    </div>
+          <br />
+          </div>
+      </div>
 </div>
 
 <div class="row">
@@ -344,20 +370,22 @@ hr{
 
                 <span class="col-md-2 control-label" for="ug_yoj">Year of Joining</span>
                 <div class="col-md-4">
-                    <input id="ug_yoj" value="<?php echo (is_array($ug_det) && array_key_exists('yoj', $ug_det)) ? $ug_det['yoj'] : ''; ?>" name="ug_yoj" type="text" placeholder="Year of Joining" class="form-control input-md" required="">
+                    <input id="ug_yoj" onchange="calculateDuration('ug')" value="<?php echo (is_array($ug_det) && array_key_exists('yoj', $ug_det)) ? $ug_det['yoj'] : ''; ?>" name="ug_yoj" type="text" placeholder="Year of Joining" class="form-control input-md" required="">
                 </div>
 
                 <div class="row">
                     <div class="col-md-12">
                         <span class="col-md-2 control-label" for="ug_yog">Year of Completion</span>
                         <div class="col-md-4">
-                            <input id="ug_yog" value="<?php echo (is_array($ug_det) && array_key_exists('yog', $ug_det)) ? $ug_det['yog'] : ''; ?>" name="ug_yog" type="text" placeholder="Year of Completion" class="form-control input-md" required="">
+                            <input id="ug_yog" onchange="calculateDuration('ug')" value="<?php echo (is_array($ug_det) && array_key_exists('yog', $ug_det)) ? $ug_det['yog'] : ''; ?>" name="ug_yog" type="text" placeholder="Year of Completion" class="form-control input-md" required="">
                         </div>
 
                         <span class="col-md-2 control-label" for="ug_duration">Duration (in years)</span>
                         <div class="col-md-4">
-                            <input id="ug_duration" value="<?php echo (is_array($ug_det) && array_key_exists('duration', $ug_det)) ? $ug_det['duration'] : ''; ?>" name="ug_duration" type="text" placeholder="Duration" class="form-control input-md" required="">
+                            <input id="ug_duration" name="ug_duration" type="text" placeholder="Duration" class="form-control input-md" value="<?php echo (is_array($ug_det) && array_key_exists('duration', $ug_det)) ? $ug_det['duration'] : ''; ?>" readonly>
                         </div>
+                    </div>
+                </div>
 
                         <span class="col-md-2 control-label" for="ug_perce">Percentage/ CGPA</span>
                         <div class="col-md-4">
@@ -371,8 +399,6 @@ hr{
                     </div>
                 </div>
                 <br />
-            </div>
-        </div>
     </div>
 </div>
 
@@ -422,7 +448,7 @@ hr{
                                 </td>
 
                                 <td class="col-md-2">
-                                    <input id="s_rank<?php echo $i + 1; ?>" name="s_rank[]" type="text" value="<?php echo $s_rank_value; ?>" placeholder="Percentage/Grade" class="form-control input-md" maxlength="5" required="">
+                                    <input id="s_rank<?php echo $i + 1; ?>" name="s_rank[]" type="text" value="<?php echo $s_rank_value; ?>" placeholder="Division/Class" class="form-control input-md" maxlength="10" required="">
                                 </td>
                             </tr>
                         <?php
@@ -449,7 +475,7 @@ hr{
 
                           
                           <td class="col-md-2"> 
-                            <input id="s_rank1" name="s_rank[]" type="text" value="" placeholder="Percentage/Grade" class="form-control input-md" maxlength="5" required="">
+                            <input id="s_rank1" name="s_rank[]" type="text" value="" placeholder="Percentage/Grade" class="form-control input-md" maxlength="10" required="">
                           </td>
 
 
@@ -475,7 +501,7 @@ hr{
 
                           
                           <td class="col-md-2"> 
-                            <input id="s_rank2" name="s_rank[]" type="text" value="" placeholder="Percentage/Grade" class="form-control input-md" maxlength="5" required="">
+                            <input id="s_rank2" name="s_rank[]" type="text" value="" placeholder="Division/Class" class="form-control input-md" maxlength="10" required="">
                           </td>
 
 
@@ -558,18 +584,21 @@ hr{
 
 
 <div class="form-group">
-  
   <div class="col-md-1">
-    <a href="../personal_det/main.php" class="btn btn-primary pull-left"><i class="glyphicon glyphicon-fast-backward"></i></a>
+    <a href="../personal_det/main.php" class="btn btn-primary pull-left">
+      &lt; <!-- HTML entity for the '<' symbol -->
+    </a>
+  </div>
+
+  <div class="col-md-6">
+    <span class="pull-right" style="margin-right: 20px;">Page 2/9</span>
   </div>
 
   <div class="col-md-11">
     <button id="submit" type="submit" name="submit" value="Submit" class="btn btn-success pull-right" style="margin-left: 75%;">SAVE & NEXT</button>
-    
   </div>
-
-    
 </div>
+
           
 </fieldset>
 </form>

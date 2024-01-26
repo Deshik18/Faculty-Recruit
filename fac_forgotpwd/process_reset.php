@@ -13,43 +13,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Validate and sanitize the email address
     $email = $_POST["email"];
 
-    // Generate a random reset token
-    $resetToken = bin2hex(random_bytes(16));
+    // Check if the email exists in the database
+    $checkQuery = "SELECT * FROM faculty_details WHERE email = ?";
+    $stmtCheck = $conn->prepare($checkQuery);
+    $stmtCheck->bind_param("s", $email);
+    $stmtCheck->execute();
+    $result = $stmtCheck->get_result();
 
-    // Update the faculty_details table with the reset token
-    $updateQuery = "UPDATE faculty_details SET reset_token = ? WHERE email = ?";
-    $stmt = $conn->prepare($updateQuery);
-    $stmt->bind_param("ss", $resetToken, $email);
-
-    // Execute the update query
-    if ($stmt->execute()) {
-        // Send the password reset email
-        $mail = new PHPMailer\PHPMailer\PHPMailer();
-        $mail->isSMTP();
-        $mail->SMTPAuth = true;
-        $mail->SMTPSecure = 'tls';
-        $mail->Host = 'smtp.gmail.com';
-        $mail->Port = 587;
-        $mail->Username = 'deshiksingamsetty@gmail.com'; // Your Gmail address
-        $mail->Password = 'akcxgetdhwoqsssd';
-
-        $mail->setFrom('deshiksingamsetty@gmail.com', 'Faculty Recruit');
-        $mail->addAddress($email);
-        $mail->Subject = 'Password Reset Request';
-        $resetLink = 'https://localhost/fac_recruit/fac_forgotpwd/reset.php?token=' . $resetToken;
-        $mail->Body = 'Click the following link to reset your password: ' . $resetLink;
-
-        try {
-            if ($mail->send()) {
-                $message = "An email with instructions to reset your password has been sent to your registered email address.";
-            } else {
-                $message = "Email sending failed. Please try again.";
-            }
-        } catch (Exception $e) {
-            $message = "Email sending failed: " . $e->getMessage();
-        }
+    // If the email is not found in the database
+    if ($result->num_rows == 0) {
+        $message = "Email not found in the database. Please enter a valid registered email address.";
     } else {
-        $message = "Error updating the database. Please try again later.";
+        // Generate a random reset token
+        $resetToken = bin2hex(random_bytes(16));
+
+        // Update the faculty_details table with the reset token
+        $updateQuery = "UPDATE faculty_details SET reset_token = ? WHERE email = ?";
+        $stmt = $conn->prepare($updateQuery);
+        $stmt->bind_param("ss", $resetToken, $email);
+
+        // Execute the update query
+        if ($stmt->execute()) {
+            // Send the password reset email
+            $mail = new PHPMailer\PHPMailer\PHPMailer();
+            // ... (your existing email configuration code)
+
+            try {
+                if ($mail->send()) {
+                    $message = "An email with instructions to reset your password has been sent to your registered email address.";
+                } else {
+                    $message = "Email sending failed. Please try again.";
+                }
+            } catch (Exception $e) {
+                $message = "Email sending failed: " . $e->getMessage();
+            }
+        } else {
+            $message = "Error updating the database. Please try again later.";
+        }
     }
 } else {
     // Handle the case where the form was not submitted

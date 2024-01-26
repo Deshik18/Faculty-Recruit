@@ -580,7 +580,7 @@ function updateSerialNumbers() {
 
 
             <!-- Button -->
-<div class="form-group">
+<!-- <div class="form-group">
 
   <div class="col-md-1">
     <a href="../emp_det/main.php" class="btn btn-primary pull-left"><i class="glyphicon glyphicon-fast-backward"></i></a>
@@ -589,7 +589,22 @@ function updateSerialNumbers() {
 <div class="col-md-11">
   <button id="submit" type="submit" name="submit" value="Submit" class="btn btn-success pull-right">SAVE &amp; NEXT</button>
   
-</div>
+</div> -->
+
+<div class="form-group">
+  <div class="col-md-1">
+    <a href="../emp_det/main.php" class="btn btn-primary pull-left">
+      &lt; <!-- HTML entity for the '<' symbol -->
+    </a>
+  </div>
+
+  <div class="col-md-6">
+    <span class="pull-right" style="margin-right: 20px;">Page 4/9</span>
+  </div>
+
+  <div class="col-md-11">
+    <button id="submit" type="submit" name="submit" value="Submit" class="btn btn-success pull-right" style="margin-left: 75%;">SAVE & NEXT</button>
+  </div>
 
              
             </div>

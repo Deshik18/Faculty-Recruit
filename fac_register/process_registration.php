@@ -29,10 +29,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $errorMsg = 'Email already exists. Please use a different email address.';
         } else {
             // Combine first name, last name, and cast into a JSON object
+            $userCountQuery = "SELECT COUNT(*) as count FROM faculty_details";
+            $userCountResult = mysqli_query($conn, $userCountQuery);
+            $userCount = mysqli_fetch_assoc($userCountResult)['count'];
+
+            // Increment the user count for the new user
+            $newRefNum = $userCount + 1;
+
+            // Format the new ref_num to be a 10-digit number (padded with zeros)
+            $formattedRefNum = str_pad($newRefNum, 10, '0', STR_PAD_LEFT);
+
+            // Combine first name, last name, and cast into a JSON object
             $fn_ln_cast = json_encode(array(
                 'first_name' => $firstname,
                 'last_name' => $lastname,
-                'cast' => $cast
+                'cast' => $cast,
+                'ref_num' => $formattedRefNum
             ));
 
             // Get the current date in the desired format (e.g., DD/MM/YYYY)

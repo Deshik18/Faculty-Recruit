@@ -45,7 +45,6 @@ $stmt->close();
 	<link href="../files/css2" rel="stylesheet">
 
 
-	
 </head>
 <style type="text/css">
 	body { background-color: lightgray; padding-top:0px!important;}
@@ -124,14 +123,61 @@ hr{
             autoclose: true
         });
     });
+
+    document.getElementById('exp').addEventListener('change', function (event) {
+        if (event.target.classList.contains('datepicker') || event.target.name === 'doj[]' || event.target.name === 'dol[]') {
+            var counter = event.target.id.match(/\d+/)[0];
+            updateDuration('doj', 'dol', 'duration', counter);
+        }
+    });
+
+    document.getElementById('t_exp').addEventListener('change', function (event) {
+        if (event.target.classList.contains('datepicker') || event.target.name === 'te_doj[]' || event.target.name === 'te_dol[]') {
+            var counter = event.target.id.match(/\d+/)[0];
+            updateDuration('te_doj', 'te_dol', 'te_duration', counter);
+        }
+    });
+
+    document.getElementById('r_exp').addEventListener('change', function (event) {
+        if (event.target.classList.contains('datepicker') || event.target.name === 'r_exp_doj[]' || event.target.name === 'r_exp_dol[]') {
+            var counter = event.target.id.match(/\d+/)[0];
+            updateDuration('r_exp_doj', 'r_exp_dol', 'r_exp_duration', counter);
+        }
+    });
+
+    document.getElementById('ind_exp').addEventListener('change', function (event) {
+        if (event.target.classList.contains('datepicker') || event.target.name === 'ind_doj[]' || event.target.name === 'ind_dol[]') {
+            var counter = event.target.id.match(/\d+/)[0];
+            updateDuration('ind_doj', 'ind_dol', 'period', counter);
+        }
+    });
+
+    function updateDuration(dojPrefix, dolPrefix, durationPrefix, counter) {
+        var dojValue = document.getElementById(dojPrefix + counter).value;
+        var dolValue = document.getElementById(dolPrefix + counter).value;
+
+        var dojDate = parseDate(dojValue);
+        var dolDate = parseDate(dolValue);
+
+        if (dojDate && dolDate) {
+            var durationInMilliseconds = dolDate - dojDate;
+
+            var years = Math.floor(durationInMilliseconds / (365.25 * 24 * 60 * 60 * 1000));
+            var months = Math.floor((durationInMilliseconds % (365.25 * 24 * 60 * 60 * 1000)) / (30.44 * 24 * 60 * 60 * 1000));
+
+            document.getElementById(durationPrefix + counter).value = years + " years " + months + " months";
+        } else {
+            console.log('Debug: Date values are not valid');
+        }
+    }
 </script>
 
 <script type="text/javascript">
 var tr="";
 var counter_exp=1;
-var counter_t_exp=1;
-var counter_r_exp=1;
-var counter_ind_exp=1;
+var counter_t_exp=2;
+var counter_r_exp=3;
+var counter_ind_exp=4;
 
 
   $(document).ready(function(){
@@ -141,8 +187,8 @@ var counter_ind_exp=1;
         create_serial('exp');
         create_input('position[]', 'Position','position'+counter_exp, 'exp',counter_exp, 'exp');
         create_input('org[]', 'Organization/Institution', 'org'+counter_exp,'exp',counter_exp, 'exp');
-        create_input('doj[]', 'DD/MM/YYYY', 'doj'+counter_exp,'exp',counter_exp, 'exp',  false, false, true);
-        create_input('dol[]', 'DD/MM/YYYY', 'dol'+counter_exp,'exp',counter_exp, 'exp',  false, false, true);
+        create_input('doj[]', 'MM/DD/YYYY', 'doj'+counter_exp,'exp',counter_exp, 'exp',  false, false, true, calc_Dur1 = true);
+        create_input('dol[]', 'MM/DD/YYYY', 'dol'+counter_exp,'exp',counter_exp, 'exp',  false, false, true, calc_Dur1 = true);
         create_input('duration[]', 'Duration','duration'+counter_exp, 'exp',counter_exp,'exp', true);
         counter_exp++;
         return false;
@@ -156,8 +202,8 @@ var counter_ind_exp=1;
         create_input('te_course[]', 'Courses', 'te_course'+counter_t_exp,'t_exp',counter_t_exp, 't_exp');
         create_input('te_ug_pg[]', 'UG/PG', 'te_ug_pg'+counter_t_exp,'t_exp',counter_t_exp, 't_exp');
         create_input('te_no_stu[]', 'No. of Students', 'te_no_stu'+counter_t_exp,'t_exp',counter_t_exp, 't_exp');
-        create_input('te_doj[]', 'DD/MM/YYYY', 'te_doj'+counter_t_exp,'t_exp',counter_t_exp, 't_exp',  false, false, true);
-        create_input('te_dol[]', 'DD/MM/YYYY', 'te_dol'+counter_t_exp,'t_exp',counter_t_exp, 't_exp',  false, false, true);
+        create_input('te_doj[]', 'MM/DD/YYYY', 'te_doj'+counter_t_exp,'t_exp',counter_t_exp, 't_exp',  false, false, true, false, true);
+        create_input('te_dol[]', 'MM/DD/YYYY', 'te_dol'+counter_t_exp,'t_exp',counter_t_exp, 't_exp',  false, false, true, false, true);
         create_input('te_duration[]', 'Duration', 'te_duration'+counter_t_exp,'t_exp',counter_t_exp, 't_exp', true);
         counter_t_exp++;
         return false;
@@ -170,9 +216,9 @@ var counter_ind_exp=1;
         create_input('r_exp_position[]', 'Position','r_exp_position'+counter_r_exp, 'r_exp',counter_r_exp, 'r_exp');
         create_input('r_exp_institute[]', 'Institute', 'r_exp_institute'+counter_r_exp,'r_exp',counter_r_exp, 'r_exp');
         create_input('r_exp_supervisor[]', 'Supervisor', 'r_exp_supervisor'+counter_r_exp,'r_exp',counter_r_exp, 'r_exp');
-        create_input('r_exp_doj[]', 'DD/MM/YYYY', 'r_exp_doj'+counter_r_exp,'r_exp',counter_r_exp, 'r_exp', false, false, true);
-        create_input('r_exp_dol[]', 'DD/MM/YYYY', 'r_exp_dol'+counter_r_exp,'r_exp',counter_r_exp, 'r_exp',  false, false, true);
-        create_input('r_exp_duration[]', 'Duration', 'r_exp_duration'+counter_r_exp,'r_exp',counter_r_exp, 'r_exp', true);
+        create_input('r_exp_doj[]', 'MM/DD/YYYY', 'r_exp_doj'+counter_r_exp,'r_exp',counter_r_exp, 'r_exp', false, false, true, false, false, true);
+        create_input('r_exp_dol[]', 'MM/DD/YYYY', 'r_exp_dol'+counter_r_exp,'r_exp',counter_r_exp, 'r_exp',  false, false, true, false, false, true);
+        create_input('r_exp_duration[]', 'Duration', 'r_exp_duration'+counter_r_exp,'r_exp',counter_r_exp, 'r_exp',  true);
         counter_r_exp++;
         return false;
     });
@@ -184,14 +230,14 @@ $("#add_more_ind_exp").click(function(){
     create_serial('ind_exp');
     create_input('ind_org[]', 'Organization','ind_org'+counter_ind_exp, 'ind_exp',counter_ind_exp, 'ind_exp');
     create_input('ind_work[]', 'Work Profile', 'ind_work'+counter_ind_exp,'ind_exp',counter_ind_exp, 'ind_exp');
-    create_input('ind_doj[]', 'DD/MM/YYYY', 'ind_doj'+counter_ind_exp,'ind_exp',counter_ind_exp, 'ind_exp', false, false, true);
-    create_input('ind_dol[]', 'DD/MM/YYYY', 'ind_dol'+counter_ind_exp,'ind_exp',counter_ind_exp, 'ind_exp',  false, false, true);
+    create_input('ind_doj[]', 'MM/DD/YYYY', 'ind_doj'+counter_ind_exp,'ind_exp',counter_ind_exp, 'ind_exp', false, false, true, false, false, false, true);
+    create_input('ind_dol[]', 'MM/DD/YYYY', 'ind_dol'+counter_ind_exp,'ind_exp',counter_ind_exp, 'ind_exp',  false, false, true, false, false, false, true);
     create_input('period[]', 'Duration', 'period'+counter_ind_exp,'ind_exp',counter_ind_exp, 'ind_exp', true);
     counter_ind_exp++;
     return false;
   });
 
-});
+  });
 
   function create_select()
   {
@@ -206,7 +252,7 @@ $("#add_more_ind_exp").click(function(){
     //console.log(tbody_id);
     var td=document.createElement("td");
     // var x=0;
-     var x = document.getElementById(tbody_id).rows.length + 1;
+    var x = document.getElementById(tbody_id).rows.length;
     // if(document.getElementById(tbody_id).rows)
     // {
     // }
@@ -228,13 +274,167 @@ $("#add_more_ind_exp").click(function(){
           autoclose: true,
       });
   }
-  
-  function create_input(t_name, place_value, id, tbody_id, counter, remove_name, btn=false, select=false, datepicker_set=false)
+
+  function parseDate(dateString) {
+    var parts = dateString.split("/");
+    return new Date(parts[2], parts[0] - 1, parts[1]);
+}
+
+
+function dur1(counter){
+  console.log("Hi");
+  var dojId = 'doj' + counter;
+  var dolId = 'dol' + counter;
+  var durationId = 'duration' + counter;
+
+  var dojValue = document.getElementById(dojId).value;
+  var dolValue = document.getElementById(dolId).value;
+
+  console.log('Debug: dojValue =', dojValue);
+  console.log('Debug: dolValue =', dolValue);
+
+  var dojDate = parseDate(dojValue);
+  var dolDate = parseDate(dolValue);
+
+  console.log('Debug: dojDate =', dojDate);
+  console.log('Debug: dolDate =', dolDate);
+
+  if (dojDate && dolDate) {
+        var durationInMilliseconds = dolDate - dojDate;
+
+        console.log('Debug: durationInMilliseconds =', durationInMilliseconds);
+
+        var years = Math.floor(durationInMilliseconds / (365.25 * 24 * 60 * 60 * 1000));
+        var months = Math.floor((durationInMilliseconds % (365.25 * 24 * 60 * 60 * 1000)) / (30.44 * 24 * 60 * 60 * 1000));
+
+        if (!isNaN(years) && !isNaN(months)) {
+            document.getElementById(durationId).value = years + " years " + months + " months";
+        } else {
+            console.log('Debug: Invalid duration values');
+        }
+    } else {
+        console.log('Debug: Date values are not valid');
+    }
+
+    console.log('Debug: End calculateDur');
+}
+
+function dur2(counter){
+  var dojId = 'te_doj' + counter;
+  var dolId = 'te_dol' + counter;
+  var durationId = 'te_duration' + counter;
+
+  var dojValue = document.getElementById(dojId).value;
+  var dolValue = document.getElementById(dolId).value;
+
+  console.log('Debug: dojValue =', dojValue);
+  console.log('Debug: dolValue =', dolValue);
+
+  var dojDate = parseDate(dojValue);
+  var dolDate = parseDate(dolValue);
+
+  console.log('Debug: dojDate =', dojDate);
+  console.log('Debug: dolDate =', dolDate);
+
+  if (dojDate && dolDate) {
+        var durationInMilliseconds = dolDate - dojDate;
+
+        console.log('Debug: durationInMilliseconds =', durationInMilliseconds);
+
+        var years = Math.floor(durationInMilliseconds / (365.25 * 24 * 60 * 60 * 1000));
+        var months = Math.floor((durationInMilliseconds % (365.25 * 24 * 60 * 60 * 1000)) / (30.44 * 24 * 60 * 60 * 1000));
+
+        if (!isNaN(years) && !isNaN(months)) {
+            document.getElementById(durationId).value = years + " years " + months + " months";
+        } else {
+            console.log('Debug: Invalid duration values');
+        }
+    } else {
+        console.log('Debug: Date values are not valid');
+    }
+
+    console.log('Debug: End calculateDur');
+}
+
+function dur3(counter){
+  var dojId = 'r_exp_doj' + counter;
+  var dolId = 'r_exp_dol' + counter;
+  var durationId = 'r_exp_duration' + counter;
+
+  var dojValue = document.getElementById(dojId).value;
+  var dolValue = document.getElementById(dolId).value;
+
+  console.log('Debug: dojValue =', dojValue);
+  console.log('Debug: dolValue =', dolValue);
+
+  var dojDate = parseDate(dojValue);
+  var dolDate = parseDate(dolValue);
+
+  console.log('Debug: dojDate =', dojDate);
+  console.log('Debug: dolDate =', dolDate);
+
+  if (dojDate && dolDate) {
+        var durationInMilliseconds = dolDate - dojDate;
+
+        console.log('Debug: durationInMilliseconds =', durationInMilliseconds);
+
+        var years = Math.floor(durationInMilliseconds / (365.25 * 24 * 60 * 60 * 1000));
+        var months = Math.floor((durationInMilliseconds % (365.25 * 24 * 60 * 60 * 1000)) / (30.44 * 24 * 60 * 60 * 1000));
+
+        if (!isNaN(years) && !isNaN(months)) {
+            document.getElementById(durationId).value = years + " years " + months + " months";
+        } else {
+            console.log('Debug: Invalid duration values');
+        }
+    } else {
+        console.log('Debug: Date values are not valid');
+    }
+
+    console.log('Debug: End calculateDur');
+}
+
+function dur4(counter){
+  var dojId = 'ind_doj' + counter;
+  var dolId = 'ind_dol' + counter;
+  var durationId = 'period' + counter;
+
+  var dojValue = document.getElementById(dojId).value;
+  var dolValue = document.getElementById(dolId).value;
+
+  console.log('Debug: dojValue =', dojValue);
+  console.log('Debug: dolValue =', dolValue);
+
+  var dojDate = parseDate(dojValue);
+  var dolDate = parseDate(dolValue);
+
+  console.log('Debug: dojDate =', dojDate);
+  console.log('Debug: dolDate =', dolDate);
+
+  if (dojDate && dolDate) {
+        var durationInMilliseconds = dolDate - dojDate;
+
+        console.log('Debug: durationInMilliseconds =', durationInMilliseconds);
+
+        var years = Math.floor(durationInMilliseconds / (365.25 * 24 * 60 * 60 * 1000));
+        var months = Math.floor((durationInMilliseconds % (365.25 * 24 * 60 * 60 * 1000)) / (30.44 * 24 * 60 * 60 * 1000));
+
+        if (!isNaN(years) && !isNaN(months)) {
+            document.getElementById(durationId).value = years + " years " + months + " months";
+        } else {
+            console.log('Debug: Invalid duration values');
+        }
+    } else {
+        console.log('Debug: Date values are not valid');
+    }
+
+    console.log('Debug: End calculateDur');
+}
+
+
+function create_input(t_name, place_value, id, tbody_id, counter, remove_name, btn=false, select=false, datepicker_set=false, calc_Dur1 = false, calc_Dur2 = false, calc_Dur3 = false, calc_Dur4 = false)
   {
-    //console.log(counter);
     if(select==false)
     {
-
       var input=document.createElement("input");
       input.setAttribute("type", "text");
       input.setAttribute("name", t_name);
@@ -244,10 +444,57 @@ $("#add_more_ind_exp").click(function(){
       input.setAttribute("required", "");
       var td=document.createElement("td");
       td.appendChild(input);
+      if (calc_Dur1) {
+        input.addEventListener("change", function() {
+            dur1(counter);
+        });
+
+        // Assuming Bootstrap Datepicker
+        if (datepicker_set) {
+            $(input).datepicker().on('changeDate', function () {
+                dur1(counter);
+            });
+        }
+      }
+      if (calc_Dur2) {
+        input.addEventListener("change", function() {
+            dur2(counter);
+        });
+
+        // Assuming Bootstrap Datepicker
+        if (datepicker_set) {
+            $(input).datepicker().on('changeDate', function () {
+                dur2(counter);
+            });
+        }
+      }
+      if (calc_Dur3) {
+        input.addEventListener("change", function() {
+            dur3(counter);
+        });
+
+        // Assuming Bootstrap Datepicker
+        if (datepicker_set) {
+            $(input).datepicker().on('changeDate', function () {
+                dur3(counter);
+            });
+        }
+      }
+      if (calc_Dur4) {
+        input.addEventListener("change", function() {
+            dur4(counter);
+        });
+
+        // Assuming Bootstrap Datepicker
+        if (datepicker_set) {
+            $(input).datepicker().on('changeDate', function () {
+                dur4(counter);
+            });
+        }
+      }
     }
     if(select==true)
     {
-
       var sel=document.createElement("select");
       sel.setAttribute("name", t_name);
       sel.setAttribute("id", id);
@@ -255,7 +502,6 @@ $("#add_more_ind_exp").click(function(){
       sel.innerHTML+="<option>Select</option>";
       sel.innerHTML+="<option value='Principal Investigator'>Principal Investigator</option>";
       sel.innerHTML+="<option value='Co-investigator'>Co-investigator</option>";
-      // sel.innerHTML+="<option value='in_preparation'>In-Preparation</option>";
       var td=document.createElement("td");
       td.appendChild(sel);
     }
@@ -265,7 +511,6 @@ $("#add_more_ind_exp").click(function(){
     }
     if(btn==true)
     {
-      // alert();
       var but=document.createElement("button");
       but.setAttribute("class", "close");
       but.setAttribute("onclick", "remove_row('"+remove_name+"','"+counter+"', '"+tbody_id+"')");
@@ -275,11 +520,6 @@ $("#add_more_ind_exp").click(function(){
     tr.setAttribute("id", "row"+counter);
     tr.appendChild(td);
     document.getElementById(tbody_id).appendChild(tr);
-     $('.datepicker').datepicker({
-                    format: 'dd/mm/yyyy',
-                    autoclose: true
-                });
-    
   }
   function remove_row(remove_name, n, tbody_id)
   {
@@ -314,7 +554,38 @@ $("#add_more_ind_exp").click(function(){
         row.cells[0].textContent = index + 1;
     });
 }
+function calculateDuration(type) {
+    var dojString = document.getElementById(type + "_doj").value;
+    var dolString = document.getElementById(type + "_dol").value;
 
+    // Parse the date strings in "dd/mm/yy" format
+    var dojParts = dojString.split("/");
+    var dolParts;
+
+    // Check if dolString is "continue" and set it to the current date
+    if (dolString.toLowerCase() === "continue") {
+      var currentDate = new Date();
+      var formattedDate = new Intl.DateTimeFormat('en-GB').format(currentDate); // 'en-GB' represents the locale for 'dd/mm/yyyy'
+      // Now, you can split the formatted date
+      var dateParts = formattedDate.split("/");
+      console.log(dolParts)
+    } else {
+        dolParts = dolString.split("/");
+    }
+
+    // Convert the date parts to a Date object
+    var doj = new Date(dojParts[2], dojParts[1]-1, dojParts[0]);
+    var dol = new Date(dolParts[2], dolParts[1]-1, dolParts[0]);
+
+    if (!isNaN(doj.getTime()) && !isNaN(dol.getTime())) {
+        var durationInMilliseconds = dol - doj;
+
+        var years = Math.floor(durationInMilliseconds / (365.25 * 24 * 60 * 60 * 1000));
+        var months = Math.floor((durationInMilliseconds % (365.25 * 24 * 60 * 60 * 1000)) / (30.44 * 24 * 60 * 60 * 1000));
+
+        document.getElementById("pres_emp_duration").value = years + " years " + months + " months";
+    }
+}
 
 </script>
 <!-- all bootstrap buttons classes -->
@@ -350,7 +621,6 @@ $("#add_more_ind_exp").click(function(){
       <div class="panel panel-success">
       <div class="panel-heading">(A) Present Employment</div>
         <div class="panel-body">
-          
           <span class="col-md-2 control-label" for="pres_emp_position">Position</span>  
           <div class="col-md-4">
           <input id="pres_emp_position" value="<?php echo (is_array($pres_emp_det) && array_key_exists('position', $pres_emp_det)) ? $pres_emp_det['position'] : ''; ?>" name="pres_emp_position" type="text" placeholder="Position" class="form-control input-md" autofocus="" required="">
@@ -363,24 +633,24 @@ $("#add_more_ind_exp").click(function(){
           
           <span class="col-md-2 control-label" for="pres_status">Status</span>  
           <div class="col-md-4">
-          <select id="pres_status" name="pres_status" class="form-control input-md" required="">
-              <option value="<?php echo (is_array($pres_emp_det) && array_key_exists('status', $pres_emp_det)) ? $pres_emp_det['status'] : ''; ?>">Select</option>
-              <option   value="Central Govt.">Central Govt.</option>
-              <option   value="State Government">State Government</option>
-              <option   value="Private">Private</option>
-              <option   value="Quasi Govt.">Quasi Govt.</option>
-              <option   value="Other">Other</option>
-          </select>
+              <select id="pres_status" name="pres_status" class="form-control input-md" required="">
+                  <option value="">Select</option>
+                  <option value="Central Govt." <?php echo (is_array($pres_emp_det) && array_key_exists('status', $pres_emp_det) && $pres_emp_det['status'] === 'Central Govt.') ? 'selected' : ''; ?>>Central Govt.</option>
+                  <option value="State Government" <?php echo (is_array($pres_emp_det) && array_key_exists('status', $pres_emp_det) && $pres_emp_det['status'] === 'State Government') ? 'selected' : ''; ?>>State Government</option>
+                  <option value="Private" <?php echo (is_array($pres_emp_det) && array_key_exists('status', $pres_emp_det) && $pres_emp_det['status'] === 'Private') ? 'selected' : ''; ?>>Private</option>
+                  <option value="Quasi Govt." <?php echo (is_array($pres_emp_det) && array_key_exists('status', $pres_emp_det) && $pres_emp_det['status'] === 'Quasi Govt.') ? 'selected' : ''; ?>>Quasi Govt.</option>
+                  <option value="Other" <?php echo (is_array($pres_emp_det) && array_key_exists('status', $pres_emp_det) && $pres_emp_det['status'] === 'Other') ? 'selected' : ''; ?>>Other</option>
+              </select>
           </div>
 
           <span class="col-md-2 control-label" for="pres_emp_doj">Date of Joining</span>  
           <div class="col-md-4">
-          <input id="pres_emp_doj" name="pres_emp_doj" type="text" placeholder="Date of Joining" value="<?php echo (is_array($pres_emp_det) && array_key_exists('doj', $pres_emp_det)) ? $pres_emp_det['doj'] : ''; ?>" class="form-control input-md datepicker" required="">
+          <input id="pres_emp_doj" onchange="calculateDuration('pres_emp')" name="pres_emp_doj" type="text" placeholder="Date of Joining" value="<?php echo (is_array($pres_emp_det) && array_key_exists('doj', $pres_emp_det)) ? $pres_emp_det['doj'] : ''; ?>" class="form-control input-md datepicker" required="">
           </div>
 
           <span class="col-md-2 control-label" for="pres_emp_dol">Date of Leaving <br />(Mention Continue if working)</span>  
           <div class="col-md-4">
-          <input id="pres_emp_dol" value="<?php echo (is_array($pres_emp_det) && array_key_exists('dol', $pres_emp_det)) ? $pres_emp_det['dol'] : ''; ?>" name="pres_emp_dol" type="text" placeholder="Date of Leaving" class="form-control input-md datepicker" required="">
+          <input id="pres_emp_dol" onchange="calculateDuration('pres_emp')" value="<?php echo (is_array($pres_emp_det) && array_key_exists('dol', $pres_emp_det)) ? $pres_emp_det['dol'] : ''; ?>" name="pres_emp_dol" type="text" placeholder="Date of Leaving" class="form-control input-md datepicker" required="">
           </div>
           
           <span class="col-md-2 control-label" for="pres_emp_duration">Duration (in years & months)</span>  
@@ -426,13 +696,13 @@ $("#add_more_ind_exp").click(function(){
                           <input id="org<?= $index + 1 ?>" name="org[]" type="text" placeholder="Employer" class="form-control input-md" autofocus="" value="<?= $qualification['org'] ?? '' ?>">
                         </td>
                         <td class="col-md-2">
-                          <input id="doj<?= $index + 1 ?>" name="doj[]" type="text" placeholder="Course Taught" class="form-control input-md datepicker" autofocus="" value="<?= $qualification['doj'] ?? '' ?>">
+                          <input id="doj<?= $index + 1 ?>" name="doj[]" type="text" placeholder="MM/DD/YY" class="form-control input-md datepicker" autofocus="" value="<?= $qualification['doj'] ?? '' ?>">
                         </td>
                         <td class="col-md-1">
-                            <input id="dol<?= $index + 1 ?>" name="dol[]" type="text" placeholder="UG/PG" class="form-control input-md datepicker" autofocus="" value="<?= $qualification['dol'] ?? '' ?>">
+                            <input id="dol<?= $index + 1 ?>" name="dol[]" type="text" placeholder="MM/DD/YY" class="form-control input-md datepicker" autofocus="" value="<?= $qualification['dol'] ?? '' ?>">
                         </td>
                         <td class="col-md-1">
-                          <input id="duration<?= $index + 1 ?>" name="duration[]" type="text" placeholder="No. of Students" class="form-control input-md" autofocus="" value="<?= $qualification['duration'] ?? '' ?>">
+                          <input id="duration<?= $index + 1 ?>" name="duration[]" type="text" placeholder="Duration" class="form-control input-md" autofocus="" value="<?= $qualification['duration'] ?? '' ?>">
                           <button type="button" class="btn btn-light btn-sm" style="background-color: white; color: lightgray; font-size: 22px; margin-left: 120px;" onclick="removeRow(this)">x</button>
                         </td>
                   </tr>
@@ -660,7 +930,7 @@ $("#add_more_ind_exp").click(function(){
   </div>
  </div>
 
-<div class="form-group">
+<!-- <div class="form-group">
   
   <div class="col-md-1">
     <a href="../acad_det/main.php" class="btn btn-primary pull-left"><i class="glyphicon glyphicon-fast-backward"></i></a>
@@ -671,6 +941,22 @@ $("#add_more_ind_exp").click(function(){
     
   </div>
   
+</div> -->
+
+<div class="form-group">
+  <div class="col-md-1">
+    <a href="../acad_det/main.php" class="btn btn-primary pull-left">
+      &lt; <!-- HTML entity for the '<' symbol -->
+    </a>
+  </div>
+
+  <div class="col-md-6">
+    <span class="pull-right" style="margin-right: 20px;">Page 3/9</span>
+  </div>
+
+  <div class="col-md-11">
+    <button id="submit" type="submit" name="submit" value="Submit" class="btn btn-success pull-right" style="margin-left: 75%;">SAVE & NEXT</button>
+  </div>
 </div>
           
 </fieldset>
@@ -692,7 +978,6 @@ $("#add_more_ind_exp").click(function(){
     document.getElementById("result_test").value = duration_year ;
    
   }
-
  
 </script>
 
