@@ -135,7 +135,7 @@ $(document).ready(function () {
         create_input('samount[]', 'Amount of grant', 'samount' + counter_s_proj, 's_proj', counter_s_proj, 's_proj');
         create_input('speriod[]', 'Period', 'speriod' + counter_s_proj, 's_proj', counter_s_proj, 's_proj');
         create_input('s_role[]', 'Role', 's_role' + counter_s_proj, 's_proj', counter_s_proj, 's_proj', false, true);
-        create_input('s_status[]', 'Status', 's_status' + counter_s_proj, 's_proj', counter_s_proj, 's_proj', true);
+        create_input('s_status[]', 'Status', 's_status' + counter_s_proj, 's_proj', counter_s_proj, 's_proj', true, true);
         counter_s_proj++;
         return false;
     });
@@ -145,7 +145,7 @@ $(document).ready(function () {
         create_serial('award');
         create_input('award_nature[]', 'Name of Award', 'award_nature' + counter_award, 'award', counter_award, 'award');
         create_input('award_org[]', 'Granting body/Organization', 'award_org' + counter_award, 'award', counter_award, 'award');
-        create_input('award_year[]', 'Year', 'award_year' + counter_award, 'award', counter_award, 'award', true);
+        create_input('award_year[]', 'Year', 'award_year' + counter_award, 'award', counter_award, 'award', true, false, false, true);
         counter_award++;
         return false;
     });
@@ -155,7 +155,7 @@ $(document).ready(function () {
         create_serial('prof_trg');
         create_input('trg[]', 'Taining Received', 'trg' + counter_prof_trg, 'prof_trg', counter_prof_trg, 'prof_trg');
         create_input('porg[]', 'Organization', 'porg' + counter_prof_trg, 'prof_trg', counter_prof_trg, 'prof_trg');
-        create_input('pyear[]', 'Year', 'pyear' + counter_prof_trg, 'prof_trg', counter_prof_trg, 'prof_trg');
+        create_input('pyear[]', 'Year', 'pyear' + counter_prof_trg, 'prof_trg', counter_prof_trg, 'prof_trg', false, false, false, true);
         create_input('pduration[]', 'Duration', 'pduration' + counter_prof_trg, 'prof_trg', counter_prof_trg, 'prof_trg', true);
         counter_prof_trg++;
         return false;
@@ -165,7 +165,7 @@ $(document).ready(function () {
         create_tr();
         create_serial('membership');
         create_input('mname[]', 'Name of the Professional Society', 'mname' + counter_membership, 'membership', counter_membership, 'membership');
-        create_input('mstatus[]', 'Membership Status (Lifetime/Annual)', 'mstatus' + counter_membership, 'membership', counter_membership, 'membership', true);
+        create_input('mstatus[]', 'Membership Status (Lifetime/Annual)', 'mstatus' + counter_membership, 'membership', counter_membership, 'membership', true, true);
         counter_membership++;
         return false;
     });
@@ -179,7 +179,7 @@ $(document).ready(function () {
         create_input('cperiod[]', 'Period', 'cperiod' + counter_consultancy, 'consultancy', counter_consultancy, 'consultancy');
 
         create_input('c_role[]', 'Role', 'c_role' + counter_consultancy, 'consultancy', counter_consultancy, 'consultancy', false, true);
-        create_input('c_status[]', 'Status', 'c_status' + counter_consultancy, 'consultancy', counter_consultancy, 'consultancy', true);
+        create_input('c_status[]', 'Status', 'c_status' + counter_consultancy, 'consultancy', counter_consultancy, 'consultancy', true, true);
         counter_consultancy++;
         return false;
     });
@@ -206,8 +206,10 @@ function for_date_picker(obj) {
     return obj;
 }
 
-function create_input(t_name, place_value, id, tbody_id, counter, remove_name, btn = false, select = false, datepicker_set = false) {
-    if (select == false) {
+function create_input(t_name, place_value, id, tbody_id, counter, remove_name, btn = false, select = false, datepicker_set = false, year_dropdown = false) {
+    var td = document.createElement("td");
+
+    if (select == false && year_dropdown==false) {
         var input = document.createElement("input");
         input.setAttribute("type", "text");
         input.setAttribute("name", t_name);
@@ -215,23 +217,52 @@ function create_input(t_name, place_value, id, tbody_id, counter, remove_name, b
         input.setAttribute("placeholder", place_value);
         input.setAttribute("class", "form-control input-md");
         input.setAttribute("required", "");
-        var td = document.createElement("td");
+
         td.appendChild(input);
+
+        if (datepicker_set) {
+            input = for_date_picker(input);
+        }
     }
+
     if (select == true) {
         var sel = document.createElement("select");
         sel.setAttribute("name", t_name);
         sel.setAttribute("id", id);
         sel.setAttribute("class", "form-control input-md");
         sel.innerHTML += "<option>Select</option>";
-        sel.innerHTML += "<option value='Principal Investigator'>Principal Investigator</option>";
-        sel.innerHTML += "<option value='Co-investigator'>Co-investigator</option>";
-        var td = document.createElement("td");
+
+        if (id == 'mstatus' + counter) {
+            sel.innerHTML += "<option value='Lifetime'>Lifetime</option>";
+            sel.innerHTML += "<option value='Annual'>Annual</option>";
+        } else if (id == 'c_role' + counter || id == 's_role' + counter) {
+            sel.innerHTML += "<option value='Ongoing'>Ongoing</option>";
+            sel.innerHTML += "<option value='Completed'>Completed</option>";
+        } else {
+            sel.innerHTML += "<option value='Principal Investigator'>Principal Investigator</option>";
+            sel.innerHTML += "<option value='Co-investigator'>Co-investigator</option>";
+        }
+
         td.appendChild(sel);
     }
-    if (datepicker_set == true) {
-        input = for_date_picker(input);
+
+    if (year_dropdown) {
+        var yearSelect = document.createElement("select");
+        yearSelect.setAttribute("name", t_name + "_year");
+        yearSelect.setAttribute("class", "form-control input-md");
+
+        // Assuming you want the year dropdown to cover a range from 1950 to the current year
+        var currentYear = new Date().getFullYear();
+        for (var year = currentYear; year >= 1950; year--) {
+            var option = document.createElement("option");
+            option.value = year;
+            option.text = year;
+            yearSelect.appendChild(option);
+        }
+
+        td.appendChild(yearSelect);
     }
+
     if (btn == true) {
         var but = document.createElement("button");
         but.setAttribute("class", "close");
@@ -239,13 +270,10 @@ function create_input(t_name, place_value, id, tbody_id, counter, remove_name, b
         but.innerHTML = "x";
         td.appendChild(but);
     }
+
     tr.setAttribute("id", "row" + counter);
     tr.appendChild(td);
     document.getElementById(tbody_id).appendChild(tr);
-    $('.datepicker').datepicker({
-        format: 'dd/mm/yyyy',
-        autoclose: true
-    });
 }
 
 function remove_row(remove_name, n, tbody_id) {
@@ -321,7 +349,10 @@ function updateRowNumbers(tbody_id) {
                                         <input name="mname[]" type="text" class="form-control input-md" value="<?= $society['name'] ?? '' ?>">
                                     </td>
                                     <td class="col-md-3">
-                                        <input name="mstatus[]" type="text" class="form-control input-md" value="<?= $society['status'] ?? '' ?>">
+                                        <select name="mstatus[]" class="form-control input-md">
+                                            <option value="Lifetime" <?= ($society['status'] ?? '') == 'Lifetime' ? 'selected' : '' ?>>Lifetime</option>
+                                            <option value="Annual" <?= ($society['status'] ?? '') == 'Annual' ? 'selected' : '' ?>>Annual</option>
+                                        </select>
                                         <button type="button" class="btn btn-light btn-sm" style="background-color: white; color: lightgray; font-size: 22px; margin-left: 120px;" onclick="removeRow(this)">x</button>
                                     </td>
                                 </tr>
@@ -365,8 +396,20 @@ function updateRowNumbers(tbody_id) {
                                     <td class="col-md-3">
                                         <input name="porg[]" type="text" class="form-control input-md" value="<?= $training['organization'] ?? '' ?>">
                                     </td>
-                                    <td class="col-md-2">
-                                        <input name="pyear[]" type="text" class="form-control input-md" value="<?= $training['year'] ?? '' ?>">
+                                    <td>
+                                    <select name="pyear[]" class="form-control input-md">
+                                        <?php
+                                            // Assuming you want the year dropdown to cover a range from 1950 to the current year
+                                            $currentYear = date("Y");
+                                            for ($year = 1950; $year <= $currentYear; $year++) {
+                                                echo "<option value=\"$year\"";
+                                                if (isset($training['year']) && $training['year'] == $year) {
+                                                    echo " selected";
+                                                }
+                                                echo ">$year</option>";
+                                            }
+                                        ?>
+                                    </select>
                                     </td>
                                     <td class="col-md-2">
                                         <input name="pduration[]" type="text" class="form-control input-md" value="<?= $training['duration'] ?? '' ?>">
@@ -413,8 +456,21 @@ function updateRowNumbers(tbody_id) {
                                         <input name="award_org[]" type="text" class="form-control input-md" value="<?= $award['organization'] ?? '' ?>">
                                     </td>
                                     <td class="col-md-2">
-                                        <input name="award_year[]" type="text" class="form-control input-md" value="<?= $award['year'] ?? '' ?>">
-                                        <button type="button" class="btn btn-light btn-sm" style="background-color: white; color: lightgray; font-size: 22px; margin-left: 120px;" onclick="removeRow(this)">x</button>
+                                        <select name="award_year[]" class="form-control input-md">
+                                        <?php
+                                            // Assuming you want the year dropdown to cover a range from 1950 to the current year
+                                            $currentYear = date("Y");
+                                            for ($year = 1950; $year <= $currentYear; $year++) {
+                                                echo "<option value=\"$year\"";
+                                                if (isset($award['year']) && $award['year'] == $year) {
+                                                    echo " selected";
+                                                }
+                                                echo ">$year</option>";
+                                            }
+                                        ?>
+                                        </select>
+                                        <!-- <input name="award_year[]" type="text" class="form-control input-md" value="<?= $award['year'] ?? '' ?>">
+                                        <button type="button" class="btn btn-light btn-sm" style="background-color: white; color: lightgray; font-size: 22px; margin-left: 120px;" onclick="removeRow(this)">x</button> -->
                                     </td>
                                 </tr>
                         <?php
@@ -447,9 +503,9 @@ function updateRowNumbers(tbody_id) {
                             <th class="col-md-2">Sponsoring Agency</th>
                             <th class="col-md-2">Title of Project</th>
                             <th class="col-md-2">Sanctioned Amount (₹)</th>
-                            <th class="col-md-1">Period</th>
-                            <th class="col-md-2">Role</th>
+                            <th class="col-md-1">Period (in Year and Months)</th>
                             <th class="col-md-2">Status</th>
+                            <th class="col-md-2">Role</th>
                         </tr>
                         <?php if (!empty($s_proj)): ?>
                             <?php foreach ($s_proj as $index => $project): ?>
@@ -468,10 +524,16 @@ function updateRowNumbers(tbody_id) {
                                         <input name="speriod[]" type="text" class="form-control input-md" value="<?= $project['period'] ?? '' ?>">
                                     </td>
                                     <td class="col-md-2">
-                                        <input name="s_role[]" type="text" class="form-control input-md" value="<?= $project['role'] ?? '' ?>">
+                                        <select name="s_role[]" class="form-control input-md">
+                                            <option value="Ongoing" <?= ($project['role'] ?? '') == 'Ongoing' ? 'selected' : '' ?>>Ongoing</option>
+                                            <option value="Completed" <?= ($project['role'] ?? '') == 'Completed' ? 'selected' : '' ?>>Completed</option>
+                                        </select>
                                     </td>
                                     <td class="col-md-2">
-                                        <input name="s_status[]" type="text" class="form-control input-md" value="<?= $project['status'] ?? '' ?>">
+                                        <select name="s_status[]" class="form-control input-md">
+                                            <option value="Principal Investigator" <?= ($project['status'] ?? '') == 'Principal Investigator' ? 'selected' : '' ?>>Principal Investigator</option>
+                                            <option value="Co-investigator" <?= ($project['status'] ?? '') == 'Co-investigator' ? 'selected' : '' ?>>Co-investigator</option>
+                                        </select>
                                         <button type="button" class="btn btn-light btn-sm" style="background-color: white; color: lightgray; font-size: 22px; margin-left: 5px;" onclick="removeRow(this)">x</button>
                                     </td>
                                 </tr>
@@ -497,9 +559,9 @@ function updateRowNumbers(tbody_id) {
                             <th class="col-md-3">Organization</th>
                             <th class="col-md-2">Title of Project</th>
                             <th class="col-md-2">Amount of Grant</th>
-                            <th class="col-md-1">Period</th>
-                            <th class="col-md-2">Role</th>
+                            <th class="col-md-1">Period (in Year and Months)</th>
                             <th class="col-md-2">Status</th>
+                            <th class="col-md-2">Role</th>
                         </tr>
                         <?php if (!empty($consultancy)): ?>
                             <?php foreach ($consultancy as $index => $project): ?>
@@ -518,10 +580,16 @@ function updateRowNumbers(tbody_id) {
                                         <input name="cperiod[]" type="text" class="form-control input-md" value="<?= $project['period'] ?? '' ?>">
                                     </td>
                                     <td class="col-md-2">
-                                        <input name="c_role[]" type="text" class="form-control input-md" value="<?= $project['role'] ?? '' ?>">
+                                        <select name="c_role[]" class="form-control input-md">
+                                            <option value="Ongoing" <?= ($project['role'] ?? '') == 'Ongoing' ? 'selected' : '' ?>>Ongoing</option>
+                                            <option value="Completed" <?= ($project['role'] ?? '') == 'Completed' ? 'selected' : '' ?>>Completed</option>
+                                        </select>
                                     </td>
                                     <td class="col-md-2">
-                                        <input name="c_status[]" type="text" class="form-control input-md" value="<?= $project['status'] ?? '' ?>">
+                                        <select name="c_status[]" class="form-control input-md">
+                                            <option value="Principal Investigator" <?= ($project['status'] ?? '') == 'Principal Investigator' ? 'selected' : '' ?>>Principal Investigator</option>
+                                            <option value="Co-investigator" <?= ($project['status'] ?? '') == 'Co-investigator' ? 'selected' : '' ?>>Co-investigator</option>
+                                        </select>
                                         <button type="button" class="btn btn-light btn-sm" style="background-color: white; color: lightgray; font-size: 22px; margin-left: 5px;" onclick="removeRow(this)">x</button>
                                     </td>
                                 </tr>
@@ -537,14 +605,19 @@ function updateRowNumbers(tbody_id) {
 
             <div class="form-group">
               
-              <div class="col-md-1">
-                <a href="../pub_det/main.php" class="btn btn-primary pull-left"><i class="glyphicon glyphicon-fast-backward"></i></a>
-              </div>
+            <div class="col-md-1">
+                <a href="../pub_det/main.php" class="btn btn-primary pull-left">
+                &lt; <!-- HTML entity for the '<' symbol -->
+                </a>
+            </div>
 
-              <div class="col-md-11">
-                <button id="submit" type="submit" name="submit" value="Submit" class="btn btn-success pull-right">SAVE &amp; NEXT</button>
-                
-              </div>
+            <div class="col-md-6">
+                <span class="pull-right" style="margin-right: 20px;">Page 5/9</span>
+            </div>
+
+            <div class="col-md-11">
+                <button id="submit" type="submit" name="submit" value="Submit" class="btn btn-success pull-right" style="margin-left: 75%;">SAVE & NEXT</button>
+            </div>
               
             </div>
 

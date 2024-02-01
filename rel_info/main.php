@@ -33,7 +33,6 @@ $conn->close();
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Rel Info</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Update your personal details</title>
     <link rel="stylesheet" type="text/css" href="../favicon.ico" type="image/x-icon">
     <link rel="icon" href="../favicon.ico" type="image/x-icon">
@@ -76,67 +75,6 @@ $conn->close();
         }
     </style>
     <script src="https://cdn.tiny.cloud/1/sff91z3m43jbjf600o1wyrzz0utxilczyt6pjpnlzolmh5ae/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
-
-    <!-- Place the following <script> and <textarea> tags your HTML's <body> -->
-    <script>
-    tinymce.init({
-        selector: 'textarea',
-        plugins: 'ai tinycomments mentions anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker autocorrect a11ychecker typography inlinecss',
-        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline superscript subscript strikethrough | link image media table mergetags | align lineheight | tinycomments | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-        tinycomments_mode: 'embedded',
-        tinycomments_author: 'Author name',
-        mergetags_list: [
-        { value: 'First.Name', title: 'First Name' },
-        { value: 'Email', title: 'Email' },
-        ],
-        ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
-    });
-    </script>
-
-
-    <script>
-        tinymce.init({
-            selector: 'textarea[name=research_statement]',
-            plugins: 'advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount',
-            toolbar: 'undo redo | formatselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | link image | charmap | print preview | media | code',
-            menubar: true
-        });
-
-        tinymce.init({
-            selector: 'textarea[name=teaching_statement]',
-            plugins: 'advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount',
-            toolbar: 'undo redo | formatselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | link image | charmap | print preview | media | code',
-            menubar: true
-        });
-
-        tinymce.init({
-            selector: 'textarea[name=rel_in]',
-            plugins: 'advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount',
-            toolbar: 'undo redo | formatselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | link image | charmap | print preview | media | code',
-            menubar: true
-        });
-
-        tinymce.init({
-            selector: 'textarea[name=prof_serv]',
-            plugins: 'advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount',
-            toolbar: 'undo redo | formatselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | link image | charmap | print preview | media | code',
-            menubar: true
-        });
-
-        tinymce.init({
-            selector: 'textarea[name=jour_details]',
-            plugins: 'advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount',
-            toolbar: 'undo redo | formatselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | link image | charmap | print preview | media | code',
-            menubar: true
-        });
-
-        tinymce.init({
-            selector: 'textarea[name=conf_details]',
-            plugins: 'advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount',
-            toolbar: 'undo redo | formatselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | link image | charmap | print preview | media | code',
-            menubar: true
-        });
-    </script>
 </head>
 
 <body>
@@ -244,12 +182,19 @@ $conn->close();
 
 
                         <div class="form-group">
-                            <div class="col-md-10">
-                                <a href="../acad_exp/main.php" class="btn btn-primary pull-left"><i class="glyphicon glyphicon-fast-backward"></i></a>
-                            </div>
-                            <div class="col-md-2">
-                                <button id="submit" type="submit" name="submit" value="Submit" class="btn btn-success pull-right">SAVE &amp; NEXT</button>
-                            </div>
+                        <div class="col-md-1">
+                            <a href="../acad_exp/main.php" class="btn btn-primary pull-left">
+                            &lt; <!-- HTML entity for the '<' symbol -->
+                            </a>
+                        </div>
+
+                        <div class="col-md-6">
+                            <span class="pull-right" style="margin-right: 20px;">Page 7/9</span>
+                        </div>
+
+                        <div class="col-md-11">
+                            <button id="submit" type="submit" name="submit" value="Submit" class="btn btn-success pull-right" style="margin-left: 75%;">SAVE & NEXT</button>
+                        </div>
                         </div>
                     </form>
                 </fieldset>

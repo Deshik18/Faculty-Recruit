@@ -9,6 +9,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $_SESSION['fname'] = $_POST['fname'];
     $_SESSION['lname'] = $_POST['lname'];
     $_SESSION['cast'] = $_POST['cast'];
+    $_SESSION['ref_num'] = $_POST['ref_num'];
+    $_SESSION['post'] = $_POST['post'];
     // Retrieve form data
     $adv_num = $_POST['adv_num'];
     $ref_num = $_POST['ref_num'];

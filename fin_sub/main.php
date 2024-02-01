@@ -231,6 +231,9 @@ p
   <h5 style="font-weight: bold; color:red;">Note: The form can be edited till the cutoff date of the rolling advertisment.</h5>
 <hr> 
 <div class="form-group">
+<div class="col-md-6">
+  <span class="pull-right" style="margin-right: 20px; font-weight: bold; font-size: 1.2em;">Page 9/9</span>
+</div>
 <div class="col-md-12">
   <!-- <a href="https://ofa.iiti.ac.in/facrec_che_2023_july_02/acde" class="btn btn-primary pull-left">BACK</a> -->
   <button type="submit" name="preview" value="preview" class="btn btn-info pull-right">SAVE &amp; SUBMIT</button>

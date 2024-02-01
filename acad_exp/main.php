@@ -140,8 +140,8 @@ var counter_ug_thesis=1;
           create_input('pg_scholar[]', 'Scholar','pg_scholar'+counter_pg_thesis, 'pg_thesis_sup',counter_pg_thesis, 'pg_thesis_sup');
           create_input('pg_thesis[]', 'Title of Thesis','pg_thesis'+counter_pg_thesis, 'pg_thesis_sup',counter_pg_thesis, 'pg_thesis_sup');
           create_input('pg_role[]', 'Role','pg_role'+counter_pg_thesis, 'pg_thesis_sup',counter_pg_thesis, 'pg_thesis_sup', false,true);
-          create_input('pg_ths_status[]', 'Ongoing/Completed', 'pg_status'+counter_pg_thesis,'pg_thesis_sup',counter_pg_thesis, 'pg_thesis_sup');
-          create_input('pg_ths_year[]', 'Ongoing Since/ Year of Completion', 'pg_ths_year'+counter_pg_thesis,'pg_thesis_sup',counter_pg_thesis, 'pg_thesis_sup',true);
+          create_input('pg_ths_status[]', 'Ongoing/Completed', 'pg_status'+counter_pg_thesis,'pg_thesis_sup',counter_pg_thesis, 'pg_thesis_sup',false,true);
+          create_input('pg_ths_year[]', 'Ongoing Since/ Year of Completion', 'pg_ths_year'+counter_pg_thesis,'pg_thesis_sup',counter_pg_thesis, 'pg_thesis_sup',true,false,false,true);
           counter_pg_thesis++;
           return false;
     });
@@ -152,8 +152,8 @@ var counter_ug_thesis=1;
           create_input('ug_scholar[]', 'Scholar','ug_scholar'+counter_ug_thesis, 'ug_thesis_sup',counter_ug_thesis, 'ug_thesis_sup');
           create_input('ug_thesis[]', 'Title of Thesis','ug_thesis'+counter_ug_thesis, 'ug_thesis_sup',counter_ug_thesis, 'ug_thesis_sup');
           create_input('ug_role[]', 'Role','ug_role'+counter_ug_thesis, 'ug_thesis_sup',counter_ug_thesis, 'ug_thesis_sup', false,true);
-          create_input('ug_ths_status[]', 'Ongoing/Completed', 'ug_status'+counter_ug_thesis,'ug_thesis_sup',counter_ug_thesis, 'ug_thesis_sup');
-          create_input('ug_ths_year[]', 'Ongoing Since/ Year of Completion', 'ug_ths_year'+counter_ug_thesis,'ug_thesis_sup',counter_ug_thesis, 'ug_thesis_sup',true);
+          create_input('ug_ths_status[]', 'Ongoing/Completed', 'ug_status'+counter_ug_thesis,'ug_thesis_sup',counter_ug_thesis, 'ug_thesis_sup',false,true);
+          create_input('ug_ths_year[]', 'Ongoing Since/ Year of Completion', 'ug_ths_year'+counter_ug_thesis,'ug_thesis_sup',counter_ug_thesis, 'ug_thesis_sup',true,false,false,true);
           counter_ug_thesis++;
           return false;
     });
@@ -164,8 +164,8 @@ var counter_ug_thesis=1;
           create_input('phd_scholar[]', 'Scholar','phd_scholar'+counter_thesis, 'thesis_sup',counter_thesis, 'thesis_sup');
           create_input('phd_thesis[]', 'Title of Thesis','phd_thesis'+counter_thesis, 'thesis_sup',counter_thesis, 'thesis_sup');
           create_input('phd_role[]', 'Role','phd_role'+counter_thesis, 'thesis_sup',counter_thesis, 'thesis_sup', false,true);
-          create_input('phd_ths_status[]', 'Ongoing/Completed', 'phd_ths_status'+counter_thesis,'thesis_sup',counter_thesis, 'thesis_sup');
-          create_input('phd_ths_year[]', 'Ongoing Since/ Year of Completion', 'phd_ths_year'+counter_thesis,'thesis_sup',counter_thesis, 'thesis_sup',true);
+          create_input('phd_ths_status[]', 'Ongoing/Completed', 'phd_ths_status'+counter_thesis,'thesis_sup',counter_thesis, 'thesis_sup',false, true);
+          create_input('phd_ths_year[]', 'Ongoing Since/ Year of Completion', 'phd_ths_year'+counter_thesis,'thesis_sup',counter_thesis, 'thesis_sup',true,false,false,true);
           counter_thesis++;
           return false;
     });
@@ -191,90 +191,83 @@ function for_date_picker(obj) {
     obj.className += " datepicker";
     return obj;
 }
-  function create_input(t_name, place_value, id, tbody_id, counter, remove_name, btn=false, select=false, datepicker_set=false)
-  {
-    //console.log(counter);
-    if(select==false)
-    {
+function create_input(t_name, place_value, id, tbody_id, counter, remove_name, btn=false, select=false, datepicker_set=false, year_dropdown=false) {
+    var td = document.createElement("td");
+    if (select == false && year_dropdown == false) {
+        var input = document.createElement("input");
+        input.setAttribute("type", "text");
+        input.setAttribute("name", t_name);
+        input.setAttribute("id", id);
+        input.setAttribute("placeholder", place_value);
+        input.setAttribute("class", "form-control input-md");
+        input.setAttribute("required", "");
+        td.appendChild(input);
+    }
 
-      var input=document.createElement("input");
-      input.setAttribute("type", "text");
-      input.setAttribute("name", t_name);
-      input.setAttribute("id", id);
-      input.setAttribute("placeholder", place_value);
-      input.setAttribute("class", "form-control input-md");
-      input.setAttribute("required", "");
-      var td=document.createElement("td");
-      td.appendChild(input);
+    if (select == true) {
+        var sel = document.createElement("select");
+        sel.setAttribute("name", t_name);
+        sel.setAttribute("id", id);
+        sel.setAttribute("class", "form-control input-md");
+        sel.innerHTML += "<option>Select</option>";
+        if (id == 'ug_role' + counter || id == 'pg_role' + counter || id == 'phd_role' + counter) {
+            sel.innerHTML += "<option value='Supervisor with no Co-supervisor'>Supervisor with no Co-supervisor</option>";
+            sel.innerHTML += "<option value='Supervisor with Co-supervisor'>Supervisor with Co-supervisor</option>";
+            sel.innerHTML += "<option value='Co-Supervisor'>Co-Supervisor</option>";
+        } else {
+            sel.innerHTML += "<option value='Ongoing'>Ongoing</option>";
+            sel.innerHTML += "<option value='Completed'>Completed</option>";
+        }
+        td.appendChild(sel);
     }
-    if(select==true)
-    {
 
-      var sel=document.createElement("select");
-      sel.setAttribute("name", t_name);
-      sel.setAttribute("id", id);
-      sel.setAttribute("class", "form-control input-md");
-      sel.innerHTML+="<option>Select</option>";
-      sel.innerHTML+="<option value='Supervisor with no Co-supervisor'>Supervisor with no Co-supervisor</option>";
-      sel.innerHTML+="<option value='Supervisor with Co-supervisor'>Supervisor with Co-supervisor</option>";
-      sel.innerHTML+="<option value='Co-Supervisor'>Co-Supervisor</option>";
-      var td=document.createElement("td");
-      td.appendChild(sel);
+    if (year_dropdown == true) {
+        var yearDropdown = document.createElement("select");
+        yearDropdown.setAttribute("name", t_name);
+        yearDropdown.setAttribute("id", id);
+        yearDropdown.setAttribute("class", "form-control input-md");
+
+        // Add options for the year dropdown (e.g., from 1950 to the current year)
+        var currentYear = new Date().getFullYear();
+        for (var i = currentYear; i >=1950 ; i--) {
+            yearDropdown.innerHTML += "<option value='" + i + "'>" + i + "</option>";
+        }
+        td.appendChild(yearDropdown);
     }
-    if(datepicker_set==true)
-    {
-      input=for_date_picker(input);
+
+    if (datepicker_set == true) {
+        input = for_date_picker(input);
     }
-    if(btn==true)
-    {
-      // alert();
-      var but=document.createElement("button");
-      but.setAttribute("class", "close");
-      but.setAttribute("onclick", "remove_row('"+remove_name+"','"+counter+"', '"+tbody_id+"')");
-      but.innerHTML="x";
-      td.appendChild(but);
+
+    if (btn == true) {
+        var but = document.createElement("button");
+        but.setAttribute("class", "close");
+        but.setAttribute("onclick", "remove_row('" + remove_name + "','" + counter + "', '" + tbody_id + "')");
+        but.innerHTML = "x";
+        td.appendChild(but);
     }
+
     tr.setAttribute("id", "row" + tbody_id + counter);
-        tr.appendChild(td);
-        document.getElementById(tbody_id).appendChild(tr);
-        $('.datepicker').datepicker({
-            format: 'dd/mm/yyyy',
-            autoclose: true
-        });
-    
-  }
-  function remove_row(remove_name, n, tbody_id)
-  {
-    var tab=document.getElementById(remove_name);
-    var tr=document.getElementById("row"+n);
+    tr.appendChild(td);
+    document.getElementById(tbody_id).appendChild(tr);
+}
+
+function remove_row(remove_name, n, tbody_id) {
+    var tab = document.getElementById(remove_name);
+    var tr = document.getElementById("row" + n);
     tab.removeChild(tr);
-    var x = document.getElementById(tbody_id).rows.length;
-    for(var i=0; i<=x; i++)
-    {
-      $("#"+tbody_id).find("tr:eq("+i+") td:first").text(i);
-      
-    }
-    
-  }
-  function updateRowNumbers(tbody_id) {
+
+    // Update row numbers
+    updateRowNumbers(tbody_id);
+}
+
+function updateRowNumbers(tbody_id) {
     var rows = document.getElementById(tbody_id).rows;
     for (var i = 0; i < rows.length; i++) {
         rows[i].cells[0].innerHTML = i + 1;
     }
 }
 </script>
-
-<script>
-    function removeRow(button) {
-        // Assuming the button is in a td, and the tr is the parent
-        var row = button.closest('tr');
-        row.remove();
-    }
-</script>
-
-
-
-
 
 <div class="container">
   
@@ -459,14 +452,19 @@ function for_date_picker(obj) {
 
             <div class="form-group">
               
-              <div class="col-md-1">
-                <a href="../acad_ind_exp/main.php" class="btn btn-primary pull-left"><i class="glyphicon glyphicon-fast-backward"></i></a>
-              </div>
+            <div class="col-md-1">
+                <a href="../acad_ind_exp/main.php" class="btn btn-primary pull-left">
+                &lt; <!-- HTML entity for the '<' symbol -->
+                </a>
+            </div>
 
-              <div class="col-md-11">
-                <button id="submit" type="submit" name="submit" value="Submit" class="btn btn-success pull-right">SAVE &amp; NEXT</button>
-                
-              </div>
+            <div class="col-md-6">
+                <span class="pull-right" style="margin-right: 20px;">Page 6/9</span>
+            </div>
+
+            <div class="col-md-11">
+                <button id="submit" type="submit" name="submit" value="Submit" class="btn btn-success pull-right" style="margin-left: 75%;">SAVE & NEXT</button>
+            </div>
               
             </div>
 

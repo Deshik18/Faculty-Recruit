@@ -43,6 +43,11 @@ $stmt->close();
 	<link href="../files/css(4)" rel="stylesheet"> 
 	<link rel="preconnect" href="https://fonts.gstatic.com/">
 	<link href="../files/css2" rel="stylesheet">
+  <script src="../jquery-ui.js"></script>
+  <script src="../pikaday.min.js"></script>
+  <link rel="stylesheet" href="../pikaday.min.css" />
+  <script src="../moment.min.js"></script>
+
 
 
 </head>
@@ -123,53 +128,6 @@ hr{
             autoclose: true
         });
     });
-
-    document.getElementById('exp').addEventListener('change', function (event) {
-        if (event.target.classList.contains('datepicker') || event.target.name === 'doj[]' || event.target.name === 'dol[]') {
-            var counter = event.target.id.match(/\d+/)[0];
-            updateDuration('doj', 'dol', 'duration', counter);
-        }
-    });
-
-    document.getElementById('t_exp').addEventListener('change', function (event) {
-        if (event.target.classList.contains('datepicker') || event.target.name === 'te_doj[]' || event.target.name === 'te_dol[]') {
-            var counter = event.target.id.match(/\d+/)[0];
-            updateDuration('te_doj', 'te_dol', 'te_duration', counter);
-        }
-    });
-
-    document.getElementById('r_exp').addEventListener('change', function (event) {
-        if (event.target.classList.contains('datepicker') || event.target.name === 'r_exp_doj[]' || event.target.name === 'r_exp_dol[]') {
-            var counter = event.target.id.match(/\d+/)[0];
-            updateDuration('r_exp_doj', 'r_exp_dol', 'r_exp_duration', counter);
-        }
-    });
-
-    document.getElementById('ind_exp').addEventListener('change', function (event) {
-        if (event.target.classList.contains('datepicker') || event.target.name === 'ind_doj[]' || event.target.name === 'ind_dol[]') {
-            var counter = event.target.id.match(/\d+/)[0];
-            updateDuration('ind_doj', 'ind_dol', 'period', counter);
-        }
-    });
-
-    function updateDuration(dojPrefix, dolPrefix, durationPrefix, counter) {
-        var dojValue = document.getElementById(dojPrefix + counter).value;
-        var dolValue = document.getElementById(dolPrefix + counter).value;
-
-        var dojDate = parseDate(dojValue);
-        var dolDate = parseDate(dolValue);
-
-        if (dojDate && dolDate) {
-            var durationInMilliseconds = dolDate - dojDate;
-
-            var years = Math.floor(durationInMilliseconds / (365.25 * 24 * 60 * 60 * 1000));
-            var months = Math.floor((durationInMilliseconds % (365.25 * 24 * 60 * 60 * 1000)) / (30.44 * 24 * 60 * 60 * 1000));
-
-            document.getElementById(durationPrefix + counter).value = years + " years " + months + " months";
-        } else {
-            console.log('Debug: Date values are not valid');
-        }
-    }
 </script>
 
 <script type="text/javascript">
@@ -187,8 +145,8 @@ var counter_ind_exp=4;
         create_serial('exp');
         create_input('position[]', 'Position','position'+counter_exp, 'exp',counter_exp, 'exp');
         create_input('org[]', 'Organization/Institution', 'org'+counter_exp,'exp',counter_exp, 'exp');
-        create_input('doj[]', 'MM/DD/YYYY', 'doj'+counter_exp,'exp',counter_exp, 'exp',  false, false, true, calc_Dur1 = true);
-        create_input('dol[]', 'MM/DD/YYYY', 'dol'+counter_exp,'exp',counter_exp, 'exp',  false, false, true, calc_Dur1 = true);
+        create_input('doj[]', 'DD/MM/YYYY', 'doj'+counter_exp,'exp',counter_exp, 'exp',  false, false, true, true);
+        create_input('dol[]', 'DD/MM/YYYY', 'dol'+counter_exp,'exp',counter_exp, 'exp',  false, false, true, true);
         create_input('duration[]', 'Duration','duration'+counter_exp, 'exp',counter_exp,'exp', true);
         counter_exp++;
         return false;
@@ -202,8 +160,8 @@ var counter_ind_exp=4;
         create_input('te_course[]', 'Courses', 'te_course'+counter_t_exp,'t_exp',counter_t_exp, 't_exp');
         create_input('te_ug_pg[]', 'UG/PG', 'te_ug_pg'+counter_t_exp,'t_exp',counter_t_exp, 't_exp');
         create_input('te_no_stu[]', 'No. of Students', 'te_no_stu'+counter_t_exp,'t_exp',counter_t_exp, 't_exp');
-        create_input('te_doj[]', 'MM/DD/YYYY', 'te_doj'+counter_t_exp,'t_exp',counter_t_exp, 't_exp',  false, false, true, false, true);
-        create_input('te_dol[]', 'MM/DD/YYYY', 'te_dol'+counter_t_exp,'t_exp',counter_t_exp, 't_exp',  false, false, true, false, true);
+        create_input('te_doj[]', 'DD/MM/YYYY', 'te_doj'+counter_t_exp,'t_exp',counter_t_exp, 't_exp',  false, false, true, false, true);
+        create_input('te_dol[]', 'DD/MM/YYYY', 'te_dol'+counter_t_exp,'t_exp',counter_t_exp, 't_exp',  false, false, true, false, true);
         create_input('te_duration[]', 'Duration', 'te_duration'+counter_t_exp,'t_exp',counter_t_exp, 't_exp', true);
         counter_t_exp++;
         return false;
@@ -216,8 +174,8 @@ var counter_ind_exp=4;
         create_input('r_exp_position[]', 'Position','r_exp_position'+counter_r_exp, 'r_exp',counter_r_exp, 'r_exp');
         create_input('r_exp_institute[]', 'Institute', 'r_exp_institute'+counter_r_exp,'r_exp',counter_r_exp, 'r_exp');
         create_input('r_exp_supervisor[]', 'Supervisor', 'r_exp_supervisor'+counter_r_exp,'r_exp',counter_r_exp, 'r_exp');
-        create_input('r_exp_doj[]', 'MM/DD/YYYY', 'r_exp_doj'+counter_r_exp,'r_exp',counter_r_exp, 'r_exp', false, false, true, false, false, true);
-        create_input('r_exp_dol[]', 'MM/DD/YYYY', 'r_exp_dol'+counter_r_exp,'r_exp',counter_r_exp, 'r_exp',  false, false, true, false, false, true);
+        create_input('r_exp_doj[]', 'DD/MM/YYYY', 'r_exp_doj'+counter_r_exp,'r_exp',counter_r_exp, 'r_exp', false, false, true, false, false, true);
+        create_input('r_exp_dol[]', 'DD/MM/YYYY', 'r_exp_dol'+counter_r_exp,'r_exp',counter_r_exp, 'r_exp',  false, false, true, false, false, true);
         create_input('r_exp_duration[]', 'Duration', 'r_exp_duration'+counter_r_exp,'r_exp',counter_r_exp, 'r_exp',  true);
         counter_r_exp++;
         return false;
@@ -231,7 +189,7 @@ $("#add_more_ind_exp").click(function(){
     create_input('ind_org[]', 'Organization','ind_org'+counter_ind_exp, 'ind_exp',counter_ind_exp, 'ind_exp');
     create_input('ind_work[]', 'Work Profile', 'ind_work'+counter_ind_exp,'ind_exp',counter_ind_exp, 'ind_exp');
     create_input('ind_doj[]', 'MM/DD/YYYY', 'ind_doj'+counter_ind_exp,'ind_exp',counter_ind_exp, 'ind_exp', false, false, true, false, false, false, true);
-    create_input('ind_dol[]', 'MM/DD/YYYY', 'ind_dol'+counter_ind_exp,'ind_exp',counter_ind_exp, 'ind_exp',  false, false, true, false, false, false, true);
+    create_input('ind_dol[]', 'DD/MM/YYYY', 'ind_dol'+counter_ind_exp,'ind_exp',counter_ind_exp, 'ind_exp',  false, false, true, false, false, false, true);
     create_input('period[]', 'Duration', 'period'+counter_ind_exp,'ind_exp',counter_ind_exp, 'ind_exp', true);
     counter_ind_exp++;
     return false;
@@ -445,52 +403,94 @@ function create_input(t_name, place_value, id, tbody_id, counter, remove_name, b
       var td=document.createElement("td");
       td.appendChild(input);
       if (calc_Dur1) {
-        input.addEventListener("change", function() {
-            dur1(counter);
+        // Add an event listener for the input change
+        input.addEventListener("change", function () {
+          dur1(counter);
         });
 
         // Assuming Bootstrap Datepicker
         if (datepicker_set) {
-            $(input).datepicker().on('changeDate', function () {
-                dur1(counter);
-            });
+          var picker = new Pikaday({
+              field: inputElement,
+              format: 'DD/MM/YYYY',
+              yearRange: [1950, new Date().getFullYear()],
+              toString: function (date) {
+                  // Format the date to 'DD/MM/YYYY'
+                  return moment(date).format('DD/MM/YYYY');
+              },
+              onSelect: function () {
+                  updateDuration(inputElement, durationElement);
+              }
+          });
         }
       }
-      if (calc_Dur2) {
-        input.addEventListener("change", function() {
+    if (calc_Dur2) {
+        // Add an event listener for the input change
+        input.addEventListener("change", function () {
             dur2(counter);
         });
 
         // Assuming Bootstrap Datepicker
         if (datepicker_set) {
-            $(input).datepicker().on('changeDate', function () {
-                dur2(counter);
-            });
+          var picker = new Pikaday({
+              field: inputElement,
+              format: 'DD/MM/YYYY',
+              yearRange: [1950, new Date().getFullYear()],
+              toString: function (date) {
+                  // Format the date to 'DD/MM/YYYY'
+                  return moment(date).format('DD/MM/YYYY');
+              },
+              onSelect: function () {
+                  updateDuration(inputElement, durationElement);
+              }
+          });
         }
-      }
-      if (calc_Dur3) {
-        input.addEventListener("change", function() {
+    }
+
+    if (calc_Dur3) {
+        // Add an event listener for the input change
+        input.addEventListener("change", function () {
             dur3(counter);
         });
 
         // Assuming Bootstrap Datepicker
         if (datepicker_set) {
-            $(input).datepicker().on('changeDate', function () {
-                dur3(counter);
-            });
+          var picker = new Pikaday({
+              field: inputElement,
+              format: 'DD/MM/YYYY',
+              yearRange: [1950, new Date().getFullYear()],
+              toString: function (date) {
+                  // Format the date to 'DD/MM/YYYY'
+                  return moment(date).format('DD/MM/YYYY');
+              },
+              onSelect: function () {
+                  updateDuration(inputElement, durationElement);
+              }
+          });
         }
-      }
-      if (calc_Dur4) {
-        input.addEventListener("change", function() {
-            dur4(counter);
-        });
+    }
 
-        // Assuming Bootstrap Datepicker
-        if (datepicker_set) {
-            $(input).datepicker().on('changeDate', function () {
-                dur4(counter);
+      if (calc_Dur4) {
+          // Add an event listener for the input change
+          input.addEventListener("change", function () {
+              dur4(counter);
+          });
+
+          // Assuming Bootstrap Datepicker
+          if (datepicker_set) {
+            var picker = new Pikaday({
+                field: inputElement,
+                format: 'DD/MM/YYYY',
+                yearRange: [1950, new Date().getFullYear()],
+                toString: function (date) {
+                    // Format the date to 'DD/MM/YYYY'
+                    return moment(date).format('DD/MM/YYYY');
+                },
+                onSelect: function () {
+                    updateDuration(inputElement, durationElement);
+                }
             });
-        }
+          }
       }
     }
     if(select==true)
@@ -554,37 +554,56 @@ function create_input(t_name, place_value, id, tbody_id, counter, remove_name, b
         row.cells[0].textContent = index + 1;
     });
 }
-function calculateDuration(type) {
-    var dojString = document.getElementById(type + "_doj").value;
-    var dolString = document.getElementById(type + "_dol").value;
+function initPikaday(inputId, durationId) {
+    var inputElement = document.getElementById(inputId);
+    var durationElement = document.getElementById(durationId);
 
-    // Parse the date strings in "dd/mm/yy" format
-    var dojParts = dojString.split("/");
-    var dolParts;
+    if (inputElement && durationElement) {
+        var picker = new Pikaday({
+            field: inputElement,
+            format: 'DD/MM/YYYY',
+            yearRange: [1950, new Date().getFullYear()],
+            toString: function (date) {
+                // Format the date to 'DD/MM/YYYY'
+                return moment(date).format('DD/MM/YYYY');
+            },
+            onSelect: function () {
+                updateDuration(inputElement, durationElement);
+            }
+        });
 
-    // Check if dolString is "continue" and set it to the current date
-    if (dolString.toLowerCase() === "continue") {
-      var currentDate = new Date();
-      var formattedDate = new Intl.DateTimeFormat('en-GB').format(currentDate); // 'en-GB' represents the locale for 'dd/mm/yyyy'
-      // Now, you can split the formatted date
-      var dateParts = formattedDate.split("/");
-      console.log(dolParts)
-    } else {
-        dolParts = dolString.split("/");
+        // Initial update of duration
+        updateDuration(inputElement, durationElement);
+    }
+}
+function updateDuration(startInput, durationInput) {
+    var startDateString = startInput.value;
+
+    // Log the input date string for debugging
+    console.log('Input Date String:', startDateString);
+
+    // Parse the date string using moment
+    var startDate = moment(startDateString, 'DD/MM/YY', true);
+
+    // Check if moment successfully parsed the date
+    if (!startDate.isValid()) {
+        console.error('Invalid date format:', startDateString);
+        return;
     }
 
-    // Convert the date parts to a Date object
-    var doj = new Date(dojParts[2], dojParts[1]-1, dojParts[0]);
-    var dol = new Date(dolParts[2], dolParts[1]-1, dolParts[0]);
+    var endDate = moment(); // Assuming current date as end date, modify as needed
+    var duration = moment.duration(endDate.diff(startDate));
+    var years = duration.years();
+    var months = duration.months();
 
-    if (!isNaN(doj.getTime()) && !isNaN(dol.getTime())) {
-        var durationInMilliseconds = dol - doj;
+    // Log information to the console
+    console.log('Start Date:', startDate.format('DD/MM/YYYY')); // Format to 'DD/MM/YYYY'
+    console.log('End Date:', endDate.format('DD/MM/YYYY')); // Format to 'DD/MM/YYYY'
+    console.log('Duration:', duration.humanize()); // Outputs a human-readable duration
 
-        var years = Math.floor(durationInMilliseconds / (365.25 * 24 * 60 * 60 * 1000));
-        var months = Math.floor((durationInMilliseconds % (365.25 * 24 * 60 * 60 * 1000)) / (30.44 * 24 * 60 * 60 * 1000));
-
-        document.getElementById("pres_emp_duration").value = years + " years " + months + " months";
-    }
+    // Update the duration input
+    durationInput.value = years + ' years ' + months + ' months';
+    console.log('Updated Duration:', durationInput.value);
 }
 
 </script>
@@ -984,6 +1003,55 @@ function calculateDuration(type) {
 <div id="footer"></div>
 </body>
 </html>
+
+<script>
+    <?php
+    if (!empty($emp_hist)) {
+        foreach ($emp_hist as $index => $qualification) {
+            ?>
+            initPikaday("doj<?= $index + 1 ?>", "duration<?= $index + 1 ?>");
+            initPikaday("dol<?= $index + 1 ?>", "duration<?= $index + 1 ?>");
+            <?php
+        }
+    }
+    ?>
+    <?php
+    if (!empty($te_exp)) {
+        foreach ($te_exp as $index => $qualification) {
+            ?>
+            initPikaday("te_doj<?= $index + 1 ?>", "te_duration<?= $index + 1 ?>");
+            initPikaday("te_dol<?= $index + 1 ?>", "te_duration<?= $index + 1 ?>");
+            <?php
+        }
+    }
+    ?>
+    <?php
+    if (!empty($r_exp)) {
+        foreach ($r_exp as $index => $qualification) {
+            ?>
+            initPikaday("r_exp_doj<?= $index + 1 ?>", "r_exp_duration<?= $index + 1 ?>");
+            initPikaday("r_exp_dol<?= $index + 1 ?>", "r_exp_duration<?= $index + 1 ?>");
+            <?php
+        }
+    }
+    ?>
+    <?php
+    if (!empty($ind_exp)) {
+        foreach ($ind_exp as $index => $qualification) {
+            ?>
+            initPikaday("ind_doj<?= $index + 1 ?>", "period<?= $index + 1 ?>");
+            initPikaday("ind_dol<?= $index + 1 ?>", "period<?= $index + 1 ?>");
+            <?php
+        }
+    }
+    ?>
+    var dateFields = ['pres_emp_doj', 'pres_emp_dol'];
+    var durationField = 'pres_emp_duration';
+
+    dateFields.forEach(function (field) {
+        initPikaday(field, durationField);
+    });
+</script>
 
 <script type="text/javascript">
 	

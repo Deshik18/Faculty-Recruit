@@ -2,6 +2,9 @@
 include 'config.php';
 session_start();
 
+require 'convertapi-php-master/lib/ConvertApi/autoload.php';
+require 'TCPDF-main/tcpdf.php';
+
 if (!isset($_SESSION['adv_num']) || !isset($_SESSION['dept']) || !isset($_SESSION['fname']) || !isset($_SESSION['lname'])) {
 
     if ($conn->connect_error) {
@@ -246,14 +249,26 @@ $conn->close();
     <p>Application Number : <?php echo $application_details['ref_num'] ?? ''; ?></p>
 </div>
 <?php
-$selectedDepartment = strtoupper($_SESSION['dept']);
-$nameEmailCat = strtoupper($_SESSION['fname'] . '_' . $_SESSION['lname'] . '_' . $_SESSION['email'] . '_' . $_SESSION['cast']);
-$uploadsDir = $_SESSION['adv_num'] . '/' . $selectedDepartment . '/' . $nameEmailCat . '/';
+$selected_department = strtoupper($_SESSION['dept']);
+$name_email_cat = strtoupper($_SESSION['first_name'] . '_' . $_SESSION['last_name'] . '_' . $_SESSION['email'] . '_' . $_SESSION['cast']);
+$uploadsDir = $_SESSION['adv_num'] . '/' . $selected_department . '/' . $_SESSION['post'] . '/' . $_SESSION['cast'] . '/' . $_SESSION['ref_num'] . '_' . $name_email_cat . '_supportingdocs/';
 
-$PhotoImagePath = $uploadsDir . 'Photo.jpg';
+// Find the first available photo with any extension
+$photoExtensions = ['jpg', 'jpeg', 'png', 'gif']; // Add more extensions if needed
+
+foreach ($photoExtensions as $extension) {
+    $photoPath = $uploadsDir . 'Photo.' . $extension;
+    if (file_exists($photoPath)) {
+        break;
+    }
+}
+
 ?>
+
 <div class="receipt_right" style="margin-top: -30px;">
-    <img src="<?php echo $PhotoImagePath;?>">
+    <?php if (isset($photoPath) && file_exists($photoPath)) : ?>
+        <img src="<?php echo $photoPath; ?>">
+    <?php endif; ?>
 </div>
 <div style="clear:both"></div>
 <div>
@@ -550,7 +565,7 @@ $additional_qualifications = json_decode($facultyDetails['additional_qualificati
     <?php
     $pres_emp_det = json_decode($facultyDetails['pre_emp_det'], true) ?? [];
     $emp_hist = json_decode($facultyDetails['his_det'], true) ?? [];
-    $te_exp = json_decode($facultyDetails['teach_exp'], true) ?? [];
+    $te_exp = json_decode($facultyDetails['te_det'], true) ?? [];
     $r_exp = json_decode($facultyDetails['r_det'], true) ?? [];
     $ind_exp = json_decode($facultyDetails['ind_det'], true) ?? [];
     $area_det = json_decode($facultyDetails['area_det'], true) ?? [];
@@ -806,16 +821,16 @@ $additional_qualifications = json_decode($facultyDetails['additional_qualificati
 
         <?php
         // Assuming $best_pub is an array containing best publications
-        if (!empty($best_pub['journal'])) {
-            foreach ($best_pub['journal'] as $index => $publication) {
+        if (!empty($best_pub)) {
+            foreach ($best_pub as $index => $publication) {
                 ?>
                 <tr>
                     <td><?php echo $index + 1; ?></td>
-                    <td><?php echo $publication['authors'] ?? 'NULL'; ?></td>
+                    <td><?php echo $publication['author'] ?? 'NULL'; ?></td>
                     <td><?php echo $publication['title'] ?? 'NULL'; ?></td>
-                    <td><?php echo $publication['journal_name'] ?? 'NULL'; ?></td>
-                    <td><?php echo $publication['year_vol_page'] ?? 'NULL'; ?></td>
-                    <td><?php echo $publication['impact_factor'] ?? 'NULL'; ?></td>
+                    <td><?php echo $publication['journal'] ?? 'NULL'; ?></td>
+                    <td><?php echo $publication['year'] ?? 'NULL'; ?></td>
+                    <td><?php echo $publication['impact'] ?? 'NULL'; ?></td>
                     <td><?php echo $publication['doi'] ?? 'NULL'; ?></td>
                     <td><?php echo $publication['status'] ?? 'NULL'; ?></td>
                 </tr>
@@ -1243,49 +1258,57 @@ $consultancyProjects = json_decode($facultyDetails['consultancy'], true) ?? [];
 	</tbody></table>
 	<br>
 
-	<span class="label">20. Reprints of 5 Best Research Papers-Attached </span>
-	
+	<span class="label">20. Reprints of 5 Best Research Papers- 
+    <?php 
+    $researchPaperPath = $uploadsDir . 'Research_Paper.pdf';
+    $researchPaperExists = checkFileExists($researchPaperPath);
+
+    if ($researchPaperExists) {
+        echo '<a href="' . $researchPaperPath . '" target="_blank">Attached</a>';
+    } else {
+        echo 'Not Attached';
+    }
+    ?>
+    </span>	
 	<br>
 	<br>
 
 	<span class="label">21. Check List of the documents attached with the online application </span><br>
 
-	<?php
+    <?php
 
-// Function to check if a file exists
-function checkFileExists($filePath) {
-    return file_exists($filePath);
-}
-
-// Function to display the file name if it exists
-function displayFileNameIfExists($uploadsDir, $fileName) {
-    $filePath = $uploadsDir . $fileName;
-    if (checkFileExists($filePath)) {
-        echo "$fileName<br>";
+    // Function to check if a file exists
+    function checkFileExists($filePath) {
+        return file_exists($filePath);
     }
-}
 
-// Directory and file names
-$selectedDepartment = strtoupper($_SESSION['dept']);
-$nameEmailCat = strtoupper($_SESSION['fname'] . '_' . $_SESSION['lname'] . '_' . $_SESSION['email'] . '_' . $_SESSION['cast']);
-$uploadsDir = $_SESSION['adv_num'] . '/' . $selectedDepartment . '/' . $nameEmailCat . '/';
-$fileNames = [
-    'PHD_Certificate.pdf',
-    'PG_Certificate.pdf',
-    'UG_Certificate.pdf',
-    '12th_HSC_Diploma.pdf',
-    '10th_SSC_Certificate.pdf',
-    '10_Years_Post_PHD_Experience_Certificate.pdf',
-    'Any_Other_Document.pdf'
-];
+    // Function to display a clickable link for the file if it exists
+    function displayFileLinkIfExists($uploadsDir, $fileName) {
+        $filePath = $uploadsDir . $fileName;
+        if (checkFileExists($filePath)) {
+            echo "<a href='$filePath' target='_blank'>$fileName</a><br>";
+        }
+    }
 
-// Display the names of files that exist
-foreach ($fileNames as $fileName) {
-    displayFileNameIfExists($uploadsDir, $fileName);
-}
-?>
+    // Directory and file names
+    $selected_department = strtoupper($_SESSION['dept']);
+    $name_email_cat = strtoupper($_SESSION['first_name'] . '_' . $_SESSION['last_name'] . '_' . $_SESSION['email'] . '_' . $_SESSION['cast']);
+    $uploadsDir = $_SESSION['adv_num'] . '/' . $selected_department . '/' . $_SESSION['post'] . '/' . $_SESSION['cast'] . '/' . $_SESSION['ref_num'] . '_' . $name_email_cat . '_supportingdocs/';
+    $fileNames = [
+        'PHD_Certificate.pdf',
+        'PG_Certificate.pdf',
+        'UG_Certificate.pdf',
+        '12th_HSC_Diploma.pdf',
+        '10th_SSC_Certificate.pdf',
+        '10_Years_Post_PHD_Experience_Certificate.pdf',
+        'Any_Other_Document.pdf'
+    ];
 
-
+    // Display clickable links for files that exist
+    foreach ($fileNames as $fileName) {
+        displayFileLinkIfExists($uploadsDir, $fileName);
+    }
+    ?>
 	<span class="label">22. Referees</span>
 	<table class="tab">
 		<tbody><tr style="background-color:#f1f1f1;">
@@ -1321,32 +1344,118 @@ foreach ($fileNames as $fileName) {
 <br>
 
 <?php
-    // Assuming $uploadsDir is defined as mentioned in your code
-    $signatureImagePath = $uploadsDir . 'Signature.jpg';
-    ?>
+// Assuming $uploadsDir is defined as mentioned in your code
+$signatureImagePath = $uploadsDir . 'Signature.jpg';
+?>
 
-	
-	<span class="label">23. Final Declaration</span>
+<div id="non_print_area">
+    <button onclick="generatePDF();">Print Application</button> <br>
+</div>
 
-	<table class="tab">
-		
-		<tbody><tr><td>                I hereby declare that I have carefully read and understood the instructions and particulars mentioned in the advertisment and this application form. I further declare that all the entries along with the attachments uploaded in this form are true to the best of my knowledge and belief</td>
-	</tr></tbody></table>
-	<br>
-	
-		<img src="<?php echo $signatureImagePath; ?>" style="height:50; "><br>
-	Signature of Applicant
+<?php
+use \ConvertApi\ConvertApi;
 
-	</div>
+ConvertApi::setApiSecret('ezubjWtrEMtkztDW');
 
-    <div id="non_print_area">
-		<button onclick="window.print();">Print Application</button> <br>
-	</div>
-	</div>
+// Directory and file names
+$selected_department = strtoupper($_SESSION['dept']);
+$name_email_cat = strtoupper($_SESSION['first_name'] . '_' . $_SESSION['last_name'] . '_' . $_SESSION['email'] . '_' . $_SESSION['cast']);
+$uploadsDir = $_SESSION['adv_num'] . '/' . $selected_department . '/' . $_SESSION['post'] . '/' . $_SESSION['cast'] . '/' . $_SESSION['ref_num'] . '_' . $name_email_cat . '_supportingdocs';
+$resultDirectory = $uploadsDir;  // Change to the desired directory
+$resultFile = $resultDirectory . '/application.pdf';
+
+// Check if the merged PDF file exists
+if (!file_exists($resultFile)) {
+    $fileNames = [
+        'PHD_Certificate.pdf',
+        'PG_Certificate.pdf',
+        'UG_Certificate.pdf',
+        '12th_HSC_Diploma.pdf',
+        '10th_SSC_Certificate.pdf',
+        '10_Years_Post_PHD_Experience_Certificate.pdf',
+        'Any_Other_Document.pdf'
+    ];
+
+    // Add all files in the specified directory
+    $allFiles = [];
+    foreach ($fileNames as $fileName) {
+        $filePath = $uploadsDir . $fileName;
+
+        // Check if the file exists before adding to the array
+        if (file_exists($filePath)) {
+            $allFiles[] = $filePath;
+        }
+    }
+
+    // Check if there are valid files before making the conversion request
+    if (count($allFiles) > 0) {
+        // Convert and merge all files
+        $result = ConvertApi::convert('merge', [
+            'Files' => $allFiles,
+            'BookmarksToc' => 'title',
+            'OpenPage' => '1',
+        ], 'pdf');
+
+        if ($result->getFile()) {
+            // Save the merged PDF
+            $result->getFile()->save($resultFile);
+        }
+    }
+}
+
+// Display the PDF with dynamic header
+$pdf = new TCPDF();
+
+class MYPDF extends TCPDF {
+    public function Header() {
+        global $resultFile;
+        $this->SetY(10);
+        $this->SetFont('helvetica', 'B', 12);
+        $this->Cell(0, 10, 'Header: ' . basename($resultFile), 0, false, 'C', 0, '', 0, false, 'M', 'M');
+    }
+
+    public function Footer() {
+        // No footer
+    }
+}
+
+$pdf = new MYPDF();
+
+$pdf->SetMargins(10, 10, 10);
+$pdf->SetAutoPageBreak(TRUE, 10);
+
+// Start capturing the output into a buffer
+ob_start();
+
+// Add a page
+$pdf->AddPage();
+
+// Add the HTML content to the PDF
+$pdf->writeHTML('<h1>Your HTML Content Goes Here</h1>', true, 0, true, 0);
+
+// Add the iframe content directly
+$pdf->writeHTML('<iframe src="data:application/pdf;base64,' . base64_encode(file_get_contents($resultFile)) . '" width="100%" height="800px"></iframe>', true, 0, true, 0);
+
+// Specify the file name for saving
+$saveFileName = 'application_with_header.pdf';
+
+// Save the PDF at the server
+$pdf->Output($resultDirectory . '/' . $saveFileName, 'F');
+
+// End output buffering and get the captured content
+$contents = ob_get_clean();
+
+// Save the captured content to a file (optional)
+file_put_contents($resultDirectory . '/application_content.html', $contents);
+
+// Download the generated PDF
+header('Content-Type: application/pdf');
+header('Content-Disposition: attachment; filename="' . $saveFileName . '"');
+echo $contents;
+?>
 
 
 
-	
 <style>
 @media print
 {    

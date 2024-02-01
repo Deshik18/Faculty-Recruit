@@ -4,11 +4,12 @@ include('../config.php'); // Change to your actual database connection file
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $selected_department = strtoupper($_SESSION['dept']);
-    $name_email_cat = strtoupper($_SESSION['fname'] . '_' . $_SESSION['lname'] . '_' . $_SESSION['email'] . '_' . $_SESSION['cast']);
-    $uploads_dir = '../' . $_SESSION['adv_num'] . '/' . $selected_department . '/' . $name_email_cat . '/';
-    if (!is_dir($uploads_dir)) {
-        mkdir($uploads_dir, 0777, true);
+    $selected_department = strtoupper($_SESSION['dept']); // Convert department name to uppercase
+    $name_email_cat = strtoupper($_SESSION['first_name'] . '_' . $_SESSION['last_name'] . '_' . $_SESSION['email'] . '_' . $_SESSION['cast']);
+    $uploads_dir = '../' . $_SESSION['adv_num'] . '/' . $selected_department . '/' . $_SESSION['post'] . '/' . $_SESSION['cast'] . '/' . $_SESSION['ref_num'] . '_' . $name_email_cat . '_supportingdocs/';
+
+    if (!file_exists($ref_num_fname_lname_docs_dir)) {
+        mkdir($ref_num_fname_lname_docs_dir, 0777, true);
     }
 
     $file_fields = [

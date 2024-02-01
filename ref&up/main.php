@@ -426,13 +426,18 @@ p
  
 <hr> 
 <div class="form-group">
-<div class="col-md-10">
-  <a href="../rel_info/main.php" class="btn btn-primary pull-left"><i class="glyphicon glyphicon-fast-backward"></i></a>
-  
-
+<div class="col-md-1">
+<a href="../rel_info/main.php" class="btn btn-primary pull-left">
+&lt; <!-- HTML entity for the '<' symbol -->
+</a>
 </div>
 
-<div class="col-md-2">
+<div class="col-md-6">
+    <span class="pull-right" style="margin-right: 20px; font-weight: bold; font-size: 1.2em;">Page 8/9</span>
+</div>
+
+
+<div class="col-md-12">
   <button id="submit" type="submit" name="submit" value="Submit" class="btn btn-success pull-right">SAVE &amp; NEXT</button>
 
 </div>

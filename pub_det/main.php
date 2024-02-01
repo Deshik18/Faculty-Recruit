@@ -38,7 +38,9 @@ $chapter = json_decode($chapter_json, true);
 	<link href="../files/css(4)" rel="stylesheet"> 
 	<link rel="preconnect" href="https://fonts.gstatic.com/">
 	<link href="../files/css2" rel="stylesheet">
-
+    <script src="../jquery-ui.js"></script>
+    <script src="../pikaday.min.js"></script>
+    <link rel="stylesheet" href="../pikaday.min.css" />
 
 	
 <style type="text/css">
@@ -144,7 +146,7 @@ $(document).ready(function () {
         create_serial('book');
         create_input('bauthor[]', 'Book', 'bauthor' + counter_book, 'book', counter_book, 'book');
         create_input('btitle[]', 'Title of the Book', 'btitle' + counter_book, 'book', counter_book, 'book');
-        create_input('byear[]', 'Year', 'byear' + counter_book, 'book', counter_book, 'book');
+        create_input('byear[]', 'Year', 'byear' + counter_book, 'book', counter_book, 'book', false, false, false, false, true);
         create_input('bisbn[]', 'ISBN', 'bisbn' + counter_book, 'book', counter_book, 'book', true);
         counter_book++;
         return false;
@@ -155,7 +157,7 @@ $(document).ready(function () {
         create_serial('book_chapter');
         create_input('bc_author[]', 'Book Chapter', 'bc_author' + counter_book_chapter, 'book_chapter', counter_book_chapter, 'book_chapter');
         create_input('bc_title[]', 'Title', 'bc_title' + counter_book_chapter, 'book_chapter', counter_book_chapter, 'book_chapter');
-        create_input('bc_year[]', 'Year', 'bc_year' + counter_book_chapter, 'book_chapter', counter_book_chapter, 'book_chapter');
+        create_input('bc_year[]', 'Year', 'bc_year' + counter_book_chapter, 'book_chapter', counter_book_chapter, 'book_chapter', false, false, false, false, true);
         create_input('bc_isbn[]', 'ISBN', 'bc_isbn' + counter_book_chapter, 'book_chapter', counter_book_chapter, 'book_chapter', true);
         counter_book_chapter++;
         return false;
@@ -166,7 +168,7 @@ $(document).ready(function () {
         create_serial('patent');
         create_input('pauthor[]', 'Inventor(s)', 'pauthor' + counter_patent, 'patent', counter_patent, 'patent');
         create_input('ptitle[]', 'Title of Patent', 'ptitle' + counter_patent, 'patent', counter_patent, 'patent');
-        create_input('p_country[]', 'Country of patent', 'p_country' + counter_patent, 'patent', counter_patent, 'patent');
+        create_input('p_country[]', 'Country of Patent', 'p_country' + counter_patent, 'patent', counter_patent, 'patent', false, false, false, true);
         create_input('p_number[]', 'Patent Number', 'p_number' + counter_patent, 'patent', counter_patent, 'patent');
         create_input('pyear_filed[]', 'DD/MM/YYYY', 'pyear_filed' + counter_patent, 'patent', counter_patent, 'patent', false, false, true);
         create_input('pyear_published[]', 'DD/MM/YYYY', 'pyear_published' + counter_patent, 'patent', counter_patent, 'patent', false, false, true);
@@ -183,12 +185,281 @@ function create_tr() {
 function create_serial(tbody_id) {
     var td = document.createElement("td");
     var x = document.getElementById(tbody_id).rows.length;
+    if(tbody_id==='jour'){
+        x = x+1;
+    }
     td.innerHTML = x;
     tr.appendChild(td);
 }
 
-function create_input(t_name, place_value, id, tbody_id, counter, remove_name, btn = false, select = false, datepicker=false) {
-    if (select == false) {
+function create_input(t_name, place_value, id, tbody_id, counter, remove_name, btn = false, select = false, datepicker = false, country_dropdown = false, year_dropdown = false) {
+    var td = document.createElement("td");
+    if (year_dropdown) {
+        // Add year dropdown
+        var yearSel = document.createElement("select");
+        yearSel.setAttribute("name", "year_dropdown_" + counter);
+        yearSel.setAttribute("class", "form-control input-md");
+        yearSel.innerHTML += "<option>Select Year</option>";
+        var currentYear = new Date().getFullYear();
+        for (var year = 1950; year <= currentYear; year++) {
+            yearSel.innerHTML += "<option value='" + year + "'>" + year + "</option>";
+        }
+        td.appendChild(yearSel);
+    }
+
+    if (country_dropdown) {
+        // Add country dropdown
+        var countrySel = document.createElement("select");
+        countrySel.setAttribute("name", "country_dropdown_" + counter);
+        countrySel.setAttribute("class", "form-control input-md");
+        countrySel.innerHTML += "<option>Select Country</option>";
+        countrySel.innerHTML += "<option>Afghanistan</option>";
+        countrySel.innerHTML += "<option>Aland Islands</option>";
+        countrySel.innerHTML += "<option>Albania</option>";
+        countrySel.innerHTML += "<option>Algeria</option>";
+        countrySel.innerHTML += "<option>American Samoa</option>";
+        countrySel.innerHTML += "<option>Andorra</option>";
+        countrySel.innerHTML += "<option>Angola</option>";
+        countrySel.innerHTML += "<option>Anguilla</option>";
+        countrySel.innerHTML += "<option>Antarctica</option>";
+        countrySel.innerHTML += "<option>Antigua and Barbuda</option>";
+        countrySel.innerHTML += "<option>Argentina</option>";
+        countrySel.innerHTML += "<option>Armenia</option>";
+        countrySel.innerHTML += "<option>Aruba</option>";
+        countrySel.innerHTML += "<option>Australia</option>";
+        countrySel.innerHTML += "<option>Austria</option>";
+        countrySel.innerHTML += "<option>Azerbaijan</option>";
+        countrySel.innerHTML += "<option>Bahamas</option>";
+        countrySel.innerHTML += "<option>Bahrain</option>";
+        countrySel.innerHTML += "<option>Bangladesh</option>";
+        countrySel.innerHTML += "<option>Barbados</option>";
+        countrySel.innerHTML += "<option>Belarus</option>";
+        countrySel.innerHTML += "<option>Belgium</option>";
+        countrySel.innerHTML += "<option>Belize</option>";
+        countrySel.innerHTML += "<option>Benin</option>";
+        countrySel.innerHTML += "<option>Bermuda</option>";
+        countrySel.innerHTML += "<option>Bhutan</option>";
+        countrySel.innerHTML += "<option>Bolivia</option>";
+        countrySel.innerHTML += "<option>Bosnia and Herzegovina</option>";
+        countrySel.innerHTML += "<option>Botswana</option>";
+        countrySel.innerHTML += "<option>Bouvet Island</option>";
+        countrySel.innerHTML += "<option>Brazil</option>";
+        countrySel.innerHTML += "<option>British Indian Ocean Territory</option>";
+        countrySel.innerHTML += "<option>Brunei Darussalam</option>";
+        countrySel.innerHTML += "<option>Bulgaria</option>";
+        countrySel.innerHTML += "<option>Burkina Faso</option>";
+        countrySel.innerHTML += "<option>Burundi</option>";
+        countrySel.innerHTML += "<option>Cambodia</option>";
+        countrySel.innerHTML += "<option>Cameroon</option>";
+        countrySel.innerHTML += "<option>Canada</option>";
+        countrySel.innerHTML += "<option>Cape Verde</option>";
+        countrySel.innerHTML += "<option>Cayman Islands</option>";
+        countrySel.innerHTML += "<option>Central African Republic</option>";
+        countrySel.innerHTML += "<option>Chad</option>";
+        countrySel.innerHTML += "<option>Chile</option>";
+        countrySel.innerHTML += "<option>China</option>";
+        countrySel.innerHTML += "<option>Christmas Island</option>";
+        countrySel.innerHTML += "<option>Cocos (Keeling) Islands</option>";
+        countrySel.innerHTML += "<option>Colombia</option>";
+        countrySel.innerHTML += "<option>Comoros</option>";
+        countrySel.innerHTML += "<option>Congo</option>";
+        countrySel.innerHTML += "<option>Congo, The Democratic Republic of The</option>";
+        countrySel.innerHTML += "<option>Cook Islands</option>";
+        countrySel.innerHTML += "<option>Costa Rica</option>";
+        countrySel.innerHTML += "<option>Cote D'ivoire</option>";
+        countrySel.innerHTML += "<option>Croatia</option>";
+        countrySel.innerHTML += "<option>Cuba</option>";
+        countrySel.innerHTML += "<option>Cyprus</option>";
+        countrySel.innerHTML += "<option>Czech Republic</option>";
+        countrySel.innerHTML += "<option>Denmark</option>";
+        countrySel.innerHTML += "<option>Djibouti</option>";
+        countrySel.innerHTML += "<option>Dominica</option>";
+        countrySel.innerHTML += "<option>Dominican Republic</option>";
+        countrySel.innerHTML += "<option>Ecuador</option>";
+        countrySel.innerHTML += "<option>Egypt</option>";
+        countrySel.innerHTML += "<option>El Salvador</option>";
+        countrySel.innerHTML += "<option>Equatorial Guinea</option>";
+        countrySel.innerHTML += "<option>Eritrea</option>";
+        countrySel.innerHTML += "<option>Estonia</option>";
+        countrySel.innerHTML += "<option>Ethiopia</option>";
+        countrySel.innerHTML += "<option>Falkland Islands (Malvinas)</option>";
+        countrySel.innerHTML += "<option>Faroe Islands</option>";
+        countrySel.innerHTML += "<option>Fiji</option>";
+        countrySel.innerHTML += "<option>Finland</option>";
+        countrySel.innerHTML += "<option>France</option>";
+        countrySel.innerHTML += "<option>French Guiana</option>";
+        countrySel.innerHTML += "<option>French Polynesia</option>";
+        countrySel.innerHTML += "<option>French Southern Territories</option>";
+        countrySel.innerHTML += "<option>Gabon</option>";
+        countrySel.innerHTML += "<option>Gambia</option>";
+        countrySel.innerHTML += "<option>Georgia</option>";
+        countrySel.innerHTML += "<option>Germany</option>";
+        countrySel.innerHTML += "<option>Ghana</option>";
+        countrySel.innerHTML += "<option>Gibraltar</option>";
+        countrySel.innerHTML += "<option>Greece</option>";
+        countrySel.innerHTML += "<option>Greenland</option>";
+        countrySel.innerHTML += "<option>Grenada</option>";
+        countrySel.innerHTML += "<option>Guadeloupe</option>";
+        countrySel.innerHTML += "<option>Guam</option>";
+        countrySel.innerHTML += "<option>Guatemala</option>";
+        countrySel.innerHTML += "<option>Guernsey</option>";
+        countrySel.innerHTML += "<option>Guinea</option>";
+        countrySel.innerHTML += "<option>Guinea-bissau</option>";
+        countrySel.innerHTML += "<option>Guyana</option>";
+        countrySel.innerHTML += "<option>Haiti</option>";
+        countrySel.innerHTML += "<option>Heard Island and Mcdonald Islands</option>";
+        countrySel.innerHTML += "<option>Holy See (Vatican City State)</option>";
+        countrySel.innerHTML += "<option>Honduras</option>";
+        countrySel.innerHTML += "<option>Hong Kong</option>";
+        countrySel.innerHTML += "<option>Hungary</option>";
+        countrySel.innerHTML += "<option>Iceland</option>";
+        countrySel.innerHTML += "<option>India</option>";
+        countrySel.innerHTML += "<option>Indonesia</option>";
+        countrySel.innerHTML += "<option>Iran, Islamic Republic of</option>";
+        countrySel.innerHTML += "<option>Iraq</option>";
+        countrySel.innerHTML += "<option>Ireland</option>";
+        countrySel.innerHTML += "<option>Isle of Man</option>";
+        countrySel.innerHTML += "<option>Israel</option>";
+        countrySel.innerHTML += "<option>Italy</option>";
+        countrySel.innerHTML += "<option>Jamaica</option>";
+        countrySel.innerHTML += "<option>Japan</option>";
+        countrySel.innerHTML += "<option>Jersey</option>";
+        countrySel.innerHTML += "<option>Jordan</option>";
+        countrySel.innerHTML += "<option>Kazakhstan</option>";
+        countrySel.innerHTML += "<option>Kenya</option>";
+        countrySel.innerHTML += "<option>Kiribati</option>";
+        countrySel.innerHTML += "<option>Korea, Democratic People's Republic of</option>";
+        countrySel.innerHTML += "<option>Korea, Republic of</option>";
+        countrySel.innerHTML += "<option>Kuwait</option>";
+        countrySel.innerHTML += "<option>Kyrgyzstan</option>";
+        countrySel.innerHTML += "<option>Lao People's Democratic Republic</option>";
+        countrySel.innerHTML += "<option>Latvia</option>";
+        countrySel.innerHTML += "<option>Lebanon</option>";
+        countrySel.innerHTML += "<option>Lesotho</option>";
+        countrySel.innerHTML += "<option>Liberia</option>";
+        countrySel.innerHTML += "<option>Libyan Arab Jamahiriya</option>";
+        countrySel.innerHTML += "<option>Liechtenstein</option>";
+        countrySel.innerHTML += "<option>Lithuania</option>";
+        countrySel.innerHTML += "<option>Luxembourg</option>";
+        countrySel.innerHTML += "<option>Macao</option>";
+        countrySel.innerHTML += "<option>Macedonia, The Former Yugoslav Republic of</option>";
+        countrySel.innerHTML += "<option>Madagascar</option>";
+        countrySel.innerHTML += "<option>Malawi</option>";
+        countrySel.innerHTML += "<option>Malaysia</option>";
+        countrySel.innerHTML += "<option>Maldives</option>";
+        countrySel.innerHTML += "<option>Mali</option>";
+        countrySel.innerHTML += "<option>Malta</option>";
+        countrySel.innerHTML += "<option>Marshall Islands</option>";
+        countrySel.innerHTML += "<option>Martinique</option>";
+        countrySel.innerHTML += "<option>Mauritania</option>";
+        countrySel.innerHTML += "<option>Mauritius</option>";
+        countrySel.innerHTML += "<option>Mayotte</option>";
+        countrySel.innerHTML += "<option>Mexico</option>";
+        countrySel.innerHTML += "<option>Micronesia, Federated States of</option>";
+        countrySel.innerHTML += "<option>Moldova, Republic of</option>";
+        countrySel.innerHTML += "<option>Monaco</option>";
+        countrySel.innerHTML += "<option>Mongolia</option>";
+        countrySel.innerHTML += "<option>Montenegro</option>";
+        countrySel.innerHTML += "<option>Montserrat</option>";
+        countrySel.innerHTML += "<option>Morocco</option>";
+        countrySel.innerHTML += "<option>Mozambique</option>";
+        countrySel.innerHTML += "<option>Myanmar</option>";
+        countrySel.innerHTML += "<option>Namibia</option>";
+        countrySel.innerHTML += "<option>Nauru</option>";
+        countrySel.innerHTML += "<option>Nepal</option>";
+        countrySel.innerHTML += "<option>Netherlands</option>";
+        countrySel.innerHTML += "<option>Netherlands Antilles</option>";
+        countrySel.innerHTML += "<option>New Caledonia</option>";
+        countrySel.innerHTML += "<option>New Zealand</option>";
+        countrySel.innerHTML += "<option>Nicaragua</option>";
+        countrySel.innerHTML += "<option>Niger</option>";
+        countrySel.innerHTML += "<option>Nigeria</option>";
+        countrySel.innerHTML += "<option>Niue</option>";
+        countrySel.innerHTML += "<option>Norfolk Island</option>";
+        countrySel.innerHTML += "<option>Northern Mariana Islands</option>";
+        countrySel.innerHTML += "<option>Norway</option>";
+        countrySel.innerHTML += "<option>Oman</option>";
+        countrySel.innerHTML += "<option>Pakistan</option>";
+        countrySel.innerHTML += "<option>Palau</option>";
+        countrySel.innerHTML += "<option>Palestinian Territory, Occupied</option>";
+        countrySel.innerHTML += "<option>Panama</option>";
+        countrySel.innerHTML += "<option>Papua New Guinea</option>";
+        countrySel.innerHTML += "<option>Paraguay</option>";
+        countrySel.innerHTML += "<option>Peru</option>";
+        countrySel.innerHTML += "<option>Philippines</option>";
+        countrySel.innerHTML += "<option>Pitcairn</option>";
+        countrySel.innerHTML += "<option>Poland</option>";
+        countrySel.innerHTML += "<option>Portugal</option>";
+        countrySel.innerHTML += "<option>Puerto Rico</option>";
+        countrySel.innerHTML += "<option>Qatar</option>";
+        countrySel.innerHTML += "<option>Reunion</option>";
+        countrySel.innerHTML += "<option>Romania</option>";
+        countrySel.innerHTML += "<option>Russian Federation</option>";
+        countrySel.innerHTML += "<option>Rwanda</option>";
+        countrySel.innerHTML += "<option>Saint Helena</option>";
+        countrySel.innerHTML += "<option>Saint Kitts and Nevis</option>";
+        countrySel.innerHTML += "<option>Saint Lucia</option>";
+        countrySel.innerHTML += "<option>Saint Pierre and Miquelon</option>";
+        countrySel.innerHTML += "<option>Saint Vincent and The Grenadines</option>";
+        countrySel.innerHTML += "<option>Samoa</option>";
+        countrySel.innerHTML += "<option>San Marino</option>";
+        countrySel.innerHTML += "<option>Sao Tome and Principe</option>";
+        countrySel.innerHTML += "<option>Saudi Arabia</option>";
+        countrySel.innerHTML += "<option>Senegal</option>";
+        countrySel.innerHTML += "<option>Serbia</option>";
+        countrySel.innerHTML += "<option>Seychelles</option>";
+        countrySel.innerHTML += "<option>Sierra Leone</option>";
+        countrySel.innerHTML += "<option>Singapore</option>";
+        countrySel.innerHTML += "<option>Slovakia</option>";
+        countrySel.innerHTML += "<option>Slovenia</option>";
+        countrySel.innerHTML += "<option>Solomon Islands</option>";
+        countrySel.innerHTML += "<option>Somalia</option>";
+        countrySel.innerHTML += "<option>South Africa</option>";
+        countrySel.innerHTML += "<option>South Georgia and The South Sandwich Islands</option>";
+        countrySel.innerHTML += "<option>Spain</option>";
+        countrySel.innerHTML += "<option>Sri Lanka</option>";
+        countrySel.innerHTML += "<option>Sudan</option>";
+        countrySel.innerHTML += "<option>Suriname</option>";
+        countrySel.innerHTML += "<option>Svalbard and Jan Mayen</option>";
+        countrySel.innerHTML += "<option>Swaziland</option>";
+        countrySel.innerHTML += "<option>Sweden</option>";
+        countrySel.innerHTML += "<option>Switzerland</option>";
+        countrySel.innerHTML += "<option>Syrian Arab Republic</option>";
+        countrySel.innerHTML += "<option>Taiwan</option>";
+        countrySel.innerHTML += "<option>Tajikistan</option>";
+        countrySel.innerHTML += "<option>Tanzania, United Republic of</option>";
+        countrySel.innerHTML += "<option>Thailand</option>";
+        countrySel.innerHTML += "<option>Timor-leste</option>";
+        countrySel.innerHTML += "<option>Togo</option>";
+        countrySel.innerHTML += "<option>Tokelau</option>";
+        countrySel.innerHTML += "<option>Tonga</option>";
+        countrySel.innerHTML += "<option>Trinidad and Tobago</option>";
+        countrySel.innerHTML += "<option>Tunisia</option>";
+        countrySel.innerHTML += "<option>Turkey</option>";
+        countrySel.innerHTML += "<option>Turkmenistan</option>";
+        countrySel.innerHTML += "<option>Turks and Caicos Islands</option>";
+        countrySel.innerHTML += "<option>Tuvalu</option>";
+        countrySel.innerHTML += "<option>Uganda</option>";
+        countrySel.innerHTML += "<option>Ukraine</option>";
+        countrySel.innerHTML += "<option>United Arab Emirates</option>";
+        countrySel.innerHTML += "<option>United Kingdom</option>";
+        countrySel.innerHTML += "<option>United States</option>";
+        countrySel.innerHTML += "<option>Uruguay</option>";
+        countrySel.innerHTML += "<option>Uzbekistan</option>";
+        countrySel.innerHTML += "<option>Vanuatu</option>";
+        countrySel.innerHTML += "<option>Venezuela</option>";
+        countrySel.innerHTML += "<option>Viet Nam</option>";
+        countrySel.innerHTML += "<option>Virgin Islands, British</option>";
+        countrySel.innerHTML += "<option>Virgin Islands, U.S.</option>";
+        countrySel.innerHTML += "<option>Wallis and Futuna</option>";
+        countrySel.innerHTML += "<option>Western Sahara</option>";
+        countrySel.innerHTML += "<option>Yemen</option>";
+        countrySel.innerHTML += "<option>Zambia</option>";
+        countrySel.innerHTML += "<option>Zimbabwe</option>";
+        td.appendChild(countrySel);
+    }
+
+    if (select == false && country_dropdown==false && year_dropdown==false) {
         var input = document.createElement("input");
         input.setAttribute("type", "text");
         input.setAttribute("name", t_name);
@@ -196,8 +467,17 @@ function create_input(t_name, place_value, id, tbody_id, counter, remove_name, b
         input.setAttribute("placeholder", place_value);
         input.setAttribute("class", "form-control input-md");
         input.setAttribute("required", "");
-        var td = document.createElement("td");
+
         td.appendChild(input);
+
+        if (datepicker) {
+            // Add datepicker functionality using Pikaday
+            var picker = new Pikaday({
+                field: input,
+                format: 'DD/MM/YYYY', // Adjust the date format as needed
+                yearRange: [1950, new Date().getFullYear()] // Set the range of selectable years
+            });
+        }
     }
 
     if (select == true) {
@@ -206,9 +486,10 @@ function create_input(t_name, place_value, id, tbody_id, counter, remove_name, b
         sel.setAttribute("id", id);
         sel.setAttribute("class", "form-control input-md");
         sel.innerHTML += "<option>Select</option>";
-        sel.innerHTML += "<option value='published'>Published</option>";
-        sel.innerHTML += "<option value='accepted'>Accepted</option>";
-        var td = document.createElement("td");
+        sel.innerHTML += "<option value='Filed'>Filed</option>";
+        sel.innerHTML += "<option value='Published'>Published</option>";
+        sel.innerHTML += "<option value='Granted'>Granted</option>";
+
         td.appendChild(sel);
     }
 
@@ -219,10 +500,12 @@ function create_input(t_name, place_value, id, tbody_id, counter, remove_name, b
         but.innerHTML = "x";
         td.appendChild(but);
     }
+
     tr.setAttribute("id", "row" + counter);
     tr.appendChild(td);
     document.getElementById(tbody_id).appendChild(tr);
 }
+
 
 function remove_row(remove_name, n, tbody_id) {
     var tab = document.getElementById(tbody_id);
@@ -253,6 +536,17 @@ function updateSerialNumbers() {
     rows.forEach(function (row, index) {
         row.querySelector('td:first-child').textContent = index + 1;
     });
+}
+
+function initPikaday(inputId) {
+    var inputElement = document.getElementById(inputId);
+    if (inputElement) {
+        var picker = new Pikaday({
+            field: inputElement,
+            format: 'DD/MM/YYYY', // Adjust the date format as needed
+            yearRange: [1950, new Date().getFullYear()] // Set the range of selectable years
+        });
+    }
 }
 
 </script>
@@ -358,7 +652,7 @@ function updateSerialNumbers() {
                         <th class="col-md-1">Year, Vol., Page</th>
                         <th class="col-md-1">Impact Factor</th>
                         <th class="col-md-1">DOI</th>
-                        <th class="col-md-2">Status</th>
+                        <th class="col-md-2">Status Filed/Published/Granted</th>
                     </tr>
                 </thead>
                 <tbody id="jour">
@@ -388,7 +682,11 @@ function updateSerialNumbers() {
                                     <input name="doi[]" type="text" class="form-control input-md" value="<?= $publication['doi'] ?? '' ?>">
                                 </td>
                                 <td class="col-md-2">
-                                    <input name="status[]" type="text" class="form-control input-md" value="<?= $publication['status'] ?? '' ?>">
+                                    <select name="status[]" class="form-control input-md">
+                                        <option value="Filed" <?= ($publication['status'] ?? '') == 'Filed' ? 'selected' : '' ?>>Filed</option>
+                                        <option value="Published" <?= ($publication['status'] ?? '') == 'Published' ? 'selected' : '' ?>>Published</option>
+                                        <option value="Granted" <?= ($publication['status'] ?? '') == 'Granted' ? 'selected' : '' ?>>Granted</option>
+                                    </select>
                                     <button type="button" class="btn btn-light btn-sm" style="background-color: white; color: lightgray; font-size: 22px; margin-left: 120px;" onclick="removeRow(this)">x</button>
                                 </td>
                             </tr>
@@ -439,7 +737,19 @@ function updateSerialNumbers() {
                                     <input id="ptitle<?= $index + 1 ?>" name="ptitle[]" type="text" placeholder="Title of Patent" class="form-control input-md" autofocus="" value="<?= $qualification['title'] ?? '' ?>">
                                 </td>
                                 <td class="col-md-1">
-                                    <input id="p_country<?= $index + 1 ?>" name="p_country[]" type="text" placeholder="Country of Patent" class="form-control input-md" autofocus="" value="<?= $qualification['country'] ?? '' ?>">
+                                    <select id="p_country<?= $index + 1 ?>" name="p_country[]" class="form-control input-md" autofocus="">
+                                        <option value="">Select Country</option>
+                                        <?php
+                                        $countries = [
+                                            'Afghanistan', 'Aland Islands', 'Albania', 'Algeria', 'American Samoa', 'Andorra', 'Angola', 'Anguilla', 'Antarctica', 'Antigua and Barbuda', 'Argentina', 'Armenia', 'Aruba', 'Australia', 'Austria', 'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium', 'Belize', 'Benin', 'Bermuda', 'Bhutan', 'Bolivia', 'Bosnia and Herzegovina', 'Botswana', 'Bouvet Island', 'Brazil', 'British Indian Ocean Territory', 'Brunei Darussalam', 'Bulgaria', 'Burkina Faso', 'Burundi', 'Cambodia', 'Cameroon', 'Canada', 'Cape Verde', 'Cayman Islands', 'Central African Republic', 'Chad', 'Chile', 'China', 'Christmas Island', 'Cocos (Keeling) Islands', 'Colombia', 'Comoros', 'Congo', 'Congo, The Democratic Republic of The', 'Cook Islands', 'Costa Rica', 'Cote D\'ivoire', 'Croatia', 'Cuba', 'Cyprus', 'Czech Republic', 'Denmark', 'Djibouti', 'Dominica', 'Dominican Republic', 'Ecuador', 'Egypt', 'El Salvador', 'Equatorial Guinea', 'Eritrea', 'Estonia', 'Ethiopia', 'Falkland Islands (Malvinas)', 'Faroe Islands', 'Fiji', 'Finland', 'France', 'French Guiana', 'French Polynesia', 'French Southern Territories', 'Gabon', 'Gambia', 'Georgia', 'Germany', 'Ghana', 'Gibraltar', 'Greece', 'Greenland', 'Grenada', 'Guadeloupe', 'Guam', 'Guatemala', 'Guernsey', 'Guinea', 'Guinea-bissau', 'Guyana', 'Haiti', 'Heard Island and Mcdonald Islands', 'Holy See (Vatican City State)', 'Honduras', 'Hong Kong', 'Hungary', 'Iceland', 'India', 'Indonesia', 'Iran, Islamic Republic of', 'Iraq', 'Ireland', 'Isle of Man', 'Israel', 'Italy', 'Jamaica', 'Japan', 'Jersey', 'Jordan', 'Kazakhstan', 'Kenya', 'Kiribati', 'Korea, Democratic People\'s Republic of', 'Korea, Republic of', 'Kuwait', 'Kyrgyzstan', 'Lao People\'s Democratic Republic', 'Latvia', 'Lebanon', 'Lesotho', 'Liberia', 'Libyan Arab Jamahiriya', 'Liechtenstein', 'Lithuania', 'Luxembourg', 'Macao', 'Macedonia, The Former Yugoslav Republic of', 'Madagascar', 'Malawi', 'Malaysia', 'Maldives', 'Mali', 'Malta', 'Marshall Islands', 'Martinique', 'Mauritania', 'Mauritius', 'Mayotte', 'Mexico', 'Micronesia, Federated States of', 'Moldova, Republic of', 'Monaco', 'Mongolia', 'Montenegro', 'Montserrat', 'Morocco', 'Mozambique', 'Myanmar', 'Namibia', 'Nauru', 'Nepal', 'Netherlands', 'Netherlands Antilles', 'New Caledonia', 'New Zealand', 'Nicaragua', 'Niger', 'Nigeria', 'Niue', 'Norfolk Island', 'Northern Mariana Islands', 'Norway', 'Oman', 'Pakistan', 'Palau', 'Palestinian Territory, Occupied', 'Panama', 'Papua New Guinea', 'Paraguay', 'Peru', 'Philippines', 'Pitcairn', 'Poland', 'Portugal', 'Puerto Rico', 'Qatar', 'Reunion', 'Romania', 'Russian Federation', 'Rwanda', 'Saint Helena', 'Saint Kitts and Nevis', 'Saint Lucia', 'Saint Pierre and Miquelon', 'Saint Vincent and The Grenadines', 'Samoa', 'San Marino', 'Sao Tome and Principe', 'Saudi Arabia', 'Senegal', 'Serbia', 'Seychelles', 'Sierra Leone', 'Singapore', 'Slovakia', 'Slovenia', 'Solomon Islands', 'Somalia', 'South Africa', 'South Georgia and The South Sandwich Islands', 'Spain', 'Sri Lanka', 'Sudan', 'Suriname', 'Svalbard and Jan Mayen', 'Swaziland', 'Sweden', 'Switzerland', 'Syrian Arab Republic', 'Taiwan', 'Tajikistan', 'Tanzania, United Republic of', 'Thailand', 'Timor-leste', 'Togo', 'Tokelau', 'Tonga', 'Trinidad and Tobago', 'Tunisia', 'Turkey', 'Turkmenistan', 'Turks and Caicos Islands', 'Tuvalu', 'Uganda', 'Ukraine', 'United Arab Emirates', 'United Kingdom', 'United States', 'United States Minor Outlying Islands', 'Uruguay', 'Uzbekistan', 'Vanuatu', 'Venezuela', 'Viet Nam', 'Virgin Islands, British', 'Virgin Islands, U.S.', 'Wallis and Futuna', 'Western Sahara', 'Yemen', 'Zambia', 'Zimbabwe'
+                                        ];
+                                        
+                                        foreach ($countries as $country) {
+                                            $selected = ($qualification['country'] ?? '') == $country ? 'selected' : '';
+                                            echo "<option value='{$country}' {$selected}>{$country}</option>\n";
+                                        }
+                                        ?>
+                                    </select>
                                 </td>
                                 <td class="col-md-1">
                                     <input id="p_number<?= $index + 1 ?>" name="p_number[]" type="text" placeholder="Patent Number" class="form-control input-md" autofocus="" value="<?= $qualification['number'] ?? '' ?>">
@@ -451,7 +761,11 @@ function updateSerialNumbers() {
                                     <input id="year_published<?= $index + 1 ?>" name="pyear_published[]" type="text" placeholder="Date of Published" class="form-control input-md datepicker" autofocus="" value="<?= $qualification['year_published'] ?? '' ?>">
                                 </td>
                                 <td class="col-md-1">
-                                    <input id="status<?= $index + 1 ?>" name="pyear_issued[]" type="text" placeholder="Status Filed/Published/Granted" class="form-control input-md" autofocus="" value="<?= $qualification['year_issued'] ?? '' ?>">
+                                <select id="status<?= $index + 1 ?>" name="pyear_issued[]" class="form-control input-md" autofocus="">
+                                    <option value="Filed" <?= ($qualification['year_issued'] ?? '') == 'Filed' ? 'selected' : '' ?>>Filed</option>
+                                    <option value="Published" <?= ($qualification['year_issued'] ?? '') == 'Published' ? 'selected' : '' ?>>Published</option>
+                                    <option value="Granted" <?= ($qualification['year_issued'] ?? '') == 'Granted' ? 'selected' : '' ?>>Granted</option>
+                                </select>
                                     <button type="button" class="btn btn-light btn-sm" style="background-color: white; color: lightgray; font-size: 22px;" onclick="removeRow(this)">x</button>
                                 </td>
                             </tr>
@@ -494,7 +808,16 @@ function updateSerialNumbers() {
                                     <input id="btitle<?= $index + 1 ?>" name="btitle[]" type="text" placeholder="Title of the Book" class="form-control input-md" autofocus="" value="<?= $qualification['btitle'] ?? '' ?>">
                                 </td>
                                 <td class="col-md-2">
-                                    <input id="byear<?= $index + 1 ?>" name="byear[]" type="text" placeholder="Year of Publication" class="form-control input-md" autofocus="" value="<?= $qualification['byear'] ?? '' ?>">
+                                    <select id="byear<?= $index + 1 ?>" name="byear[]" class="form-control input-md" autofocus="">
+                                        <option value="">Select Year</option>
+                                        <?php
+                                        $currentYear = date("Y");
+                                        for ($year = $currentYear; $year >= 1950; $year--) {
+                                            $selected = ($qualification['byear'] ?? '') == $year ? 'selected' : '';
+                                            echo "<option value='{$year}' {$selected}>{$year}</option>";
+                                        }
+                                        ?>
+                                    </select>
                                 </td>
                                 <td class="col-md-2">
                                     <input id="bisbn<?= $index + 1 ?>" name="bisbn[]" type="text" placeholder="ISBN" class="form-control input-md" autofocus="" value="<?= $qualification['bisbn'] ?? '' ?>">
@@ -540,7 +863,16 @@ function updateSerialNumbers() {
                                     <input id="bc_title<?= $index + 1 ?>" name="bc_title[]" type="text" placeholder="Title of the Book Chapter(s)" class="form-control input-md" autofocus="" value="<?= $qualification['title'] ?? '' ?>">
                                 </td>
                                 <td class="col-md-2">
-                                    <input id="bc_year<?= $index + 1 ?>" name="bc_year[]" type="text" placeholder="Year of Publication" class="form-control input-md" autofocus="" value="<?= $qualification['year'] ?? '' ?>">
+                                    <select id="bc_year<?= $index + 1 ?>" name="bc_year[]" class="form-control input-md" autofocus="">
+                                        <option value="">Select Year</option>
+                                        <?php
+                                        $currentYear = date("Y");
+                                        for ($year = $currentYear; $year >= 1950; $year--) {
+                                            $selected = ($qualification['year'] ?? '') == $year ? 'selected' : '';
+                                            echo "<option value='{$year}' {$selected}>{$year}</option>";
+                                        }
+                                        ?>
+                                    </select>
                                 </td>
                                 <td class="col-md-2">
                                     <input id="bc_isbn<?= $index + 1 ?>" name="bc_isbn[]" type="text" placeholder="ISBN" class="form-control input-md" autofocus="" value="<?= $qualification['isbn'] ?? '' ?>">
@@ -621,7 +953,18 @@ function updateSerialNumbers() {
 
 <div id="footer"></div>
 
-
+<script>
+    <?php
+    if (!empty($patent)) {
+        foreach ($patent as $index => $qualification) {
+    ?>
+            initPikaday("year_filed<?= $index + 1 ?>");
+            initPikaday("year_published<?= $index + 1 ?>");
+    <?php
+        }
+    }
+    ?>
+</script>
 
 <script type="text/javascript">
 	
