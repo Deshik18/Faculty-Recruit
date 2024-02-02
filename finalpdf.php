@@ -2,9 +2,6 @@
 include 'config.php';
 session_start();
 
-require 'convertapi-php-master/lib/ConvertApi/autoload.php';
-require 'TCPDF-main/tcpdf.php';
-
 if (!isset($_SESSION['adv_num']) || !isset($_SESSION['dept']) || !isset($_SESSION['fname']) || !isset($_SESSION['lname'])) {
 
     if ($conn->connect_error) {
@@ -77,10 +74,8 @@ if ($stmtUpdate->execute()) {
 }
 
 $stmtUpdate->close();
-$conn->close();
 ?>
 
-<!-- saved from url=(0076)https://ofa.iiti.ac.in/facrec_che_2023_july_02/finalpage/preview_application -->
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title></title>
 	<style type="text/css">
@@ -249,9 +244,9 @@ $conn->close();
     <p>Application Number : <?php echo $application_details['ref_num'] ?? ''; ?></p>
 </div>
 <?php
-$selected_department = strtoupper($_SESSION['dept']);
+$selected_department = strtoupper($application_details['dept']);
 $name_email_cat = strtoupper($_SESSION['first_name'] . '_' . $_SESSION['last_name'] . '_' . $_SESSION['email'] . '_' . $_SESSION['cast']);
-$uploadsDir = $_SESSION['adv_num'] . '/' . $selected_department . '/' . $_SESSION['post'] . '/' . $_SESSION['cast'] . '/' . $_SESSION['ref_num'] . '_' . $name_email_cat . '_supportingdocs/';
+$uploadsDir = $_SESSION['adv_num'] . '/' . $selected_department . '/' . $application_details['post'] . '/' . $_SESSION['cast'] . '/' . $application_details['ref_num'] . '_' . $name_email_cat . '_supportingdocs/';
 
 // Find the first available photo with any extension
 $photoExtensions = ['jpg', 'jpeg', 'png', 'gif']; // Add more extensions if needed
@@ -1291,9 +1286,9 @@ $consultancyProjects = json_decode($facultyDetails['consultancy'], true) ?? [];
     }
 
     // Directory and file names
-    $selected_department = strtoupper($_SESSION['dept']);
+    $selected_department = strtoupper($application_details['dept']);
     $name_email_cat = strtoupper($_SESSION['first_name'] . '_' . $_SESSION['last_name'] . '_' . $_SESSION['email'] . '_' . $_SESSION['cast']);
-    $uploadsDir = $_SESSION['adv_num'] . '/' . $selected_department . '/' . $_SESSION['post'] . '/' . $_SESSION['cast'] . '/' . $_SESSION['ref_num'] . '_' . $name_email_cat . '_supportingdocs/';
+    $uploadsDir = $_SESSION['adv_num'] . '/' . $selected_department . '/' . $application_details['post'] . '/' . $_SESSION['cast'] . '/' . $application_details['ref_num'] . '_' . $name_email_cat . '_supportingdocs/';
     $fileNames = [
         'PHD_Certificate.pdf',
         'PG_Certificate.pdf',
@@ -1344,117 +1339,12 @@ $consultancyProjects = json_decode($facultyDetails['consultancy'], true) ?? [];
 <br>
 
 <?php
-// Assuming $uploadsDir is defined as mentioned in your code
 $signatureImagePath = $uploadsDir . 'Signature.jpg';
 ?>
 
 <div id="non_print_area">
     <button onclick="generatePDF();">Print Application</button> <br>
 </div>
-
-<?php
-use \ConvertApi\ConvertApi;
-
-ConvertApi::setApiSecret('ezubjWtrEMtkztDW');
-
-// Directory and file names
-$selected_department = strtoupper($_SESSION['dept']);
-$name_email_cat = strtoupper($_SESSION['first_name'] . '_' . $_SESSION['last_name'] . '_' . $_SESSION['email'] . '_' . $_SESSION['cast']);
-$uploadsDir = $_SESSION['adv_num'] . '/' . $selected_department . '/' . $_SESSION['post'] . '/' . $_SESSION['cast'] . '/' . $_SESSION['ref_num'] . '_' . $name_email_cat . '_supportingdocs';
-$resultDirectory = $uploadsDir;  // Change to the desired directory
-$resultFile = $resultDirectory . '/application.pdf';
-
-// Check if the merged PDF file exists
-if (!file_exists($resultFile)) {
-    $fileNames = [
-        'PHD_Certificate.pdf',
-        'PG_Certificate.pdf',
-        'UG_Certificate.pdf',
-        '12th_HSC_Diploma.pdf',
-        '10th_SSC_Certificate.pdf',
-        '10_Years_Post_PHD_Experience_Certificate.pdf',
-        'Any_Other_Document.pdf'
-    ];
-
-    // Add all files in the specified directory
-    $allFiles = [];
-    foreach ($fileNames as $fileName) {
-        $filePath = $uploadsDir . $fileName;
-
-        // Check if the file exists before adding to the array
-        if (file_exists($filePath)) {
-            $allFiles[] = $filePath;
-        }
-    }
-
-    // Check if there are valid files before making the conversion request
-    if (count($allFiles) > 0) {
-        // Convert and merge all files
-        $result = ConvertApi::convert('merge', [
-            'Files' => $allFiles,
-            'BookmarksToc' => 'title',
-            'OpenPage' => '1',
-        ], 'pdf');
-
-        if ($result->getFile()) {
-            // Save the merged PDF
-            $result->getFile()->save($resultFile);
-        }
-    }
-}
-
-// Display the PDF with dynamic header
-$pdf = new TCPDF();
-
-class MYPDF extends TCPDF {
-    public function Header() {
-        global $resultFile;
-        $this->SetY(10);
-        $this->SetFont('helvetica', 'B', 12);
-        $this->Cell(0, 10, 'Header: ' . basename($resultFile), 0, false, 'C', 0, '', 0, false, 'M', 'M');
-    }
-
-    public function Footer() {
-        // No footer
-    }
-}
-
-$pdf = new MYPDF();
-
-$pdf->SetMargins(10, 10, 10);
-$pdf->SetAutoPageBreak(TRUE, 10);
-
-// Start capturing the output into a buffer
-ob_start();
-
-// Add a page
-$pdf->AddPage();
-
-// Add the HTML content to the PDF
-$pdf->writeHTML('<h1>Your HTML Content Goes Here</h1>', true, 0, true, 0);
-
-// Add the iframe content directly
-$pdf->writeHTML('<iframe src="data:application/pdf;base64,' . base64_encode(file_get_contents($resultFile)) . '" width="100%" height="800px"></iframe>', true, 0, true, 0);
-
-// Specify the file name for saving
-$saveFileName = 'application_with_header.pdf';
-
-// Save the PDF at the server
-$pdf->Output($resultDirectory . '/' . $saveFileName, 'F');
-
-// End output buffering and get the captured content
-$contents = ob_get_clean();
-
-// Save the captured content to a file (optional)
-file_put_contents($resultDirectory . '/application_content.html', $contents);
-
-// Download the generated PDF
-header('Content-Type: application/pdf');
-header('Content-Disposition: attachment; filename="' . $saveFileName . '"');
-echo $contents;
-?>
-
-
 
 <style>
 @media print
@@ -1465,5 +1355,11 @@ echo $contents;
     }
 }
 </style>
+
+<script>
+    function generatePDF(){
+        window.print();
+    }
+</script>
 
 </body></html>

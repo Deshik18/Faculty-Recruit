@@ -3,6 +3,11 @@
 include '../config.php';
 session_start(); // Start the session
 
+function replaceNewlines($input) {
+    // Replace \r\n with <br>
+    return str_replace("\r\n", "", $input);
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Validate and sanitize the input data
     $researchStatement = $_POST['research_statement']; // No need to filter as we want to store HTML content
@@ -12,13 +17,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $journalPublications = $_POST['jour_details']; // No need to filter as we want to store HTML content
     $conferencePublications = $_POST['conf_details']; // No need to filter as we want to store HTML content
 
-    // Escape and sanitize the HTML content
-    $escapedResearchStatement = mysqli_real_escape_string($conn, $researchStatement);
-    $escapedTeachingStatement = mysqli_real_escape_string($conn, $teachingStatement);
-    $escapedRelInfo = mysqli_real_escape_string($conn, $relInfo);
-    $escapedProfService = mysqli_real_escape_string($conn, $profService);
-    $escapedJournalPublications = mysqli_real_escape_string($conn, $journalPublications);
-    $escapedConferencePublications = mysqli_real_escape_string($conn, $conferencePublications);
+    // Remove \r\n characters and replace them with <br>
+    $researchStatement = replaceNewlines($researchStatement);
+    $teachingStatement = replaceNewlines($teachingStatement);
+    $relInfo = replaceNewlines($relInfo);
+    $profService = replaceNewlines($profService);
+    $journalPublications = replaceNewlines($journalPublications);
+    $conferencePublications = replaceNewlines($conferencePublications);
 
     // Get the email from the session
     $sessionEmail = $_SESSION['email'];
@@ -44,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Bind parameters and execute the statement
-    $stmt->bind_param("sssssss", $escapedResearchStatement, $escapedTeachingStatement, $escapedRelInfo, $escapedProfService, $escapedJournalPublications, $escapedConferencePublications, $sessionEmail);
+    $stmt->bind_param("sssssss", $researchStatement, $teachingStatement, $relInfo, $profService, $journalPublications, $conferencePublications, $sessionEmail);
 
     if ($stmt->execute()) {
         header("Location: ../ref&up/main.php");
