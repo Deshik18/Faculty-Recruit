@@ -199,7 +199,6 @@ function create_input(t_name, place_value, id, tbody_id, counter, remove_name, b
         var yearSel = document.createElement("select");
         yearSel.setAttribute("name", "year_dropdown_" + counter);
         yearSel.setAttribute("class", "form-control input-md");
-        yearSel.innerHTML += "<option>Select Year</option>";
         var currentYear = new Date().getFullYear();
         for (var year = 1950; year <= currentYear; year++) {
             yearSel.innerHTML += "<option value='" + year + "'>" + year + "</option>";
@@ -212,7 +211,6 @@ function create_input(t_name, place_value, id, tbody_id, counter, remove_name, b
         var countrySel = document.createElement("select");
         countrySel.setAttribute("name", "country_dropdown_" + counter);
         countrySel.setAttribute("class", "form-control input-md");
-        countrySel.innerHTML += "<option>Select Country</option>";
         countrySel.innerHTML += "<option>Afghanistan</option>";
         countrySel.innerHTML += "<option>Aland Islands</option>";
         countrySel.innerHTML += "<option>Albania</option>";

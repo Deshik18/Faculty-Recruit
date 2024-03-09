@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $v1 = 1;
     $update = "UPDATE faculty_details set refrees = ?, submitted=? WHERE email = ? ";
     $stmt = $conn->prepare($update);
-    $stmt->bind_param("ssi", $ref_json, $v1, $_SESSION['email']);
+    $stmt->bind_param($ref_json, $v1, $_SESSION['email']);
     if ($stmt->execute()) {
         header("Location: ../fin_sub/main.php");
         exit();

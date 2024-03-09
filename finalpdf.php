@@ -1,44 +1,21 @@
 <?php
 include 'config.php';
-session_start();
 
-if (!isset($_SESSION['adv_num']) || !isset($_SESSION['dept']) || !isset($_SESSION['fname']) || !isset($_SESSION['lname'])) {
-
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-
-    // Get the email from the session
-    $sessionEmail = $_SESSION['email'];
-
-    // Fetch values from the database
-    $sql = "SELECT application_details, per_det FROM faculty_details WHERE email = ?";
-    $stmt = $conn->prepare($sql);
-
-    if ($stmt) {
-        $stmt->bind_param("s", $sessionEmail);
-        $stmt->execute();
-        $stmt->bind_result($applicationDetails, $perDetails);
-
-        if ($stmt->fetch()) {
-            $detailsArray = json_decode($applicationDetails, true);
-
-            // Update session variables
-            $_SESSION['adv_num'] = $detailsArray['adv_num'];
-            $_SESSION['dept'] = $detailsArray['dept'];
-
-            $perDetailsArray = json_decode($perDetails, true);
-
-            $_SESSION['fname'] = $perDetailsArray['fname'];
-            $_SESSION['lname'] = $perDetailsArray['lname'];
-        }
-
-        $stmt->close();
-    }
-}
-
-// Assuming $_SESSION['email'] contains the email of the faculty member
 $email = $_SESSION['email'];
+$sql = "SELECT fn_ln_cast, application_details, per_det FROM faculty_details WHERE email = ?";
+$stmt = $conn->prepare($sql);
+if ($stmt) {
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $stmt->bind_result($fn_ln_cast, $applicationDetails, $perDetails);
+
+    if ($stmt->fetch()) {
+        $fnArray = json_decode($fn_ln_cast, true);
+        $detailsArray = json_decode($applicationDetails, true);
+        $perDetailsArray = json_decode($perDetails, true);
+    }
+    $stmt->close();
+}
 
 // Use a prepared statement to avoid SQL injection
 $updateQuery = "UPDATE faculty_details SET submitted = '2' WHERE email = ?";
@@ -46,34 +23,27 @@ $stmtUpdate = $conn->prepare($updateQuery);
 $stmtUpdate->bind_param("s", $email);
 
 if ($stmtUpdate->execute()) {
-    // Query executed successfully
-
-    // Now, let's fetch the faculty details
     $selectQuery = "SELECT * FROM faculty_details WHERE email = ?";
     $stmtSelect = $conn->prepare($selectQuery);
 
     if ($stmtSelect) {
         $stmtSelect->bind_param("s", $email);
         $stmtSelect->execute();
-
-        // Get the result
         $result = $stmtSelect->get_result();
-
-        // Fetch data as an associative array
         $facultyDetails = $result->fetch_assoc();
-
-        // Close the statement
         $stmtSelect->close();
     } else {
-        // Handle the case where the statement preparation failed
         echo "Error in prepared statement: " . $conn->error;
     }
 } else {
-    // Query failed
     echo 'Error updating submitted status: ' . $stmtUpdate->error;
 }
 
 $stmtUpdate->close();
+
+$selected_department = strtoupper($detailsArray['dept']);
+$name_email_cat = strtoupper($fnArray['first_name'] . '_' . $fnArray['last_name'] . '_' . $email . '_' . $fnArray['cast']);
+$uploadsDir = $detailsArray['adv_num'] . '/' . $selected_department . '/' . $detailsArray['post'] . '/' . $fnArray['cast'] . '/' . $detailsArray['ref_num'] . '_' . $name_email_cat . '_supportingdocs/';
 ?>
 
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -237,18 +207,13 @@ $stmtUpdate->close();
     <?php
     $application_details = json_decode($facultyDetails['application_details'], true) ?? [];
     ?>
-    <p style="width:10in;">Advertisement Number : <?php echo $_SESSION['adv_num']; ?></p>
+    <p style="width:10in;">Advertisement Number : <?php echo $detailsArray['adv_num']; ?></p>
     <p>Date of Application : <?php echo $facultyDetails['doa'] ?? ''; ?></p>
     <p>Post Applied for : <?php echo $application_details['post'] ?? ''; ?></p>
     <p>Department : <?php echo $application_details['dept'] ?? ''; ?></p>
     <p>Application Number : <?php echo $application_details['ref_num'] ?? ''; ?></p>
 </div>
 <?php
-$selected_department = strtoupper($application_details['dept']);
-$name_email_cat = strtoupper($_SESSION['first_name'] . '_' . $_SESSION['last_name'] . '_' . $_SESSION['email'] . '_' . $_SESSION['cast']);
-$uploadsDir = $_SESSION['adv_num'] . '/' . $selected_department . '/' . $application_details['post'] . '/' . $_SESSION['cast'] . '/' . $application_details['ref_num'] . '_' . $name_email_cat . '_supportingdocs/';
-
-// Find the first available photo with any extension
 $photoExtensions = ['jpg', 'jpeg', 'png', 'gif']; // Add more extensions if needed
 
 foreach ($photoExtensions as $extension) {
@@ -386,10 +351,10 @@ foreach ($photoExtensions as $extension) {
 	<table class="tab">
 <?php
     $phd_details = json_decode($facultyDetails['phd_det'], true) ?? [];
-  $pg_details = json_decode($facultyDetails['pg_det'], true) ?? [];
-  $ug_details = json_decode($facultyDetails['ug_det'], true) ?? [];
-  $sch_details = json_decode($facultyDetails['sch_det'], true) ?? [];
-$additional_qualifications = json_decode($facultyDetails['additional_qualifications'], true) ?? [];
+    $pg_details = json_decode($facultyDetails['pg_det'], true) ?? [];
+    $ug_details = json_decode($facultyDetails['ug_det'], true) ?? [];
+    $sch_details = json_decode($facultyDetails['sch_det'], true) ?? [];
+    $additional_qualifications = json_decode($facultyDetails['additional_qualifications'], true) ?? [];
 ?>
 		<tbody><tr style="background-color:#f1f1f1;">
 			<td colspan="6" class="tr_title"><strong>(A) Ph. D. Details</strong></td>
@@ -618,7 +583,7 @@ $additional_qualifications = json_decode($facultyDetails['additional_qualificati
         } ?>
 
         <tr>
-            <td colspan="5"> <strong style="color:red;"></strong></td>
+            <td colspan="5"> More than 3 years Teaching Experience<strong style="color:red;"><?php echo $facultyDetails['teach_exp']; ?></strong></td>
         </tr>
     </tbody>
 </table>
@@ -1286,9 +1251,6 @@ $consultancyProjects = json_decode($facultyDetails['consultancy'], true) ?? [];
     }
 
     // Directory and file names
-    $selected_department = strtoupper($application_details['dept']);
-    $name_email_cat = strtoupper($_SESSION['first_name'] . '_' . $_SESSION['last_name'] . '_' . $_SESSION['email'] . '_' . $_SESSION['cast']);
-    $uploadsDir = $_SESSION['adv_num'] . '/' . $selected_department . '/' . $application_details['post'] . '/' . $_SESSION['cast'] . '/' . $application_details['ref_num'] . '_' . $name_email_cat . '_supportingdocs/';
     $fileNames = [
         'PHD_Certificate.pdf',
         'PG_Certificate.pdf',
@@ -1339,8 +1301,20 @@ $consultancyProjects = json_decode($facultyDetails['consultancy'], true) ?? [];
 <br>
 
 <?php
-$signatureImagePath = $uploadsDir . 'Signature.jpg';
-?>
+    // Assuming $uploadsDir is defined as mentioned in your code
+    $signatureImagePath = $uploadsDir . 'Signature.jpg';
+    ?>
+	
+	<span class="label">23. Final Declaration</span>
+	<table class="tab">
+		
+		<tbody><tr><td>                I hereby declare that I have carefully read and understood the instructions and particulars mentioned in the advertisment and this application form. I further declare that all the entries along with the attachments uploaded in this form are true to the best of my knowledge and belief</td>
+	</tr></tbody></table>
+	<br>
+	
+		<img src="<?php echo $signatureImagePath; ?>" style="height:50; "><br>
+	Signature of Applicant
+	</div>
 
 <div id="non_print_area">
     <button onclick="generatePDF();">Print Application</button> <br>
@@ -1362,4 +1336,5 @@ $signatureImagePath = $uploadsDir . 'Signature.jpg';
     }
 </script>
 
-</body></html>
+</body>
+</html>

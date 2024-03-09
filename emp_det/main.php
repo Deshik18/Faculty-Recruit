@@ -158,7 +158,7 @@ var counter_ind_exp=4;
         create_input('te_position[]', 'Position','te_position'+counter_t_exp, 't_exp',counter_t_exp, 't_exp');
         create_input('te_employer[]', 'Employer', 'te_employer'+counter_t_exp,'t_exp',counter_t_exp, 't_exp');
         create_input('te_course[]', 'Courses', 'te_course'+counter_t_exp,'t_exp',counter_t_exp, 't_exp');
-        create_input('te_ug_pg[]', 'UG/PG', 'te_ug_pg'+counter_t_exp,'t_exp',counter_t_exp, 't_exp');
+        create_input('te_ug_pg[]', 'UG/PG', 'te_ug_pg'+counter_t_exp,'t_exp',counter_t_exp, 't_exp', false, true);
         create_input('te_no_stu[]', 'No. of Students', 'te_no_stu'+counter_t_exp,'t_exp',counter_t_exp, 't_exp');
         create_input('te_doj[]', 'DD/MM/YYYY', 'te_doj'+counter_t_exp,'t_exp',counter_t_exp, 't_exp',  false, false, true, false, true);
         create_input('te_dol[]', 'DD/MM/YYYY', 'te_dol'+counter_t_exp,'t_exp',counter_t_exp, 't_exp',  false, false, true, false, true);
@@ -211,6 +211,9 @@ $("#add_more_ind_exp").click(function(){
     var td=document.createElement("td");
     // var x=0;
     var x = document.getElementById(tbody_id).rows.length;
+    if(tbody_id==='ind_exp' || tbody_id==='r_exp'){
+      x=x+1;
+    }
     // if(document.getElementById(tbody_id).rows)
     // {
     // }
@@ -239,25 +242,36 @@ $("#add_more_ind_exp").click(function(){
 }
 
 
-function dur1(counter){
-  console.log("Hi");
-  var dojId = 'doj' + counter;
-  var dolId = 'dol' + counter;
-  var durationId = 'duration' + counter;
+// Sample parseDate function, you might need to adjust it based on your date format
+function parseDate(dateString) {
+    var parts = dateString.split('/');
+    // Assuming date format is dd/mm/yyyy
+    var day = parseInt(parts[0]);
+    var month = parseInt(parts[1]) - 1; // Months are 0-based in JavaScript Date object
+    var year = parseInt(parts[2]);
 
-  var dojValue = document.getElementById(dojId).value;
-  var dolValue = document.getElementById(dolId).value;
+    return new Date(year, month, day);
+}
 
-  console.log('Debug: dojValue =', dojValue);
-  console.log('Debug: dolValue =', dolValue);
+function dur1(counter) {
+    console.log("Hi");
+    var dojId = 'doj' + counter;
+    var dolId = 'dol' + counter;
+    var durationId = 'duration' + counter;
 
-  var dojDate = parseDate(dojValue);
-  var dolDate = parseDate(dolValue);
+    var dojValue = document.getElementById(dojId).value;
+    var dolValue = document.getElementById(dolId).value;
 
-  console.log('Debug: dojDate =', dojDate);
-  console.log('Debug: dolDate =', dolDate);
+    console.log('Debug: dojValue =', dojValue);
+    console.log('Debug: dolValue =', dolValue);
 
-  if (dojDate && dolDate) {
+    var dojDate = parseDate(dojValue);
+    var dolDate = parseDate(dolValue);
+
+    console.log('Debug: dojDate =', dojDate);
+    console.log('Debug: dolDate =', dolDate);
+
+    if (dojDate && dolDate) {
         var durationInMilliseconds = dolDate - dojDate;
 
         console.log('Debug: durationInMilliseconds =', durationInMilliseconds);
@@ -411,7 +425,7 @@ function create_input(t_name, place_value, id, tbody_id, counter, remove_name, b
         // Assuming Bootstrap Datepicker
         if (datepicker_set) {
           var picker = new Pikaday({
-              field: inputElement,
+              field: input,
               format: 'DD/MM/YYYY',
               yearRange: [1950, new Date().getFullYear()],
               toString: function (date) {
@@ -419,7 +433,7 @@ function create_input(t_name, place_value, id, tbody_id, counter, remove_name, b
                   return moment(date).format('DD/MM/YYYY');
               },
               onSelect: function () {
-                  updateDuration(inputElement, durationElement);
+                  updateDuration(input, durationElement);
               }
           });
         }
@@ -433,7 +447,7 @@ function create_input(t_name, place_value, id, tbody_id, counter, remove_name, b
         // Assuming Bootstrap Datepicker
         if (datepicker_set) {
           var picker = new Pikaday({
-              field: inputElement,
+              field: input,
               format: 'DD/MM/YYYY',
               yearRange: [1950, new Date().getFullYear()],
               toString: function (date) {
@@ -441,7 +455,7 @@ function create_input(t_name, place_value, id, tbody_id, counter, remove_name, b
                   return moment(date).format('DD/MM/YYYY');
               },
               onSelect: function () {
-                  updateDuration(inputElement, durationElement);
+                  updateDuration(input, durationElement);
               }
           });
         }
@@ -456,7 +470,7 @@ function create_input(t_name, place_value, id, tbody_id, counter, remove_name, b
         // Assuming Bootstrap Datepicker
         if (datepicker_set) {
           var picker = new Pikaday({
-              field: inputElement,
+              field: input,
               format: 'DD/MM/YYYY',
               yearRange: [1950, new Date().getFullYear()],
               toString: function (date) {
@@ -464,7 +478,7 @@ function create_input(t_name, place_value, id, tbody_id, counter, remove_name, b
                   return moment(date).format('DD/MM/YYYY');
               },
               onSelect: function () {
-                  updateDuration(inputElement, durationElement);
+                  updateDuration(input, durationElement);
               }
           });
         }
@@ -479,7 +493,7 @@ function create_input(t_name, place_value, id, tbody_id, counter, remove_name, b
           // Assuming Bootstrap Datepicker
           if (datepicker_set) {
             var picker = new Pikaday({
-                field: inputElement,
+                field: input,
                 format: 'DD/MM/YYYY',
                 yearRange: [1950, new Date().getFullYear()],
                 toString: function (date) {
@@ -487,7 +501,7 @@ function create_input(t_name, place_value, id, tbody_id, counter, remove_name, b
                     return moment(date).format('DD/MM/YYYY');
                 },
                 onSelect: function () {
-                    updateDuration(inputElement, durationElement);
+                    updateDuration(input, durationElement);
                 }
             });
           }
@@ -499,15 +513,11 @@ function create_input(t_name, place_value, id, tbody_id, counter, remove_name, b
       sel.setAttribute("name", t_name);
       sel.setAttribute("id", id);
       sel.setAttribute("class", "form-control input-md");
-      sel.innerHTML+="<option>Select</option>";
-      sel.innerHTML+="<option value='Principal Investigator'>Principal Investigator</option>";
-      sel.innerHTML+="<option value='Co-investigator'>Co-investigator</option>";
+      console.log(counter);
+      sel.innerHTML+="<option value='UG'>UG</option>";
+      sel.innerHTML+="<option value='PG'>PG</option>";
       var td=document.createElement("td");
       td.appendChild(sel);
-    }
-    if(datepicker_set==true)
-    {
-      input = for_date_picker(input);
     }
     if(btn==true)
     {
@@ -606,6 +616,49 @@ function updateDuration(startInput, durationInput) {
     console.log('Updated Duration:', durationInput.value);
 }
 
+function calculateDuration(prefix) {
+    var dojInput = document.getElementById('pres_emp_doj');
+    var dolInput = document.getElementById('pres_emp_dol');
+    var durationInput = document.getElementById('pres_emp_duration');
+
+    if (dojInput && dolInput && durationInput) {
+        var dojValue = dojInput.value;
+        var dolValue = dolInput.value;
+
+        if (dojValue && dolValue) {
+            var dojDate = moment(dojValue, 'DD/MM/YYYY');
+            var dolDate = moment(dolValue, 'DD/MM/YYYY');
+            var duration = moment.duration(dolDate.diff(dojDate));
+
+            var years = duration.years();
+            var months = duration.months();
+
+            // Format the duration as "X years Y months"
+            var durationString = (years > 0 ? years + ' years ' : '') + (months > 0 ? months + ' months' : '');
+
+            durationInput.value = durationString;
+
+            // Corrected console.log
+            console.log('Duration:', durationString);
+        }
+    }
+}
+
+// Function to handle changes in Date of Joining
+function handleDOJChange(prefix) {
+    calculateDuration(prefix);
+}
+
+window.onload = function () {
+    document.getElementById('pres_emp_doj').addEventListener('change', function () {
+        handleDOJChange('pres_emp');
+    });
+
+    document.getElementById('pres_emp_dol').addEventListener('change', function () {
+        calculateDuration('pres_emp');
+    });
+};
+
 </script>
 <!-- all bootstrap buttons classes -->
 <!-- 
@@ -664,12 +717,12 @@ function updateDuration(startInput, durationInput) {
 
           <span class="col-md-2 control-label" for="pres_emp_doj">Date of Joining</span>  
           <div class="col-md-4">
-          <input id="pres_emp_doj" onchange="calculateDuration('pres_emp')" name="pres_emp_doj" type="text" placeholder="Date of Joining" value="<?php echo (is_array($pres_emp_det) && array_key_exists('doj', $pres_emp_det)) ? $pres_emp_det['doj'] : ''; ?>" class="form-control input-md datepicker" required="">
+          <input id="pres_emp_doj" name="pres_emp_doj" type="text" placeholder="Date of Joining" value="<?php echo (is_array($pres_emp_det) && array_key_exists('doj', $pres_emp_det)) ? $pres_emp_det['doj'] : ''; ?>" class="form-control input-md datepicker" required="">
           </div>
 
           <span class="col-md-2 control-label" for="pres_emp_dol">Date of Leaving <br />(Mention Continue if working)</span>  
           <div class="col-md-4">
-          <input id="pres_emp_dol" onchange="calculateDuration('pres_emp')" value="<?php echo (is_array($pres_emp_det) && array_key_exists('dol', $pres_emp_det)) ? $pres_emp_det['dol'] : ''; ?>" name="pres_emp_dol" type="text" placeholder="Date of Leaving" class="form-control input-md datepicker" required="">
+          <input id="pres_emp_dol" value="<?php echo (is_array($pres_emp_det) && array_key_exists('dol', $pres_emp_det)) ? $pres_emp_det['dol'] : ''; ?>" name="pres_emp_dol" type="text" placeholder="Date of Leaving" class="form-control input-md datepicker" required="">
           </div>
           
           <span class="col-md-2 control-label" for="pres_emp_duration">Duration (in years & months)</span>  
@@ -715,7 +768,7 @@ function updateDuration(startInput, durationInput) {
                           <input id="org<?= $index + 1 ?>" name="org[]" type="text" placeholder="Employer" class="form-control input-md" autofocus="" value="<?= $qualification['org'] ?? '' ?>">
                         </td>
                         <td class="col-md-2">
-                          <input id="doj<?= $index + 1 ?>" name="doj[]" type="text" placeholder="MM/DD/YY" class="form-control input-md datepicker" autofocus="" value="<?= $qualification['doj'] ?? '' ?>">
+                          <input id="doj<?= $index + 1 ?>" name="doj[]" type="text" placeholder="DD/MM/YY" class="form-control input-md datepicker" autofocus="" value="<?= $qualification['doj'] ?? '' ?>">
                         </td>
                         <td class="col-md-1">
                             <input id="dol<?= $index + 1 ?>" name="dol[]" type="text" placeholder="MM/DD/YY" class="form-control input-md datepicker" autofocus="" value="<?= $qualification['dol'] ?? '' ?>">
@@ -786,7 +839,10 @@ function updateDuration(startInput, durationInput) {
                           <input id="te_course<?= $index + 1 ?>" name="te_course[]" type="text" placeholder="Course Taught" class="form-control input-md" autofocus="" value="<?= $qualification['course'] ?? '' ?>">
                         </td>
                         <td class="col-md-1">
-                            <input id="te_ug_pg<?= $index + 1 ?>" name="te_ug_pg[]" type="text" placeholder="UG/PG" class="form-control input-md" autofocus="" value="<?= $qualification['ug_pg'] ?? '' ?>">
+                          <select id="te_ug_pg<?= $index + 1 ?>" name="te_ug_pg[]" class="form-control input-md" autofocus="">
+                            <option value="UG" <?php echo isset($qualification['ug_pg']) && $qualification['ug_pg'] === 'UG' ? 'selected' : '' ?>>UG</option>
+                            <option value="PG" <?php echo isset($qualification['ug_pg']) && $qualification['ug_pg'] === 'PG' ? 'selected' : '' ?>>PG</option>
+                          </select>
                         </td>
                         <td class="col-md-1">
                           <input id="te_no_stu<?= $index + 1 ?>" name="te_no_stu[]" type="text" placeholder="No. of Students" class="form-control input-md" autofocus="" value="<?= $qualification['no_stu'] ?? '' ?>">

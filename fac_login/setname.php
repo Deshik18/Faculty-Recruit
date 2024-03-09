@@ -40,7 +40,7 @@ if (isset($_SESSION['email'])) {
                 header('Location: ../fin_sub/main.php');
                 exit();
             } else if($submitted == 2){
-                header('Location: ../finalpdf.php');
+                header('Location: ../testing.php');
             }else {
                 // If not submitted, redirect to personal_det/main.php
                 header('Location: ../personal_det/main.php');

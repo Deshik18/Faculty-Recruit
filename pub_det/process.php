@@ -108,4 +108,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 } else {
     // Handle cases where the form was not submitted
 }
-?>
