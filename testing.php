@@ -5,6 +5,12 @@ session_start();
 
 $email = $_SESSION['email']; // Assuming the email is stored in the session variable
 
+$updateQuery = "UPDATE faculty_details SET submitted = 2 WHERE email = ?";
+$stmtUpdate = $conn->prepare($updateQuery);
+$stmtUpdate->bind_param("s", $email);
+$stmtUpdate->execute();
+
+
 $sql = "SELECT fn_ln_cast, application_details, per_det FROM faculty_details WHERE email = ?";
 $stmt = $conn->prepare($sql);
 if ($stmt) {
@@ -1214,7 +1220,7 @@ $html .= '
 
 <span class="label">20. Reprints of 5 Best Research Papers- ';
 
-$researchPaperPath = $uploadsDir . 'Research_Paper.pdf';
+$researchPaperPath = $uploadsDir . 'Research_Paper_1.pdf';
 $researchPaperExists = checkFileExists($researchPaperPath);
 
 if ($researchPaperExists) {

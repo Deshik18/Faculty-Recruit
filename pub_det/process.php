@@ -1,9 +1,9 @@
 <?php
 include '../config.php';
 session_start();
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-var_dump($_POST);
+// ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// var_dump($_POST);
 
 // Check if the form was submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -101,7 +101,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Update successful
         // Redirect to a success page or perform other actions
         header("Location: ../acad_ind_exp/main.php");
-        exit();
     } else {
         echo 'Some Error Occurred: ' . $stmt->error;
     }

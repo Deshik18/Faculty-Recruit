@@ -21,8 +21,6 @@ if ($result->num_rows > 0) {
     $profService = nl2br($row['prof_service']);
     $journalPublications = nl2br($row['journal_publications']);
     $conferencePublications = nl2br($row['conference_publications']);
-} else {
-    echo "No data found";
 }
 ?>
 

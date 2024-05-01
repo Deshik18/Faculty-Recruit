@@ -94,6 +94,7 @@ function create_tr() {
     tr = document.createElement("tr");
 }
 
+
 function for_date_picker(obj) {
     obj.setAttribute("data-provide", "datepicker");
     obj.className += " datepicker";
@@ -157,17 +158,31 @@ function remove_row(remove_name, n) {
     tab.removeChild(tr);
 }
 
-    function calculateDuration(type) {
-        var yoj = document.getElementById(type + "_yoj").value;
-        var yog = document.getElementById(type + "_yog").value;
+function calculateDuration(type) {
+    var yojInput = document.getElementById(type + "_yoj").value;
+    var yogInput = document.getElementById(type + "_yog").value;
 
-        if (yoj && yog) {
-            var diff_years = parseInt(yog) - parseInt(yoj);
-            document.getElementById(type + "_duration").value = diff_years + " Years";
-        } else {
-            document.getElementById(type + "_duration").value = "";
+    // Parse the date strings into Date objects
+    var yojDate = new Date(yojInput);
+    var yogDate = new Date(yogInput);
+
+    // Check if the Date objects are valid
+    if (!isNaN(yojDate.getTime()) && !isNaN(yogDate.getTime())) {
+        // Calculate the difference in years
+        var diff_years = yogDate.getFullYear() - yojDate.getFullYear();
+        if (yogDate.getMonth() < yojDate.getMonth() || (yogDate.getMonth() === yojDate.getMonth() && yogDate.getDate() < yojDate.getDate())) {
+            diff_years--;
         }
+
+        // Display the difference
+        document.getElementById(type + "_duration").value = diff_years + " Years";
+    } else {
+        // Handle invalid input
+        document.getElementById(type + "_duration").value = "";
     }
+}
+
+
 </script>
 
 <script type="text/javascript">
@@ -267,8 +282,21 @@ hr{
 
           <span class="col-md-2 control-label" for="yoj_phd">Year of Joining</span>
           <div class="col-md-4">
-              <input id="yoj_phd" value="<?php echo (is_array($phd_details) && array_key_exists('yoj', $phd_details)) ? $phd_details['yoj'] : ''; ?>" name="yoj_phd" type="text" placeholder="Year of Joining" class="form-control input-md" required="">
+              <select id="yoj_phd" name="yoj_phd" class="form-control input-md" required="">
+                  <?php
+                  $currentYear = date("Y");
+                  for ($year = 1950; $year <= $currentYear; $year++) {
+                      $selected = (is_array($phd_details) && array_key_exists('yoj', $phd_details) && $phd_details['yoj'] == $year) ? 'selected' : '';
+                      echo "<option value='{$year}' {$selected}>{$year}</option>";
+                  }
+                  ?>
+              </select>
           </div>
+
+          <!-- <span class="col-md-2 control-label" for="yoj_phd">Year of Joining</span>
+          <div class="col-md-4">
+              <input id="yoj_phd" value="<?php echo (is_array($phd_details) && array_key_exists('yoj', $phd_details)) ? $phd_details['yoj'] : ''; ?>" name="yoj_phd" type="text" placeholder="Year of Joining" class="form-control input-md" required="">
+          </div> -->
 
           <div class="row">
               <div class="col-md-12">
@@ -316,14 +344,30 @@ hr{
 
                 <span class="col-md-2 control-label" for="pg_yoj">Year of Joining</span>
                 <div class="col-md-4">
-                    <input id="pg_yoj" onchange="calculateDuration('pg')" value="<?php echo (is_array($pg_det) && array_key_exists('yoj', $pg_det)) ? $pg_det['yoj'] : ''; ?>" name="pg_yoj" type="text" placeholder="Year of Joining" class="form-control input-md">
+                    <select id="pg_yoj" onchange="calculateDuration('pg')" name="pg_yoj" class="form-control input-md">
+                        <?php
+                        $currentYear = date("Y");
+                        for ($year = 1950; $year <= $currentYear; $year++) {
+                            $selected = (is_array($pg_det) && array_key_exists('yoj', $pg_det) && $pg_det['yoj'] == $year) ? 'selected' : '';
+                            echo "<option value='{$year}' {$selected}>{$year}</option>";
+                        }
+                        ?>
+                    </select>
                 </div>
 
+                <!-- Year of Completion -->
                 <div class="row">
                     <div class="col-md-12">
                         <span class="col-md-2 control-label" for="pg_yog">Year of Completion</span>
                         <div class="col-md-4">
-                            <input id="pg_yog" onchange="calculateDuration('pg')" value="<?php echo (is_array($pg_det) && array_key_exists('yog', $pg_det)) ? $pg_det['yog'] : ''; ?>" name="pg_yog" type="text" placeholder="Year of Completion" class="form-control input-md">
+                            <select id="pg_yog" onchange="calculateDuration('pg')" name="pg_yog" class="form-control input-md">
+                                <?php
+                                for ($year = 1950; $year <= $currentYear; $year++) {
+                                    $selected = (is_array($pg_det) && array_key_exists('yog', $pg_det) && $pg_det['yog'] == $year) ? 'selected' : '';
+                                    echo "<option value='{$year}' {$selected}>{$year}</option>";
+                                }
+                                ?>
+                            </select>
                         </div>
 
                         <span class="col-md-2 control-label" for="pg_duration">Duration (in years)</span>
@@ -368,18 +412,34 @@ hr{
                     <input id="ug_subjects" value="<?php echo (is_array($ug_det) && array_key_exists('subjects', $ug_det)) ? $ug_det['subjects'] : ''; ?>" name="ug_subjects" type="text" placeholder="Branch/Stream" class="form-control input-md" required="">
                 </div>
 
+                <!-- Year of Joining -->
                 <span class="col-md-2 control-label" for="ug_yoj">Year of Joining</span>
                 <div class="col-md-4">
-                    <input id="ug_yoj" onchange="calculateDuration('ug')" value="<?php echo (is_array($ug_det) && array_key_exists('yoj', $ug_det)) ? $ug_det['yoj'] : ''; ?>" name="ug_yoj" type="text" placeholder="Year of Joining" class="form-control input-md" required="">
+                    <select id="ug_yoj" onchange="calculateDuration('ug')" name="ug_yoj" class="form-control input-md" required="">
+                        <?php
+                        $currentYear = date("Y");
+                        for ($year = 1950; $year <= $currentYear; $year++) {
+                            $selected = (is_array($ug_det) && array_key_exists('yoj', $ug_det) && $ug_det['yoj'] == $year) ? 'selected' : '';
+                            echo "<option value='{$year}' {$selected}>{$year}</option>";
+                        }
+                        ?>
+                    </select>
                 </div>
 
+                <!-- Year of Completion -->
                 <div class="row">
                     <div class="col-md-12">
                         <span class="col-md-2 control-label" for="ug_yog">Year of Completion</span>
                         <div class="col-md-4">
-                            <input id="ug_yog" onchange="calculateDuration('ug')" value="<?php echo (is_array($ug_det) && array_key_exists('yog', $ug_det)) ? $ug_det['yog'] : ''; ?>" name="ug_yog" type="text" placeholder="Year of Completion" class="form-control input-md" required="">
+                            <select id="ug_yog" onchange="calculateDuration('ug')" name="ug_yog" class="form-control input-md" required="">
+                                <?php
+                                for ($year = 1950; $year <= $currentYear; $year++) {
+                                    $selected = (is_array($ug_det) && array_key_exists('yog', $ug_det) && $ug_det['yog'] == $year) ? 'selected' : '';
+                                    echo "<option value='{$year}' {$selected}>{$year}</option>";
+                                }
+                                ?>
+                            </select>
                         </div>
-
                         <span class="col-md-2 control-label" for="ug_duration">Duration (in years)</span>
                         <div class="col-md-4">
                             <input id="ug_duration" name="ug_duration" type="text" placeholder="Duration" class="form-control input-md" value="<?php echo (is_array($ug_det) && array_key_exists('duration', $ug_det)) ? $ug_det['duration'] : ''; ?>" readonly>
@@ -440,7 +500,15 @@ hr{
                                 </td>
 
                                 <td class="col-md-2">
-                                    <input id="passing_year<?php echo $i + 1; ?>" name="passing_year[]" type="text" value="<?php echo $passing_year_value; ?>" placeholder="Passing Year" class="form-control input-md" maxlength="5" required="">
+                                    <select id="passing_year<?php echo $i + 1; ?>" name="passing_year[]" class="form-control input-md" required="">
+                                        <?php
+                                        $currentYear = date("Y");
+                                        for ($year = 1950; $year <= $currentYear; $year++) {
+                                            $selected = ($passing_year_value == $year) ? 'selected' : '';
+                                            echo "<option value='{$year}' {$selected}>{$year}</option>";
+                                        }
+                                        ?>
+                                    </select>
                                 </td>
 
                                 <td class="col-md-2">
@@ -462,12 +530,22 @@ hr{
 
                           <td class="col-md-2"> 
                               <input id="school1" name="school[]" type="text" value="" placeholder="School" class="form-control input-md" maxlength="80" required=""> 
-                            </td>
-                          <td class="col-md-2"> 
-                            <input id="passing_year1" name="passing_year[]" type="text" value="" placeholder="Passing Year" class="form-control input-md" maxlength="5" required=""> 
                           </td>
 
-                        
+                          <td class="col-md-2"> 
+                              <select id="passing_year1" name="passing_year[]" class="form-control input-md" required="">
+                                  <?php
+                                  $currentYear = date("Y");
+                                  for ($year = 1950; $year <= $currentYear; $year++) {
+                                      echo "<option value='{$year}'>{$year}</option>";
+                                  }
+                                  ?>
+                              </select>
+                          </td>
+
+                          <!-- <td class="col-md-2"> 
+                            <input id="passing_year1" name="passing_year[]" type="text" value="" placeholder="Passing Year" class="form-control input-md" maxlength="5" required=""> 
+                          </td> -->
 
                           <td class="col-md-2"> 
                             <input id="s_perce1" name="s_perce[]" type="text" value="" placeholder="Percentage/Grade" class="form-control input-md" maxlength="5" required="">
@@ -488,12 +566,18 @@ hr{
 
                           <td class="col-md-2"> 
                               <input id="school2" name="school[]" type="text" value="" placeholder="School" class="form-control input-md" maxlength="80" required=""> 
-                            </td>
-                          <td class="col-md-2"> 
-                            <input id="passing_year2" name="passing_year[]" type="text" value="" placeholder="Passing Year" class="form-control input-md" maxlength="5" required=""> 
                           </td>
 
-                        
+                          <td class="col-md-2"> 
+                              <select id="passing_year2" name="passing_year[]" class="form-control input-md" required="">
+                                  <?php
+                                  $currentYear = date("Y");
+                                  for ($year = 1950; $year <= $currentYear; $year++) {
+                                      echo "<option value='{$year}'>{$year}</option>";
+                                  }
+                                  ?>
+                              </select>
+                          </td>
 
                           <td class="col-md-2"> 
                             <input id="s_perce2" name="s_perce[]" type="text" value="" placeholder="Percentage/Grade" class="form-control input-md" maxlength="5" required="">
@@ -553,10 +637,25 @@ hr{
                               <input id="add_stream<?= $index + 1 ?>" name="add_stream[]" type="text" placeholder="Branch/Stream" class="form-control input-md" autofocus="" value="<?= $qualification['stream'] ?? '' ?>">
                             </td>
                             <td class="col-md-1">
-                              <input id="add_yoj<?= $index + 1 ?>" name="add_yoj[]" type="text" placeholder="Year of Joining" class="form-control input-md" autofocus="" value="<?= $qualification['yoj'] ?? '' ?>">
+                                <select id="add_yoj<?= $index + 1 ?>" name="add_yoj[]" class="form-control input-md" onchange="updateDuration(<?= $index + 1 ?>)">
+                                    <?php
+                                    $currentYear = date("Y");
+                                    for ($year = 1950; $year <= $currentYear; $year++) {
+                                        $selected = ($qualification['yoj'] ?? '') == $year ? 'selected' : '';
+                                        echo "<option value='{$year}' {$selected}>{$year}</option>";
+                                    }
+                                    ?>
+                                </select>
                             </td>
                             <td class="col-md-1">
-                              <input id="add_yog<?= $index + 1 ?>" name="add_yog[]" type="text" placeholder="Year of Completion" class="form-control input-md" autofocus="" value="<?= $qualification['yog'] ?? '' ?>">
+                                <select id="add_yog<?= $index + 1 ?>" name="add_yog[]" class="form-control input-md" onchange="updateDuration(<?= $index + 1 ?>)">
+                                    <?php
+                                    for ($year = 1950; $year <= $currentYear; $year++) {
+                                        $selected = ($qualification['yog'] ?? '') == $year ? 'selected' : '';
+                                        echo "<option value='{$year}' {$selected}>{$year}</option>";
+                                    }
+                                    ?>
+                                </select>
                             </td>
                             <td class="col-md-1">
                               <input id="add_duration<?= $index + 1 ?>" name="add_duration[]" type="text" placeholder="Duration (in years)" class="form-control input-md" autofocus="" value="<?= $qualification['duration'] ?? '' ?>">
@@ -620,7 +719,17 @@ hr{
    
   }
 
- 
+  function updateDuration(index) {
+    var yoj = document.getElementById('add_yoj' + index).value;
+    var yog = document.getElementById('add_yog' + index).value;
+
+    if (yoj && yog) {
+        var duration = yog - yoj;
+        document.getElementById('add_duration' + index).value = duration + ' years';
+    } else {
+        document.getElementById('add_duration' + index).value = '';
+    }
+  }
 </script>
 
 <div id="footer"></div>

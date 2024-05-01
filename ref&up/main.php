@@ -2,7 +2,41 @@
 <?php
 include '../config.php';
 include '../check_session.php';
+
+$email = $_SESSION['email']; // Assuming the email is stored in the session variable
+
+$sql = "SELECT fn_ln_cast, application_details, per_det FROM faculty_details WHERE email = ?";
+$stmt = $conn->prepare($sql);
+if ($stmt) {
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $stmt->bind_result($fn_ln_cast, $applicationDetails, $perDetails);
+
+    if ($stmt->fetch()) {
+        $fnArray = json_decode($fn_ln_cast, true);
+        $detailsArray = json_decode($applicationDetails, true);
+        $perDetailsArray = json_decode($perDetails, true);
+    }
+    $stmt->close();
+}
+
+$selectQuery = "SELECT * FROM faculty_details WHERE email = ?";
+$stmtSelect = $conn->prepare($selectQuery);
+if ($stmtSelect) {
+    $stmtSelect->bind_param("s", $email);
+    $stmtSelect->execute();
+    $result = $stmtSelect->get_result();
+    $facultyDetails = $result->fetch_assoc();
+    $stmtSelect->close();
+} else {
+    echo "Error in prepared statement: " . $conn->error;
+}
+
+$selected_department = strtoupper($detailsArray['dept']);
+$name_email_cat = strtoupper($fnArray['first_name'] . '_' . $fnArray['last_name'] . '_' . $email . '_' . $fnArray['cast']);
+$uploadsDir = $detailsArray['adv_num'] . '/' . $selected_department . '/' . $detailsArray['post'] . '/' . $fnArray['cast'] . '/' . $detailsArray['ref_num'] . '_' . $name_email_cat . '_supportingdocs/';
 ?>
+
 <!-- saved from url=(0066)https://ofa.iiti.ac.in/facrec_che_2023_july_02/submission_complete -->
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>Referees &amp; Upload</title>
@@ -172,12 +206,7 @@ p
               echo "<input id=\"$fieldName\" name=\"$fieldName\" type=\"file\" class=\"form-control input-md\">";
           }
       }
-
-      $selected_department = $_SESSION['dept'];
-      $fname = $_SESSION['fname'];
-      $lname = $_SESSION['lname'];
-      $name_email_cat = strtoupper($fname . '_' . $lname . '_' . $_SESSION['email'] . '_' . $_SESSION['cast']);
-      $uploadsDir = '../' . $_SESSION['adv_num'] . '/' . $selected_department . '/' . $name_email_cat . '/';
+      
       $fileFieldsMapping = [
           'userfile7' => 'Research_Paper.pdf',
           'userfile'  => 'PHD_Certificate.pdf',
@@ -199,25 +228,25 @@ p
 <form class="form-horizontal" action="process.php" method="post" enctype="multipart/form-data" onsubmit="return confirm_box();" id="upload_frm">
 <!-- Reprints of 5 Best Research Papers Section -->
 <h4 style="text-align:center; font-weight: bold; color: #6739bb;">20. Reprints of 5 Best Research Papers *</h4>
-   <div class="row">
-      <div class="col-md-12">
-         <div class="panel panel-info">
-            <div class="panel-heading">Upload 5 Best Research Papers in a single PDF &lt; 6MB 
-               <a href="#" class="btn-sm btn-info" onclick="viewUploadedFile('full_5_paper')">View Uploaded File </a>
-               <br><br>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-info">
+                <div class="panel-heading">Upload up to 5 Best Research Papers in a single PDF &lt; 6MB
+                    <a href="#" class="btn-sm btn-info" onclick="viewUploadedFile('full_5_paper')">View Uploaded Files </a>
+                    <br><br>
+                </div>
+                <div class="panel-body">
+                    <div class="col-md-5">
+                        <p class="update_crerti">Update 5 best papers</p>
+                    </div>
+                    <div class="col-md-7">
+                        <input id="full_5_paper" name="userfile7[]" type="file" class="form-control input-md" multiple>
+                        <?php // renderFileInputField('userfile7', 'Research_Paper.pdf', $uploadsDir, $fileFieldsMapping); ?>
+                    </div>
+                </div>
             </div>
-            <div class="panel-body">
-               <div class="col-md-5">
-                  <p class="update_crerti">Update 5 best papers</p>
-               </div>
-               <div class="col-md-7">
-                  <input id="full_5_paper" name="userfile7" type="file" class="form-control input-md">
-                  <?php // renderFileInputField('userfile7', 'Research_Paper.pdf', $uploadsDir, $fileFieldsMapping); ?>
-               </div>
-            </div>
-         </div>
-      </div>
-   </div>
+        </div>
+    </div>
 
    <!-- Certificate file code start -->
    <h4 style="text-align:center; font-weight: bold; color: #6739bb;">21. Check List of the documents attached with the online application *</h4>

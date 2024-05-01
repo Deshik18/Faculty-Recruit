@@ -720,7 +720,7 @@ window.onload = function () {
           <input id="pres_emp_doj" name="pres_emp_doj" type="text" placeholder="Date of Joining" value="<?php echo (is_array($pres_emp_det) && array_key_exists('doj', $pres_emp_det)) ? $pres_emp_det['doj'] : ''; ?>" class="form-control input-md datepicker" required="">
           </div>
 
-          <span class="col-md-2 control-label" for="pres_emp_dol">Date of Leaving <br />(Mention Continue if working)</span>  
+          <span class="col-md-2 control-label" for="pres_emp_dol">Date of Leaving <br />(Mention Present Date if Working)</span>  
           <div class="col-md-4">
           <input id="pres_emp_dol" value="<?php echo (is_array($pres_emp_det) && array_key_exists('dol', $pres_emp_det)) ? $pres_emp_det['dol'] : ''; ?>" name="pres_emp_dol" type="text" placeholder="Date of Leaving" class="form-control input-md datepicker" required="">
           </div>

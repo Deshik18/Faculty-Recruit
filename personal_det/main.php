@@ -373,6 +373,13 @@ $contact_det = json_decode($cont_det, true);
                 <!-- Upload Profile Photo field -->
               <div class="col-md-2 pull-right">
                   <?php
+                  // Check if session message exists
+                  if (isset($_SESSION['message'])) {
+                      // Display session message in dark red
+                      echo '<p style="color: darkred;">' . $_SESSION['message'] . '</p>';
+                      // Unset the session message to prevent it from displaying again
+                      unset($_SESSION['message']);
+                  }
                   // Path to the uploaded profile photo
                   if (isset($application_details['adv_num']) && isset($application_details['dept']) && isset($_SESSION['first_name']) && isset($application_details['ref_num'])) {
                     $selected_department = strtoupper($application_details['dept']); // Convert department name to uppercase
@@ -957,75 +964,56 @@ $contact_det = json_decode($cont_det, true);
 </div>
 
 <div class="row">
-  <div class="col-md-12">
-    <div class="panel panel-success">
-      <!-- Contact Details -->
-      <div class="panel-heading">4. Contact Details (with STD/ISD code)</div>
-          <div class="panel-body">
-        <div class="form-group">
-            <label class="col-md-2 control-label" for="mobile">Mobile *</label>
-            <div class="col-md-4">
-                <input id="mobile" name="mobile" type="text" placeholder="Mobile" class="form-control input-md" required maxlength="20" value="<?php echo isset($contact_det['mobile']) ? $contact_det['mobile'] : ''; ?>">
-            </div>
-        </div>
+    <div class="col-md-12">
+        <div class="panel panel-success">
+            <!-- Contact Details -->
+            <div class="panel-heading">4. Contact Details (with STD/ISD code)</div>
+            <div class="panel-body">
+                <form class="form-horizontal" method="post" action="edit.php">
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="mobile">Mobile *</label>
+                        <div class="col-md-4">
+                            <input id="mobile" name="mobile" type="text" placeholder="Mobile" class="form-control input-md" required maxlength="20" value="<?php echo isset($contact_det['mobile']) ? $contact_det['mobile'] : ''; ?>">
+                        </div>
+                        <label class="col-md-2 control-label" for="email">Email</label>
+                        <div class="col-md-4">
+                            <input id="email" name="email" type="text" placeholder="email" readonly value="<?php echo $_SESSION['email']; ?>" class="form-control input-md" required>
+                        </div>
+                    </div>
 
-        <div class="form-group">
-          <label class="col-md-2 control-label" for="email">Email</label>
-          <div class="col-md-4">
-              <input id="email" name="email" type="text" placeholder="email" readonly value="<?php echo $_SESSION['email']; ?>" class="form-control input-md" required>
-          </div>
-      </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="mobile_2">Alternate Mobile</label>
+                        <div class="col-md-4">
+                            <input id="mobile_2" name="mobile_2" type="text" placeholder="Alternate Mobile" class="form-control input-md" maxlength="20" value="<?php echo isset($contact_det['mobile_2']) ? $contact_det['mobile_2'] : ''; ?>">
+                        </div>
+                        <label class="col-md-2 control-label" for="email_2">Alternate Email</label>
+                        <div class="col-md-4">
+                            <input id="email_2" name="email_2" type="email" placeholder="Alternate Email" class="form-control input-md" value="<?php echo isset($contact_det['email_2']) ? $contact_det['email_2'] : ''; ?>">
+                        </div>
+                    </div>
 
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="landline">Landline Number</label>
+                        <div class="col-md-4">
+                            <input id="landline" name="landline" type="text" placeholder="Landline Number" class="form-control input-md" maxlength="20" value="<?php echo isset($contact_det['landline']) ? $contact_det['landline'] : ''; ?>">
+                        </div>
+                    </div>
 
-        <div class="form-group">
-            <label class="col-md-2 control-label" for="mobile_2">Alternate Mobile </label>
-            <div class="col-md-4">
-                <input id="mobile_2" name="mobile_2" type="text" placeholder="Alternate Mobile" class="form-control input-md" maxlength="20" value="<?php echo isset($contact_det['mobile_2']) ? $contact_det['mobile_2'] : ''; ?>">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-md-2 control-label" for="email_2">Alternate Email </label>
-            <div class="col-md-4">
-                <input id="email_2" name="email_2" type="email" placeholder="Alternate Email" class="form-control input-md" value="<?php echo isset($contact_det['email_2']) ? $contact_det['email_2'] : ''; ?>">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-md-2 control-label" for="landline">Landline Number</label>
-            <div class="col-md-4">
-                <input id="landline" name="landline" type="text" placeholder="Landline Number" class="form-control input-md" maxlength="20" value="<?php echo isset($contact_det['landline']) ? $contact_det['landline'] : ''; ?>">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <button id="submit" type="submit" name="submit" value="Submit" class="btn btn-success pull-right">SAVE & NEXT</button>
+                            <span class="pull-right" style="margin-right: 20px;">Page 1/9</span>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-  </div>
-</div>
-
-<div class="col-md-6">
-    <span class="pull-right" style="margin-right: 20px;">Page 1/9</span>
-</div>
-
-<div class="form-group">
-  <div class="col-md-12">
-    <button id="submit" type="submit" name="submit" value="Submit" class="btn btn-success pull-right">SAVE & NEXT</button>
-  </div>
-</div>
-
-
-<!-- add the div for hide -->
-</div>
-</div>
-
-</fieldset>
-</form>
-
-
-</div>
 </div>
 
 
 <div id="passModal" class="modal fade" role="dialog">
-<form action="https://ofa.iiti.ac.in/facrec_che_2023_july_02/facultypanel/change_pass" method="post">
+<form action="../fac_forgotpwd/main2.php" method="post">
 <div class="modal-dialog">
 <div class="modal-content">
   <div class="modal-header">

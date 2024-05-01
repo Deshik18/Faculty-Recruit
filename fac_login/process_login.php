@@ -1,14 +1,24 @@
 <?php
-// Start a PHP session (if not already started)
 session_start();
 
-// Include your database connection or use any database connection method you prefer.
-include('../config.php'); // Change to your actual database connection file
+include '../config.php';
+// Assuming $conn is your database connection
+// Make sure to establish a database connection before executing this code
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Retrieve user input
     $email = $_POST['email'];
     $password = $_POST['password'];
+
+    // Check if the user is an admin
+    if ($email === 'admincse') {
+        $_SESSION['admin_dept'] = 'COMPUTER SCIENCE AND ENGINEERING';
+        header('Location: ../admin/process.php');
+    } elseif ($email === 'adminme') {
+        // Redirect to the faculty specific page for Mechanical Engineering
+        $_SESSION['admin_dept'] = 'MECHANICAL ENGINEERING';
+        header('Location: ../admin/process.php');
+    }
 
     // Check if the user's credentials are valid (example query - replace with your database schema)
     $query = "SELECT * FROM faculty_details WHERE email = '" . mysqli_real_escape_string($conn, $email) . "' AND password = '" . mysqli_real_escape_string($conn, $password) . "'";
@@ -23,8 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($activationData && $activationData['activated'] === true) {
             // User is activated, proceed with login
             $_SESSION['email'] = $email; // Store the user's email in a session variable
-            header('Location: setname.php'); // Redirect to the next step (setname.php in this case)
-            exit();
+            header('Location: setname.php'); // Redirect regular faculty to the next step (setname.php in this case)
+            
         } else {
             // User is not activated
             $errorMessage = "Your account is not activated. Please check your email for the activation link.";
@@ -35,6 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

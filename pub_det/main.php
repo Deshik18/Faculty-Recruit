@@ -494,7 +494,7 @@ function create_input(t_name, place_value, id, tbody_id, counter, remove_name, b
     if (btn == true) {
         var but = document.createElement("button");
         but.setAttribute("class", "close");
-        but.setAttribute("onclick", "remove_row('" + remove_name + "','" + counter + "', '" + tbody_id + "')");
+        but.setAttribute("onclick", "remove_row('" + remove_name + "','" + counter + "', '" + tbody_id + "', 0)");
         but.innerHTML = "x";
         td.appendChild(but);
     }
@@ -505,17 +505,18 @@ function create_input(t_name, place_value, id, tbody_id, counter, remove_name, b
 }
 
 
-function remove_row(remove_name, n, tbody_id) {
+function remove_row(remove_name, n, tbody_id, serial_column_index) {
     var tab = document.getElementById(tbody_id);
     var tr = document.getElementById("row" + n);
     tab.removeChild(tr);
     
-    // Update the row numbers
+    // Update the row numbers in the specified column
     var rows = tab.getElementsByTagName("tr");
     for (var i = 0; i < rows.length; i++) {
-        rows[i].getElementsByTagName("td")[0].textContent = i + 1;
+        rows[i].getElementsByTagName("td")[serial_column_index].textContent = i + 1;
     }
 }
+
 
 function removeRow(button) {
     // Get the row to be removed

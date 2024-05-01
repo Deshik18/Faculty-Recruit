@@ -192,6 +192,7 @@ function for_date_picker(obj) {
     return obj;
 }
 function create_input(t_name, place_value, id, tbody_id, counter, remove_name, btn=false, select=false, datepicker_set=false, year_dropdown=false) {
+    var tr = document.createElement("tr");
     var td = document.createElement("td");
     if (select == false && year_dropdown == false) {
         var input = document.createElement("input");
@@ -241,6 +242,7 @@ function create_input(t_name, place_value, id, tbody_id, counter, remove_name, b
 
     if (btn == true) {
         var but = document.createElement("button");
+        but.setAttribute("type", "button"); // Ensure the button doesn't submit the form
         but.setAttribute("class", "close");
         but.setAttribute("onclick", "remove_row('" + remove_name + "','" + counter + "', '" + tbody_id + "')");
         but.innerHTML = "x";
@@ -252,14 +254,16 @@ function create_input(t_name, place_value, id, tbody_id, counter, remove_name, b
     document.getElementById(tbody_id).appendChild(tr);
 }
 
+
 function remove_row(remove_name, n, tbody_id) {
-    var tab = document.getElementById(remove_name);
+    var tab = document.getElementById(tbody_id); // Get the table body element
     var tr = document.getElementById("row" + n);
     tab.removeChild(tr);
 
     // Update row numbers
     updateRowNumbers(tbody_id);
 }
+
 
 function updateRowNumbers(tbody_id) {
     var rows = document.getElementById(tbody_id).rows;

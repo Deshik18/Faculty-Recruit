@@ -8,12 +8,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name_email_cat = strtoupper($_SESSION['first_name'] . '_' . $_SESSION['last_name'] . '_' . $_SESSION['email'] . '_' . $_SESSION['cast']);
     $uploads_dir = '../' . $_SESSION['adv_num'] . '/' . $selected_department . '/' . $_SESSION['post'] . '/' . $_SESSION['cast'] . '/' . $_SESSION['ref_num'] . '_' . $name_email_cat . '_supportingdocs/';
 
-    if (!file_exists($ref_num_fname_lname_docs_dir)) {
-        mkdir($ref_num_fname_lname_docs_dir, 0777, true);
+    if (!file_exists($uploads_dir)) {
+        mkdir($uploads_dir, 0777, true);
     }
 
     $file_fields = [
-        'userfile7' => 'Research_Paper.pdf',
         'userfile'  => 'PHD_Certificate.pdf',
         'userfile1' => 'PG_Certificate.pdf',
         'userfile2' => 'UG_Certificate.pdf',
@@ -27,6 +26,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // ... add other mappings for the rest of the fields
     ];
 
+    $file_fields2 = [
+        'userfile7' => 'Research_Paper',
+    ];
+
+    foreach ($file_fields2 as $field => $newFileName) {
+        $files = $_FILES[$field]; // Get the array of files
+        foreach ($files['name'] as $index => $fileName) {
+            $file_type = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+            $file_path = $uploads_dir . $newFileName . '_' . ($index + 1) . '.' . $file_type; // Include index to differentiate multiple files
+    
+            if ($files['error'][$index] == 0) {
+                if (move_uploaded_file($files['tmp_name'][$index], $file_path)) {
+                    // File uploaded successfully
+                } else {
+                    die('Error uploading ' . $field . ' file.');
+                }
+            }
+        }
+    }
+
     foreach ($file_fields as $field => $newFileName) {
         $file_type = strtolower(pathinfo($_FILES[$field]['name'], PATHINFO_EXTENSION));
         $file_path = $uploads_dir . $newFileName; // Use the mapped file name
@@ -39,9 +58,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     }
-
-    // Rest of your code for processing other form fields
-    // ...
 
     $ref = array();
     if (isset($_POST['referee_name'])) {
@@ -61,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $v1 = 1;
     $update = "UPDATE faculty_details set refrees = ?, submitted=? WHERE email = ? ";
     $stmt = $conn->prepare($update);
-    $stmt->bind_param($ref_json, $v1, $_SESSION['email']);
+    $stmt->bind_param('sis', $ref_json, $v1, $_SESSION['email']);
     if ($stmt->execute()) {
         header("Location: ../fin_sub/main.php");
         exit();

@@ -4,13 +4,11 @@ include('../config.php'); // Change to your actual database connection file
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $_SESSION['adv_num'] = $_POST['adv_num'];
-    $_SESSION['dept'] = $_POST['dept'];
-    $_SESSION['fname'] = $_POST['fname'];
-    $_SESSION['lname'] = $_POST['lname'];
-    $_SESSION['cast'] = $_POST['cast'];
-    $_SESSION['ref_num'] = $_POST['ref_num'];
-    $_SESSION['post'] = $_POST['post'];
+    // Replace \r\n with <br> in all form data
+    $_POST = array_map(function($value) {
+        return str_replace("\r\n", "\n", $value);
+    }, $_POST);
+
     // Retrieve form data
     $adv_num = $_POST['adv_num'];
     $ref_num = $_POST['ref_num'];
@@ -90,67 +88,71 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Perform database insertion
     $query = "UPDATE faculty_details SET application_details = ?, per_det = ?, cadd_det = ?, padd_det = ?, contact_det = ? WHERE email = ?";
 
-$stmt = $conn->prepare($query);
+    $stmt = $conn->prepare($query);
 
-$stmt->bind_param("ssssss", $application_details, $per_det, $cadd_det, $padd_det, $contact_det, $_SESSION['email']);
+    $stmt->bind_param("ssssss", $application_details, $per_det, $cadd_det, $padd_det, $contact_det, $_SESSION['email']);
 
-if ($stmt->execute()) {
-     // Data has been successfully inserted into the database
-    $selected_department = strtoupper($dept); // Convert department name to uppercase
-    $name_email_cat = strtoupper($_SESSION['first_name'] . '_' . $_SESSION['last_name'] . '_' . $_SESSION['email'] . '_' . $_SESSION['cast']);
-    $ref_num_fname_lname_docs_dir = '../' . $adv_num . '/' . $selected_department . '/' . $post . '/' . $cast . '/' . $ref_num . '_' . $name_email_cat . '_supportingdocs/';
+    if ($stmt->execute()) {
+         // Data has been successfully inserted into the database
+        $selected_department = strtoupper($dept); // Convert department name to uppercase
+        $name_email_cat = strtoupper($_SESSION['first_name'] . '_' . $_SESSION['last_name'] . '_' . $_SESSION['email'] . '_' . $_SESSION['cast']);
+        $ref_num_fname_lname_docs_dir = '../' . $adv_num . '/' . $selected_department . '/' . $post . '/' . $cast . '/' . $ref_num . '_' . $name_email_cat . '_supportingdocs/';
 
-    if (!file_exists($ref_num_fname_lname_docs_dir)) {
-        mkdir($ref_num_fname_lname_docs_dir, 0777, true);
-    }
-
-    // Handle Photo file
-    $photo_file_type = strtolower(pathinfo($_FILES['userfile']['name'], PATHINFO_EXTENSION));
-    $photo_file = $ref_num_fname_lname_docs_dir . 'Photo.' . $photo_file_type;
-
-    if (!empty($_FILES['userfile']['name']) && file_exists($photo_file)) {
-        unlink($photo_file);
-    }
-
-    if (!empty($_FILES['userfile']['name'])) {
-        if (getimagesize($_FILES['userfile']['tmp_name']) === false) {
-            die('Invalid file. Please upload a valid image.');
-        } elseif ($_FILES['userfile']['size'] > 1000000) {
-            die('File is too large. Please upload an image smaller than 1 MB.');
-        } elseif ($photo_file_type !== 'jpg' && $photo_file_type !== 'jpeg') {
-            die('Only JPG and JPEG images are allowed.');
+        if (!file_exists($ref_num_fname_lname_docs_dir)) {
+            mkdir($ref_num_fname_lname_docs_dir, 0777, true);
         }
 
-        if (move_uploaded_file($_FILES['userfile']['tmp_name'], $photo_file)) {
-            // The photo file has been successfully uploaded
+        // Handle Photo file
+        $photo_file_type = strtolower(pathinfo($_FILES['userfile']['name'], PATHINFO_EXTENSION));
+        $photo_file = $ref_num_fname_lname_docs_dir . 'Photo.' . $photo_file_type;
+
+        if (!empty($_FILES['userfile']['name']) && file_exists($photo_file)) {
+            unlink($photo_file);
+        }
+
+        if(isset($_FILES['userfile']['name']) && !empty($_FILES['userfile']['name'])) {
+            $photo_file_type = strtolower(pathinfo($_FILES['userfile']['name'], PATHINFO_EXTENSION));
+    
+            // Check if the file extension is jpg or jpeg
+            if ($photo_file_type !== 'jpg' && $photo_file_type !== 'jpeg') {
+                // Set session message
+                $_SESSION['message'] = "Only JPG or JPEG images are allowed.";
+    
+                // Redirect back to edit.php
+                header("Location: main.php");
+                exit;
+            }
+
+            if (move_uploaded_file($_FILES['userfile']['tmp_name'], $photo_file)) {
+                // The photo file has been successfully uploaded
+            } else {
+                die('Error uploading the image. Data entered successfully.');
+            }
+        }
+
+        $photo_file_type = strtolower(pathinfo($_FILES['userfile2']['name'], PATHINFO_EXTENSION));
+        $id_proof_file = $ref_num_fname_lname_docs_dir . 'IDproof.' . $photo_file_type;
+
+        if (!empty($_FILES['userfile2']['name']) && file_exists($id_proof_file)) {
+            unlink($id_proof_file);
+        }
+
+        if (!empty($_FILES['userfile2']['name'])) {
+            if (move_uploaded_file($_FILES['userfile2']['tmp_name'], $id_proof_file)) {
+                // Data and files uploaded successfully
+                header('Location: ../acad_det/main.php');
+                exit();
+            } else {
+                die('Error uploading the ID proof file.');
+            }
         } else {
-            die('Error uploading the image. Data entered successfully.');
-        }
-    }
-
-    $photo_file_type = strtolower(pathinfo($_FILES['userfile2']['name'], PATHINFO_EXTENSION));
-    $id_proof_file = $ref_num_fname_lname_docs_dir . 'IDproof.' . $photo_file_type;
-
-    if (!empty($_FILES['userfile2']['name']) && file_exists($id_proof_file)) {
-        unlink($id_proof_file);
-    }
-
-    if (!empty($_FILES['userfile2']['name'])) {
-        if (move_uploaded_file($_FILES['userfile2']['tmp_name'], $id_proof_file)) {
-            // Data and files uploaded successfully
+            // No ID proof file uploaded, proceed to the next page
             header('Location: ../acad_det/main.php');
             exit();
-        } else {
-            die('Error uploading the ID proof file.');
         }
     } else {
-        // No ID proof file uploaded, proceed to the next page
-        header('Location: ../acad_det/main.php');
-        exit();
+        die('Error inserting data into the database.');
     }
-} else {
-    die('Error inserting data into the database.');
-}
     
 } else {
     header("Location: ../fac_login/main.html");
